@@ -1,26 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   minishell_exec.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/25 11:59:18 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/02 14:25:06 by racoutte         ###   ########.fr       */
+/*   Created: 2024/12/02 14:26:15 by racoutte          #+#    #+#             */
+/*   Updated: 2024/12/02 14:26:25 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef MINISHELL_EXEC_H
+# define MINISHELL_EXEC_H
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <string.h>
-# include <sys/wait.h>
-# include <signal.h>
-
-# include "minishell_parsing.h"
-# include "minishell_exec.h"
+# include "minishell.h"
 
 #endif

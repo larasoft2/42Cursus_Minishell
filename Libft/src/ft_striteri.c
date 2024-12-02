@@ -1,26 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/25 11:59:18 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/02 14:25:06 by racoutte         ###   ########.fr       */
+/*   Created: 2024/05/23 10:53:06 by racoutte          #+#    #+#             */
+/*   Updated: 2024/08/13 14:42:58 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <string.h>
-# include <sys/wait.h>
-# include <signal.h>
+void	ft_striteri(char *s, void (*f)(unsigned int, char*))
+{
+	unsigned int	i;
 
-# include "minishell_parsing.h"
-# include "minishell_exec.h"
+	i = 0;
+	while (s[i])
+	{
+		f(i, &s[i]);
+		i++;
+	}
+}
+/*
+void	ft_putchar_fd_bis(unsigned int i, char *c)
+{
+	while (i < 2)
+	{
+		write(1, &c[i], 1);
+		i++;
+	}
+}
 
-#endif
+int	main(int ac, char **av)
+{
+	(void)ac;
+
+	ft_striteri(av[1], ft_putchar_fd_bis);
+	return (0);
+}*/

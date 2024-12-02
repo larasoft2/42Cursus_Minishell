@@ -1,26 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/25 11:59:18 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/02 14:25:06 by racoutte         ###   ########.fr       */
+/*   Created: 2024/05/23 11:41:33 by racoutte          #+#    #+#             */
+/*   Updated: 2024/08/13 14:40:14 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <string.h>
-# include <sys/wait.h>
-# include <signal.h>
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	void	*str;
 
-# include "minishell_parsing.h"
-# include "minishell_exec.h"
+	if (nmemb == 0 && size == 0 && (nmemb >= SIZE_MAX / size))
+		return (NULL);
+	str = (void *) malloc(size * nmemb);
+	if (!str)
+		return (NULL);
+	ft_bzero(str, nmemb * size);
+	return (str);
+}
+/*
+#include <stdio.h>
 
-#endif
+int	main(void)
+{
+	char	*str;
+
+	str = (char *) ft_calloc(10, 1);
+	printf("%s\n", str);
+	return (0);
+}*/

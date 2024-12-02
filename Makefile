@@ -6,7 +6,7 @@
 #    By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/22 14:20:31 by racoutte          #+#    #+#              #
-#    Updated: 2024/11/25 11:58:35 by racoutte         ###   ########.fr        #
+#    Updated: 2024/12/02 15:05:49 by racoutte         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,12 +17,10 @@ NAME = minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
-# ifeq ($(d), 1)
-# 	CFLAGS += -fsanitize=thread
-# endif
-
 RM = rm -f
 
+LIBDIR = Libft
+LIB = $(LIBDIR)/libft.a
 INCLUDE = include
 SRC_DIR = src
 OBJ_DIR = obj
@@ -37,32 +35,46 @@ RESET = \033[0m
 
 #### SRC FILES #################################################################
 
-SRCS += src/main.c
+SRCS += src/minishell_loop/main.c
+
+SRCS += src/parsing/syntax_error.c
+
+SRCS += src/exec/built_in.c
+
 
 #### RULES ####################################################################
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) $(LIB)
 	@echo "$(YELLOW)🔨 Linking objects...$(RESET)"
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIB)
 	@echo "$(GREEN)✅ Build successful!$(RESET)"
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+$(LIB):
+	@echo "$(YELLOW)Adding Libft$(RESET)"
+	@$(MAKE) -C $(LIBDIR) > /dev/null 2>&1
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)/parsing $(OBJ_DIR)/exec $(OBJ_DIR)/minishell_loop
 	@echo "$(BLUE)Compiling $<...$(RESET)"
 	@$(CC) $(CFLAGS) -c -I $(INCLUDE) $< -o $@
 
-$(OBJ_DIR):
+$(OBJ_DIR)/parsing $(OBJ_DIR)/exec $(OBJ_DIR)/minishell_loop:
 	@mkdir -p $@
+
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
 
 clean:
 	@echo "$(YELLOW)🧹 Cleaning object files...$(RESET)"
 	@$(RM) -r $(OBJ_DIR)
+	@$(MAKE) -C $(LIBDIR) clean > /dev/null 2>&1
 	@echo "$(GREEN)✓ Cleaned$(RESET)"
 
 fclean: clean
 	@echo "$(YELLOW)🗑️ Full cleanup...$(RESET)"
 	@$(RM) $(NAME)
+	@$(MAKE) -C $(LIBDIR) fclean > /dev/null 2>&1
 	@echo "$(GREEN)✓ Fully cleaned$(RESET)"
 
 re: fclean all

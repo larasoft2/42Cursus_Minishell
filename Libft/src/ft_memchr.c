@@ -1,26 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/25 11:59:18 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/02 14:25:06 by racoutte         ###   ########.fr       */
+/*   Created: 2024/05/20 17:36:05 by racoutte          #+#    #+#             */
+/*   Updated: 2024/08/13 14:41:48 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <string.h>
-# include <sys/wait.h>
-# include <signal.h>
+void	*ft_memchr(const void *s, int c, size_t n)
+{
+	size_t	i;
 
-# include "minishell_parsing.h"
-# include "minishell_exec.h"
+	c = (unsigned char)c;
+	i = 0;
+	while (i < n)
+	{
+		if (((unsigned char *)s)[i] == c)
+			return ((void *)s + i);
+		i++;
+	}
+	return (NULL);
+}
+/*
+int	main(int ac, char **av)
+{
+	(void)ac;
 
-#endif
+	ft_memchr(av[1], 'l', 3);
+	printf("%s\n", av[1]);
+	return (0);
+}*/
