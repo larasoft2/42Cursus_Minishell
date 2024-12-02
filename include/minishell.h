@@ -6,7 +6,11 @@
 /*   By: licohen <licohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:59:18 by racoutte          #+#    #+#             */
+<<<<<<< Updated upstream
 /*   Updated: 2024/12/02 12:09:22 by licohen          ###   ########.fr       */
+=======
+/*   Updated: 2024/12/02 12:09:22 by racoutte         ###   ########.fr       */
+>>>>>>> Stashed changes
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +24,12 @@
 # include <sys/wait.h>
 # include <signal.h>
 
-typef struct mini; hey test
+typedef struct token_type
+{
+	WORD;
+	PIPE;
+	REDIR;
+}
 
 typedef enum e_error
 {
