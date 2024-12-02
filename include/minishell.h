@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: licohen <licohen@student.42.fr>            +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:59:18 by racoutte          #+#    #+#             */
-<<<<<<< Updated upstream
-/*   Updated: 2024/12/02 12:09:22 by licohen          ###   ########.fr       */
-=======
-/*   Updated: 2024/12/02 12:09:22 by racoutte         ###   ########.fr       */
->>>>>>> Stashed changes
+/*   Updated: 2024/12/02 12:33:32 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +29,8 @@ typedef struct token_type
 
 typedef enum e_error
 {
-  
-    ERR_QUOTE,          
+
+    ERR_QUOTE,
     ERR_PIPE,
 } t_error;
 
