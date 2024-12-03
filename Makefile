@@ -6,7 +6,7 @@
 #    By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/22 14:20:31 by racoutte          #+#    #+#              #
-#    Updated: 2024/12/02 15:05:49 by racoutte         ###   ########.fr        #
+#    Updated: 2024/12/03 11:12:08 by racoutte         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ INCLUDE = include
 SRC_DIR = src
 OBJ_DIR = obj
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
+SRCS = $(wildcard $(SRC_DIR)/**/*.c)
 TOTAL_FILES = $(words $(SRCS))
 COMPILED_FILES = 0
 
@@ -35,11 +36,11 @@ RESET = \033[0m
 
 #### SRC FILES #################################################################
 
-SRCS += src/minishell_loop/main.c
+# SRCS += src/minishell_loop/main.c
 
-SRCS += src/parsing/syntax_error.c
+# SRCS += src/parsing/syntax_error.c
 
-SRCS += src/exec/built_in.c
+# SRCS += src/exec/built_in.c
 
 
 #### RULES ####################################################################
