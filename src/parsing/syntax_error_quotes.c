@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:06:44 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/04 16:21:19 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:02:04 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	count_number_single_quotes(char *input)
 	return (count_single_quotes);
 }
 
-int	check_if_number_quotes_is_odd(char *input)
+int	check_if_unclosed_quotes(char *input)
 {
 	int	count_double_quotes;
 	int	count_single_quotes;
@@ -54,12 +54,12 @@ int	check_if_number_quotes_is_odd(char *input)
 	if (count_double_quotes % 2 != 0)
 	{
 		ft_printf("minishell: syntax error, odd number of double quotes\n");
-		return (ODD_NUMBER_DOUBLE_QUOTES);
+		return (UNCLOSED_QUOTES);
 	}
 	if (count_single_quotes % 2 != 0)
 	{
 		ft_printf("minishell: syntax error, odd number of single quotes\n");
-		return (ODD_NUMBER_SINGLE_QUOTES);
+		return (UNCLOSED_QUOTES);
 	}
 	return (EXIT_SUCCESS);
 }

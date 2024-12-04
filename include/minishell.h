@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:59:18 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/02 14:25:06 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:32:41 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <signal.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
+# include "../Libft/include/libft.h"
 # include "minishell_parsing.h"
 # include "minishell_exec.h"
 

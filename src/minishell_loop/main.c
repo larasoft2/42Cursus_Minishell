@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:58:59 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/04 14:34:42 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:31:42 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,25 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	(void)env;
 
-	
+	char	*input;
+
+	while (1)
+	{
+		input = readline("minishell>$ ");
+		if (!input)
+		{
+			ft_printf("exit\n");
+			break ;
+		}
+		if (syntax_error_checker(input) == EXIT_FAILURE)
+		{
+			free(input);
+			continue ;
+		}
+		if (*input)
+			add_history(input);
+		ft_printf("input: %s\n", input);
+		free(input);
+	}
+	return (EXIT_SUCCESS);
 }

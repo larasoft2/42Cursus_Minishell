@@ -6,7 +6,7 @@
 #    By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/22 14:20:31 by racoutte          #+#    #+#              #
-#    Updated: 2024/12/03 11:12:08 by racoutte         ###   ########.fr        #
+#    Updated: 2024/12/04 17:37:41 by racoutte         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ NAME = minishell
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
+LDFLAGS = -lreadline -lncurses
 
 RM = rm -f
 
@@ -49,7 +50,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS) $(LIB)
 	@echo "$(YELLOW)🔨 Linking objects...$(RESET)"
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIB)
+	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIB) $(LDFLAGS)
 	@echo "$(GREEN)✅ Build successful!$(RESET)"
 
 $(LIB):
