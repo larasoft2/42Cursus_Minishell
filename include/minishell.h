@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:59:18 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/04 17:32:41 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/05 15:54:48 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,33 @@
 # include "../Libft/include/libft.h"
 # include "minishell_parsing.h"
 # include "minishell_exec.h"
+
+// STRUCTURES ///////////////////////////////////////////////////////////////
+typedef enum e_error
+{
+	SYNTAX_ERROR_REDIR_SINGLE_RIGHT,
+	SYNTAX_ERROR_REDIR_DOUBLE_RIGHT,
+	SYNTAX_ERROR_REDIR_SINGLE_LEFT,
+	SYNTAX_ERROR_REDIR_DOUBLE_LEFT,
+	SYNTAX_ERROR_PIPE_SINGLE,
+	SYNTAX_ERROR_NEWLINE,
+	SYNTAX_ERROR_UNCLOSED_QUOTES,
+	SYNTAX_ERROR_NOT_HANDLED,
+
+	COMMAND_NOT_FOUND,
+	NOT_A_VALID_IDENTIFIER,
+	NO_SUCH_FILE_OR_DIRECTORY,
+	NUMERIC_ARGUMENT_REQUIRED,
+	INVALID_OPTION,
+	TOO_MANY_ARGUMENTS,
+}			t_error;
+
+// FUNCTIONS ////////////////////////////////////////////////////////////////
+
+// ERROR
+void	print_error_syntax_message(t_error error);
+void	print_error_not_handled(char *word);
+char	*get_error_exec_message(t_error error);
+void	print_error_exec_message(t_error error, char *word);
 
 #endif

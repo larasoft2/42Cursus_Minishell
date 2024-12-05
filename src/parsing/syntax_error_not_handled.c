@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:08:36 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/04 16:21:05 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/05 15:54:37 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	not_handled_double_pipe(char *input)
 	{
 		if (input[i] == '|' && input[i + 1] == '|')
 		{
-			ft_printf("minishell: syntax error, not handled character `||'\n");
+			print_error_not_handled("||");
 			return (NOT_HANDLED_CHARACTER);
 		}
 		i++;
@@ -38,7 +38,7 @@ int	not_handled_other_character(char *input)
 	{
 		if (input[i] == ';' || input[i] == '&' || input[i] == '/')
 		{
-			ft_printf("minishell: syntax error, not handled character `%c'\n", input[i]);
+			print_error_not_handled(&input[i]);
 			return (NOT_HANDLED_CHARACTER);
 		}
 		i++;
