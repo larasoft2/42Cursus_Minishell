@@ -6,7 +6,7 @@
 /*   By: licohen <licohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 16:14:07 by licohen           #+#    #+#             */
-/*   Updated: 2024/12/05 16:46:09 by licohen          ###   ########.fr       */
+/*   Updated: 2024/12/05 17:55:15 by licohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int is_len_one(int fd_out)
 {
-    ft_putendl_fd("exit", 1);
+    ft_putendl_fd("exit", fd_out);
     return (0);
 }
 
