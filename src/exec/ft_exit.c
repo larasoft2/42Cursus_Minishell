@@ -6,13 +6,13 @@
 /*   By: licohen <licohen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 16:14:07 by licohen           #+#    #+#             */
-/*   Updated: 2024/12/04 17:20:39 by licohen          ###   ########.fr       */
+/*   Updated: 2024/12/05 16:46:09 by licohen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell_exec.h"
 
-static int is_len_one(void)
+static int is_len_one(int fd_out)
 {
     ft_putendl_fd("exit", 1);
     return (0);
@@ -48,14 +48,14 @@ static int is_num(char *str)
     return (1);
 }
 
-int ft_exit(char **array)
+int ft_exit(char **array, int fd_out)
 {
     int len;
     int code;
 
     len = nbr_of_args(array);
     if (len == 1)
-        return (is_len_one());
+        return (is_len_one(fd_out));
     else if (!is_num(array[1]))
         return (not_num());
     else if (len > 2)
@@ -63,6 +63,6 @@ int ft_exit(char **array)
     code = ft_atoi(array[1]) % 256;
     if (code < 0)
         code += 256;
-    ft_putendl_fd("exit", 1);
+    ft_putendl_fd("exit", fd_out);
     return (code);
 }
