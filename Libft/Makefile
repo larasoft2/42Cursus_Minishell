@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+         #
+#    By: licohen <licohen@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/12 13:57:41 by racoutte          #+#    #+#              #
-#    Updated: 2024/12/02 14:57:15 by racoutte         ###   ########.fr        #
+#    Updated: 2024/12/05 17:31:26 by licohen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,7 @@ SRCS = src/ft_atoi.c
 SRCS += src/ft_bzero.c
 SRCS += src/ft_calloc.c
 SRCS += src/ft_isalnum.c
+SRCS += src/ft_isspace.c
 SRCS += src/ft_isalpha.c
 SRCS += src/ft_isascii.c
 SRCS += src/ft_isdigit.c
