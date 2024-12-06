@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/06 13:15:11 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/06 16:53:58 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # define SINGLE_QUOTE 1
 
 // STRUCTURES ///////////////////////////////////////////////////////////////
+
 typedef enum e_token_type
 {
 	TOKEN_WORD,				// For commands and arguments
@@ -39,13 +40,20 @@ typedef enum e_token_type
 	TOKEN_ENV_VAR,			// For environment variables
 }			t_token_type;
 
-// Token structure
 typedef struct s_token
 {
 	t_token_type	type;
 	char			*value;
 	struct s_token	*next;
 }			t_token;
+
+typedef struct s_input_node
+{
+	t_token_type		type;
+	char				*value;
+	struct s_input_node	*next;
+}			t_input_node;
+
 
 // FUNCTIONS ////////////////////////////////////////////////////////////////
 
