@@ -6,60 +6,50 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:06:44 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/05 15:49:06 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/06 12:06:31 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	count_number_double_quotes(char *input)
+int	is_double_quote(char c)
 {
-	size_t	i;
-	int		count_double_quotes;
-
-	i = 0;
-	count_double_quotes = 0;
-	while (input[i])
-	{
-		if (input[i] == '"')
-			count_double_quotes++;
-		i++;
-	}
-	return (count_double_quotes);
+	if (c == '"')
+		return (DOUBLE_QUOTE);
+	return (EXIT_SUCCESS);
 }
 
-int	count_number_single_quotes(char *input)
+int	is_single_quote(char c)
 {
-	size_t	i;
-	int		count_single_quotes;
-
-	i = 0;
-	count_single_quotes = 0;
-	while (input[i])
-	{
-		if (input[i] == '\'')
-			count_single_quotes++;
-		i++;
-	}
-	return (count_single_quotes);
+	if (c == '\'')
+		return (SINGLE_QUOTE);
+	return (EXIT_SUCCESS);
 }
 
 int	check_if_unclosed_quotes(char *input)
 {
-	int	count_double_quotes;
-	int	count_single_quotes;
+	size_t	i;
+	char	open_quote;
 
-	count_double_quotes = count_number_double_quotes(input);
-	count_single_quotes = count_number_single_quotes(input);
-	if (count_double_quotes % 2 != 0)
+	i = 0;
+	open_quote = '\0';
+	while (input[i])
+	{
+		if (open_quote == '\0')
+		{
+			if (is_double_quote(input[i]) == DOUBLE_QUOTE)
+				open_quote = '"';
+			else if (is_single_quote(input[i]) == SINGLE_QUOTE)
+				open_quote = '\'';
+		}
+		else if (input[i] == open_quote)
+			open_quote = '\0';
+		i++;
+	}
+	if (open_quote != '\0')
 	{
 		print_error_syntax_message(SYNTAX_ERROR_UNCLOSED_QUOTES);
 		return (UNCLOSED_QUOTES);
 	}
-	if (count_single_quotes % 2 != 0)
-	{
-		print_error_syntax_message(SYNTAX_ERROR_UNCLOSED_QUOTES);
-		return (UNCLOSED_QUOTES);
-	}
-	return (EXIT_SUCCESS);
+	return (CLOSED_QUOTES);
 }

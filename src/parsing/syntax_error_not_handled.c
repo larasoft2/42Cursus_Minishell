@@ -6,11 +6,28 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:08:36 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/05 15:54:37 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/06 13:14:48 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	not_handled_double_special_character_and(char *input)
+{
+	size_t	i;
+
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] == '&' && input[i + 1] == '&')
+		{
+			print_error_not_handled_word("&&");
+			return (NOT_HANDLED_CHARACTER);
+		}
+		i++;
+	}
+	return (EXIT_SUCCESS);
+}
 
 int	not_handled_double_pipe(char *input)
 {
@@ -21,7 +38,7 @@ int	not_handled_double_pipe(char *input)
 	{
 		if (input[i] == '|' && input[i + 1] == '|')
 		{
-			print_error_not_handled("||");
+			print_error_not_handled_word("||");
 			return (NOT_HANDLED_CHARACTER);
 		}
 		i++;
@@ -36,9 +53,12 @@ int	not_handled_other_character(char *input)
 	i = 0;
 	while (input[i])
 	{
-		if (input[i] == ';' || input[i] == '&' || input[i] == '/')
+		if (input[i] == ';' || input[i] == '&'
+			|| input[i] == '/' || input[i] == '*'
+			|| input[i] == '(' || input[i] == ')'
+			|| input[i] == '\\')
 		{
-			print_error_not_handled(&input[i]);
+			print_error_not_handled(input[i]);
 			return (NOT_HANDLED_CHARACTER);
 		}
 		i++;
@@ -49,6 +69,7 @@ int	not_handled_other_character(char *input)
 int	not_handled_char_input(char *input)
 {
 	if (not_handled_double_pipe(input) == NOT_HANDLED_CHARACTER
+		|| not_handled_double_special_character_and(input) == NOT_HANDLED_CHARACTER
 		|| not_handled_other_character(input) == NOT_HANDLED_CHARACTER)
 		return (NOT_HANDLED_CHARACTER);
 	return (EXIT_SUCCESS);

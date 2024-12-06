@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:59:18 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/05 15:54:48 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/06 13:13:16 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef enum e_error
 	SYNTAX_ERROR_NEWLINE,
 	SYNTAX_ERROR_UNCLOSED_QUOTES,
 	SYNTAX_ERROR_NOT_HANDLED,
+	SYNTAX_ERROR_NOT_HANDLED_WORD,
 
 	COMMAND_NOT_FOUND,
 	NOT_A_VALID_IDENTIFIER,
@@ -50,7 +51,8 @@ typedef enum e_error
 
 // ERROR
 void	print_error_syntax_message(t_error error);
-void	print_error_not_handled(char *word);
+void	print_error_not_handled(char c);
+void	print_error_not_handled_word(char *word);
 char	*get_error_exec_message(t_error error);
 void	print_error_exec_message(t_error error, char *word);
 
