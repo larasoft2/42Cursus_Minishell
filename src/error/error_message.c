@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 15:24:09 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/05 15:54:14 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/06 13:12:56 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,17 @@ void	print_error_syntax_message(t_error error)
 		ft_putendl_fd("minishell: syntax error, not handled", 2);
 }
 
-void	print_error_not_handled(char *word)
+void	print_error_not_handled(char c)
+{
+	ft_putstr_fd("minishell: syntax error, not handled character '", 2);
+	if (c)
+	{
+		ft_putchar_fd(c, 2);
+		ft_putendl_fd("'", 2);
+	}
+}
+
+void	print_error_not_handled_word(char *word)
 {
 	ft_putstr_fd("minishell: syntax error, not handled character '", 2);
 	if (word != NULL)

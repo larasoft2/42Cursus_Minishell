@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/05 13:58:20 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/06 13:15:11 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "minishell.h"
 
 # define NOT_EMPTY_STRING 0
+# define CLOSED_QUOTES 0
 # define EMPTY_STRING 1
 # define INPUT_ONLY_WHITESPACE 1
 # define UNCLOSED_QUOTES 1
@@ -23,6 +24,8 @@
 # define WRONG_NUMBER_REDIR 1
 # define FIRST_CHARACTER_IS_SPECIAL 1
 # define NOT_HANDLED_CHARACTER 1
+# define DOUBLE_QUOTE 1
+# define SINGLE_QUOTE 1
 
 // STRUCTURES ///////////////////////////////////////////////////////////////
 typedef enum e_token_type
@@ -51,6 +54,7 @@ int	syntax_error_checker(char *input);
 int	check_empty_input(char *input);
 int	check_only_whitespace_intput(char *input);
 int	check_first_character_is_special_without_error(char *input);
+int	not_handled_double_special_character_and(char *input);
 int	not_handled_double_pipe(char *input);
 int	not_handled_other_character(char *input);
 int	not_handled_char_input(char *input);
@@ -60,6 +64,8 @@ int	number_redir_right(char *input);
 int	number_redir_left(char *input);
 int	error_message_redir_right(int count);
 int	error_message_redir_left(int count);
+int	is_double_quote(char c);
+int	is_single_quote(char c);
 int	check_if_unclosed_quotes(char *input);
 
 #endif
