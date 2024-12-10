@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:57:10 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/10 21:14:23 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/10 21:34:51 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 
 // Les arguments seront places dans un tableau **,
 // donc je verifie si le premier argument fait ref a un builtin
+
+// // The  getenv()  function searches the environment list to find the
+// environment variable name,
+// and returns a pointer to the corresponding value string.
 
 // int	ft_isbuiltin(t_ast *ast)
 // {
