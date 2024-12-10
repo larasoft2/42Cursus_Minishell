@@ -3,23 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: licohen <licohen@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/03 13:45:20 by licohen           #+#    #+#             */
-/*   Updated: 2024/12/03 15:12:51 by licohen          ###   ########.fr       */
+/*   Created: 2024/12/10 18:55:46 by lusavign          #+#    #+#             */
+/*   Updated: 2024/12/10 19:50:44 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell_exec.h"
 
-int nbr_of_args(char **array)
+int	ft_strcmp(char *s1, char *s2)
 {
-    int i;
+	int	i;
 
-    if (!array)
-        return (0);
-    i = 0;
-    while (array[i])
-        i++;
-    return (i);
+	i = 0;
+	while (s1[i] || s2[i])
+	{
+		if (s1[i] == s2[i])
+			i++;
+		else
+			return (s1[i] - s2[i]);
+	}
+	return (0);
+}
+
+int	nbr_of_args(char **array)
+{
+	int	i;
+
+	if (!array)
+		return (0);
+	i = 0;
+	while (array[i])
+		i++;
+	return (i);
 }
