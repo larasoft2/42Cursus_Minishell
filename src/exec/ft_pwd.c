@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:39 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/10 18:55:40 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/10 21:15:26 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 ** ft_pwd : built-in pwd
 ** affiche le chemin du repertoire courant
 */
+
+// pwd with no	options;
+// prints the current working directory
 
 int	ft_pwd(int fd_out)
 {

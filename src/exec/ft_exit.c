@@ -6,11 +6,14 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:24 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/10 18:55:25 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/10 21:19:50 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell_exec.h"
+
+// // exit with no options.
+// exits the shell
 
 static int	is_len_one(int fd_out)
 {
@@ -48,19 +51,19 @@ static int	is_num(char *str)
 	return (1);
 }
 
-int	ft_exit(char **array, int fd_out)
+int	ft_exit(t_ast *ast, int fd_out)
 {
 	int len;
 	int code;
 
-	len = nbr_of_args(array);
+	len = nbr_of_args(ast);
 	if (len == 1)
 		return (is_len_one(fd_out));
-	else if (!is_num(array[1]))
+	else if (!is_num(ast->arg[1]))
 		return (not_num());
 	else if (len > 2)
 		return (too_many_args());
-	code = ft_atoi(array[1]) % 256;
+	code = ft_atoi(ast->arg[1]) % 256;
 	if (code < 0)
 		code += 256;
 	ft_putendl_fd("exit", fd_out);

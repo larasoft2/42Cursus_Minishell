@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:26:15 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/10 19:30:23 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/10 21:19:10 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,17 @@ typedef struct s_ast
 	struct s_ast	*left;
 }					t_ast;
 
-int					ft_echo(char **array, int fd_out);
-int					ft_exit(char **array, int fd_out);
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}					t_env;
+
+int					ft_echo(t_ast *ast, int fd_out);
+int					ft_exit(t_ast *ast, int fd_out);
 int					ft_pwd(int fd_out);
-int					ft_cd(char **array);
-int					nbr_of_args(char **array);
+int					nbr_of_args(t_ast *ast);
+int					ft_strcmp(char *s1, char *s2);
 
 #endif

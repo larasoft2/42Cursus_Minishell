@@ -6,8 +6,11 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:28 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/10 18:55:35 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/10 20:53:31 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell_exec.h"
+
+// export with no options;
+// sets environment variables
