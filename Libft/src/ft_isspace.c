@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: licohen <licohen@student.42.fr>            +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:14:13 by licohen           #+#    #+#             */
-/*   Updated: 2024/12/04 17:16:13 by licohen          ###   ########.fr       */
+/*   Updated: 2024/12/09 14:04:10 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int ft_isspace(char c)
 {
-    if ((c == ' ' || c == '\t' || c == '\n' || 
-            c == '\v' || c == '\f' || c == '\r'))
-        return (1);
-    else
-        return (0);
+	if ((c == ' ' || c == '\t' || c == '\n'
+		|| c == '\v' || c == '\f' || c == '\r'))
+		return (EXIT_FAILURE);
+	else
+		return (EXIT_SUCCESS);
 }

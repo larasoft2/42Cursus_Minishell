@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/06 16:53:58 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/10 12:00:26 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,19 @@ typedef enum e_token_type
 	TOKEN_ENV_VAR,			// For environment variables
 }			t_token_type;
 
-typedef struct s_token
-{
-	t_token_type	type;
-	char			*value;
-	struct s_token	*next;
-}			t_token;
-
-typedef struct s_input_node
+typedef struct s_token_node
 {
 	t_token_type		type;
 	char				*value;
-	struct s_input_node	*next;
-}			t_input_node;
+	struct s_token_node	*next;
+}			t_token_node;
+
+// typedef struct s_input_node
+// {
+// 	t_token_type		type;
+// 	char				*value;
+// 	struct s_input_node	*next;
+// }			t_input_node;
 
 
 // FUNCTIONS ////////////////////////////////////////////////////////////////
@@ -62,18 +62,19 @@ int	syntax_error_checker(char *input);
 int	check_empty_input(char *input);
 int	check_only_whitespace_intput(char *input);
 int	check_first_character_is_special_without_error(char *input);
-int	not_handled_double_special_character_and(char *input);
-int	not_handled_double_pipe(char *input);
-int	not_handled_other_character(char *input);
-int	not_handled_char_input(char *input);
+// int	not_handled_double_special_character_and(char *input);
+// int	not_handled_double_pipe(char *input);
+// int	not_handled_other_character(char *input);
+// int	not_handled_char_input(char *input);
 int	input_starts_or_ends_with_pipe(char *input);
 int	input_starts_or_ends_with_redir(char *input);
 int	number_redir_right(char *input);
 int	number_redir_left(char *input);
 int	error_message_redir_right(int count);
 int	error_message_redir_left(int count);
-int	is_double_quote(char c);
-int	is_single_quote(char c);
+int	is_quote(char c);
+// int	is_double_quote(char c);
+// int	is_single_quote(char c);
 int	check_if_unclosed_quotes(char *input);
 
 #endif
