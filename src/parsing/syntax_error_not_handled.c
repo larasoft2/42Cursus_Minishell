@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:08:36 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/06 15:41:56 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/09 19:39:20 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,25 +57,25 @@
 // 	return (EXIT_SUCCESS);
 // }
 
-// int	not_handled_other_character(char *input)
-// {
-// 	size_t	i;
+int	not_handled_other_character(char *input)
+{
+	size_t	i;
 
-// 	i = 0;
-// 	while (input[i])
-// 	{
-// 		if (input[i] == ';' || input[i] == '&'
-// 			|| input[i] == '/' || input[i] == '*'
-// 			|| input[i] == '(' || input[i] == ')'
-// 			|| input[i] == '\\')
-// 		{
-// 			print_error_not_handled(input[i]);
-// 			return (NOT_HANDLED_CHARACTER);
-// 		}
-// 		i++;
-// 	}
-// 	return (EXIT_SUCCESS);
-// }
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] == ';' || input[i] == '&'
+			|| input[i] == '/' || input[i] == '*'
+			|| input[i] == '(' || input[i] == ')'
+			|| input[i] == '\\')
+		{
+			print_error_not_handled(input[i]);
+			return (NOT_HANDLED_CHARACTER);
+		}
+		i++;
+	}
+	return (EXIT_SUCCESS);
+}
 
 // int	not_handled_char_input(char *input)
 // {
