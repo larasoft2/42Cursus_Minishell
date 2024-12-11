@@ -6,11 +6,15 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 11:43:40 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/11 18:02:22 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/11 18:31:26 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// ATTENTION !!!!!!!!
+// LES CARACTERES SPECIAUX DOIVENT ETRE GERE APRES LA TOKENISATION EGALEMENT
+// EXEMPLE: ON PEUT AVOIR echo "hello >>>> world" >> ceci est valide !!
 
 int	error_message_redir_right(int count)
 {
