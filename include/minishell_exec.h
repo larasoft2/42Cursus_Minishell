@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:26:15 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/10 15:59:41 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/11 13:43:46 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,5 @@ int ft_exit(char **array, int fd_out);
 int ft_pwd(int fd_out);
 int ft_cd(char **array);
 int nbr_of_args(char **array);
-
-
-MODIF !!!!
 
 #endif
