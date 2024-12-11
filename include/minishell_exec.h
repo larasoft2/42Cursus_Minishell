@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:26:15 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/10 21:55:32 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/11 19:59:37 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,9 @@ typedef struct s_env
 }					t_env;
 
 void				ft_env(t_env *env);
-int					ft_echo(t_ast *ast, int fd_out);
-int					ft_exit(t_ast *ast, int fd_out);
+
+int					ft_unset(t_env *env, t_ast *ast);
 int					ft_pwd(int fd_out);
-int					nbr_of_args(t_ast *ast);
 int					ft_strcmp(char *s1, char *s2);
 
 #endif
