@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/11 18:32:25 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/12 13:34:51 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@
 # define NOT_HANDLED_CHARACTER 1
 # define DOUBLE_QUOTE 1
 # define SINGLE_QUOTE 1
+# define PIPE 1
+# define REDIR_IN 2
+# define REDIR_OUT 3
 
 // STRUCTURES ///////////////////////////////////////////////////////////////
 
@@ -55,14 +58,6 @@ typedef struct s_ast
 	struct s_ast	*left;
 }			t_ast;
 
-// typedef struct s_input_node
-// {
-// 	t_token_type		type;
-// 	char				*value;
-// 	struct s_input_node	*next;
-// }			t_input_node;
-
-
 // FUNCTIONS ////////////////////////////////////////////////////////////////
 
 // SYNTAX_ERROR
@@ -83,5 +78,9 @@ int	error_message_redir_left(int count);
 int	is_quote(char c);
 int	check_if_unclosed_quotes(char *input);
 int	check_if_not_handled_char_outside_quotes(char *input);
+
+// TOKENIZE
+int	is_pipe_redirin_redirout_character(char c);
+
 
 #endif
