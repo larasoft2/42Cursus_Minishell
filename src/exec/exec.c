@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:57:10 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/10 21:34:51 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/12 18:12:16 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,17 @@
 //  while (arg[i])
 //  {
 //    if (ft_strcmp(ast->arg[i], "echo") == 0)
-// 	  ft_echo(tmp);
-// 	else if (ft_strcmp(ast->arg[i], "cd") == 0)
-// 	  ft_cd(tmp);
+//      ft_echo(tmp);
+//  else if (ft_strcmp(ast->arg[i], "cd") == 0)
+// 		ft_cd(tmp);
 // 	else if (ft_strcmp(ast->arg[i], "pwd") == 0)
 // 		ft_pwd(tmp);
 // 	else if (ft_strcmp(ast->arg[i], "export") == 0)
-// 	  ft_export(tmp);
+// 		ft_export(tmp);
 // 	else if (ft_strcmp(ast->arg[i], "unset") == 0)
-// 	  ft_unset(tmp);
+// 		ft_unset(tmp);
 // 	else if (ft_strcmp(ast->arg[i], "env") == 0)
-// 	  ft_env(tmp);
+// 		ft_env(tmp);
 // 	else if (ft_strcmp(ast->arg[i], "cd") == 0)
 // 		ft_exit(tmp);
 // 	else
