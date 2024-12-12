@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:55:03 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/11 19:54:20 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/12 15:27:45 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int	ft_unset(t_env *env, t_ast *ast)
 			else
 				env->next = current->next;
 			free(current);
+			current = NULL;
 			return (0);
 		}
 		prev = current;

@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:16 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/10 21:13:21 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/12 16:00:10 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,9 @@ int	ft_echo(t_ast *ast, int fd_out)
 		ft_putchar_fd('\n', fd_out);
 		return (0);
 	}
-	if (ft_strncmp(ast->arg[1], "-n", 2) == 0)
-	{
-		has_n_option = 1;
+	has_n_option = ft_strncmp(ast->arg[1], "-n", 2) == 0;
+	if (has_n_option)
 		i = 2;
-	}
 	else
 		i = 1;
 	while (ast->arg[i])
@@ -51,3 +49,14 @@ int	ft_echo(t_ast *ast, int fd_out)
 		ft_putchar_fd('\n', fd_out);
 	return (0);
 }
+
+// int	main(void)
+// {
+// 	t_ast	ast;
+// 	char	*args[] = {"echo", "-n", "Hello,", "world!", NULL};
+
+// 	ast.arg = args;
+// 	printf("args passed: \"-n Hello, world!\"\n");
+// 	ft_echo(&ast, STDOUT_FILENO);
+// 	return (0);
+// }
