@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:28 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/10 20:53:31 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/13 18:10:35 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,3 +14,10 @@
 
 // export with no options;
 // sets environment variables
+//
+// export can set a null variable that won't show in env
+// but will show when typing export
+// export alone shows all variables
+
+// export	a = $b
+// export b = $a must not loop
