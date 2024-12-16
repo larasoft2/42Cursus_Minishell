@@ -6,12 +6,14 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:59:18 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/06 13:13:16 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/16 15:36:58 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+// test
 
 # include <stdio.h>
 # include <stdlib.h>
