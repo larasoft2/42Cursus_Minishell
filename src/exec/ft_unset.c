@@ -6,24 +6,24 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:55:03 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/12 15:27:45 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/16 19:01:38 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell_exec.h"
 
-int	ft_unset(t_env *env, t_ast *ast)
+int	ft_unset(t_env *env, t_exec *ex)
 {
 	t_env	*current;
 	t_env	*prev;
 
-	if (!env || !ast || !ast->arg || !ast->arg[0])
+	if (!env || !ex || !ex->arg || !ex->arg[0])
 		return (1);
 	current = env;
 	prev = NULL;
 	while (current)
 	{
-		if (ft_strcmp(current->key, ast->arg[0]) == 0) //[0] might change bc AST
+		if (ft_strcmp(current->key, ex->arg[0]) == 0) //[0] might change bc struct?
 		{
 			if (prev)
 				prev->next = current->next;
@@ -57,7 +57,7 @@ int	ft_unset(t_env *env, t_ast *ast)
 // 	t_env	*env2;
 // 	t_env	*env3;
 // 	t_env	*env4;
-// 	t_ast	ast;
+// 	t_ex	ex;
 // 	char	*args[] = {"HOME", "TEST", NULL};
 
 // 	env1 = malloc(sizeof(t_env));
@@ -78,9 +78,9 @@ int	ft_unset(t_env *env, t_ast *ast)
 // 	env4->next = NULL;
 // 	printf("Initial environment:\n");
 // 	print_env(env1);
-// 	ast.arg = args;
+// 	ex.arg = args;
 // 	printf("\nCalling ft_unset to remove 'HOME':\n");
-// 	ft_unset(env1, &ast);
+// 	ft_unset(env1, &ex);
 // 	printf("\nEnvironment after unset:\n");
 // 	print_env(env1);
 // 	return (0);

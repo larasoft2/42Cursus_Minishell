@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:46 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/10 21:16:46 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/16 19:02:40 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ int	ft_strcmp(char *s1, char *s2)
 	return (0);
 }
 
-int	nbr_of_args(t_ast *ast)
+int	nbr_of_args(t_exec *ex)
 {
 	int	i;
 
-	if (!ast)
+	if (!ex)
 		return (0);
 	i = 0;
-	while (ast->arg[i])
+	while (ex->arg[i])
 		i++;
 	return (i);
 }
