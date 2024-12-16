@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:26:15 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/16 19:07:09 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/16 21:46:25 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,6 @@ void				ft_env(t_env *env);
 
 //EXEC UTILS//
 int					ft_strcmp(char *s1, char *s2);
-int					nbr_of_args(t_exec *ex)
+int					nbr_of_args(t_exec *ex);
 
 #endif
