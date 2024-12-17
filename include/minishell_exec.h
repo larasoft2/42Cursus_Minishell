@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:26:15 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/16 21:46:25 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/17 20:05:07 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,12 @@
 
 typedef struct s_exec
 {
-	char	*cmd; //contain cmd ("ls", "echo", ...)
-	char	**arg; //arr contains args for one cmd {ls "-l", grep "txt", ...}
-	t_filenames	*redirs; //list of redirs
-
-	int	fd_in; //fd for stdin
-	int	fd_out; //fd for stdout
-	struct s_exec *next; //next cmd
+	char			**arg; 		//arr contains args for one cmd {ls "-l", grep "txt", ...}
+	t_token			*type; 		//list of redirs
+	int				fd_in;		//fd for stdin
+	int				fd_out; 	//fd for stdout
+	struct s_exec 	*next; 		//next cmd
 }	t_exec;
-
-typedef struct s_filenames
-{
-	char	*path; //path to file (ex: file.txt)
-	t_token_type type; //type of redir associated to file (int, out etc)
-	struct s_filenames	*next; //next file in list
-}	t_filenames;
 
 typedef struct s_env
 {

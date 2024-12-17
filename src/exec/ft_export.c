@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:28 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/16 17:15:43 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/17 15:53:35 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 // export	a = $b
 // export b = $a must not loop
 
-void    ft_export(t_ast *ast)
+void    ft_export(t_exec *exec, t_env *env)
 {
     
 }

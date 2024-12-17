@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:09 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/16 18:58:24 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/17 15:53:05 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	ft_cd(t_exec *ex)
 {
 	char	*buff;
 
-	chdir(ex->arg[0]);
+	chdir(ex->arg[1]);
 	buff = malloc(1024);
 	printf("%s\n", getcwd(buff, 1024));
 }
