@@ -6,14 +6,12 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:59:18 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/16 15:36:58 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/18 15:14:05 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
-// test
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -57,5 +55,8 @@ void	print_error_not_handled(char c);
 void	print_error_not_handled_word(char *word);
 char	*get_error_exec_message(t_error error);
 void	print_error_exec_message(t_error error, char *word);
+
+// FREE
+void	free_token_list(t_token_node *list);
 
 #endif

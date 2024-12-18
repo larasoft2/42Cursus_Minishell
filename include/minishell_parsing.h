@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/12 13:34:51 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/18 15:19:26 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,26 +61,39 @@ typedef struct s_ast
 // FUNCTIONS ////////////////////////////////////////////////////////////////
 
 // SYNTAX_ERROR
-int	syntax_error_checker(char *input);
-int	check_empty_input(char *input);
-int	check_only_whitespace_intput(char *input);
-int	check_first_character_is_special_without_error(char *input);
-int	not_handled_double_special_character_and(char *input, char *open_quote);
-int	not_handled_double_pipe(char *input, char *open_quote);
-int	not_handled_other_character(char *input, char *open_quote);
-int	not_handled_char_input(char *input, char *open_quote);
-int	input_starts_or_ends_with_pipe(char *input);
-int	input_ends_with_redir(char *input);
-int	number_redir_right(char *input, char *open_quote);
-int	number_redir_left(char *input, char *open_quote);
-int	error_message_redir_right(int count);
-int	error_message_redir_left(int count);
-int	is_quote(char c);
-int	check_if_unclosed_quotes(char *input);
-int	check_if_not_handled_char_outside_quotes(char *input);
+int		syntax_error_checker(char *input);
+int		check_empty_input(char *input);
+int		check_only_whitespace_intput(char *input);
+int		check_first_character_is_special_without_error(char *input);
+int		not_handled_double_special_character_and(char *input, char *open_quote);
+int		not_handled_double_pipe(char *input, char *open_quote);
+int		not_handled_other_character(char *input, char *open_quote);
+int		not_handled_char_input(char *input, char *open_quote);
+int		input_starts_or_ends_with_pipe(char *input);
+int		input_ends_with_redir(char *input);
+int		number_redir_right(char *input, char *open_quote);
+int		number_redir_left(char *input, char *open_quote);
+int		error_message_redir_right(int count);
+int		error_message_redir_left(int count);
+int		is_quote(char c);
+int		check_if_unclosed_quotes(char *input);
+int		check_if_not_handled_char_outside_quotes(char *input);
 
 // TOKENIZE
-int	is_pipe_redirin_redirout_character(char c);
+int				is_pipe_redirin_redirout_character(char c);
+t_token_node	*create_token_node(t_token_type type, char *value);
+void			add_token(t_token_node **list, t_token_node *new_token);
+char			*read_word(char *input, int *i);
+void			print_tokens(t_token_node *list); // A ENLEVER A LA FIN
+t_token_node	*tokenize_input(char *input);
+void			create_word_node(char *input, int *i, t_token_node **token_list);
+void			create_special_node(char *input, int *i, t_token_node **token_list);
+void			create_pipe_node(int *i, t_token_node **token_list);
+void			create_redir_in_node(char *input, int *i, t_token_node **token_list);
+void			create_redir_out_node(char *input, int *i, t_token_node **token_list);
+void			create_redir_append_node(char *input, int *i, t_token_node **token_list);
+void			create_heredoc_node(char *input, int *i, t_token_node **token_list);
+void			skip_spaces(char *input, int *i);
 
 
 #endif

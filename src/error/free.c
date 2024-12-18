@@ -1,39 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenize_utils.c                                   :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/18 14:59:07 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/18 15:21:50 by racoutte         ###   ########.fr       */
+/*   Created: 2024/12/18 14:25:00 by racoutte          #+#    #+#             */
+/*   Updated: 2024/12/18 15:16:35 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_pipe_redirin_redirout_character(char c)
+void	free_token_list(t_token_node *list)
 {
-	if (c == '|')
-		return (PIPE);
-	if (c == '<')
-		return (REDIR_IN);
-	if (c == '>')
-		return (REDIR_OUT);
-	return (EXIT_SUCCESS);
-}
+	t_token_node *temp;
 
-void	skip_spaces(char *input, int *i)
-{
-	while (ft_isspace(input[*i]))
-		(*i)++;
-}
-
-void	print_tokens(t_token_node *list)
-{
 	while (list)
 	{
-		ft_printf("Type: %d, Value: %s\n", list->type, list->value);
+		temp = list;
 		list = list->next;
+		free(temp->value);
+		free(temp);
 	}
 }
