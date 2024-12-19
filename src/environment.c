@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_env.c                                          :+:      :+:    :+:   */
+/*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 15:00:34 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/19 19:13:14 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/19 20:10:03 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,27 @@ void	ft_free_list(t_env *head)
 		free(head);
 		head = cleaner;
 	}
+}
+
+char	**put_env_in_ar(t_env *envp)
+{
+	char	**array_env;
+	int		i;
+	char	*str;
+
+	i = 0;
+	if (!envp)
+		return (NULL);
+	array_env = malloc(sizeof(char *) * (ft_lstsize(envp) + 1));
+	while (envp)
+	{
+		str = ft_strjoin(envp->key, "=");
+		str = ft_strjoin(str, envp->value);
+		array_env[i++] = str;
+		envp = envp->next;
+		str = NULL;
+	}
+	return (array_env);
 }
 
 t_env	*create_list(char *key, char *value)

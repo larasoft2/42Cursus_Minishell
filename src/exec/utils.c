@@ -6,24 +6,15 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:46 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/19 18:56:12 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/19 20:12:54 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell_exec.h"
 
-// void	put_env_in_tab(t_env *env)
-// {
-// 	char	**envp;
-
-// 	while (env->next)
-// 	{
-// 	}
-// }
-
 char	*ft_strndup(const char *s, size_t n) // protection si string vide??
 {
-	int i;
+	size_t i;
 	char *dest;
 	char *src;
 
