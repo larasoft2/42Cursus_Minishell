@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/18 15:19:26 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/19 15:40:02 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,19 @@ typedef struct s_token_node
 	struct s_token_node	*next;
 }			t_token_node;
 
-typedef struct s_ast
+typedef struct s_exec
 {
-	t_token_type	type;
-	char			**arg;
-	struct s_ast	*right;
-	struct s_ast	*left;
-}			t_ast;
+	t_token_type		type;
+	char				**arg;
+	struct s_exec	*next;
+}			t_exec;
+
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}				t_env;
 
 // FUNCTIONS ////////////////////////////////////////////////////////////////
 
@@ -94,6 +100,9 @@ void			create_redir_out_node(char *input, int *i, t_token_node **token_list);
 void			create_redir_append_node(char *input, int *i, t_token_node **token_list);
 void			create_heredoc_node(char *input, int *i, t_token_node **token_list);
 void			skip_spaces(char *input, int *i);
-
+int				check_error_token_pipe(t_token_node *token_list);
+int				check_error_token_redir(t_token_node *token_list);
+int				check_error_token(t_token_node *token_list);
+void			print_error_token(t_token_node *token_list);
 
 #endif

@@ -6,11 +6,26 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:58:59 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/18 15:17:22 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/19 15:20:08 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	parsing(char *input, t_token_node **token_list)
+{
+	if (syntax_error_checker(input) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	*token_list = tokenize_input(input);
+	if (token_list == NULL)
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
+}
+
+// char	*create_prompt(char *input)
+// {
+
+// }
 
 int	main(int ac, char **av, char **env)
 {
@@ -21,6 +36,8 @@ int	main(int ac, char **av, char **env)
 	char			*input;
 	t_token_node	*token_list;
 
+	input = NULL;
+	token_list = NULL;
 	while (1)
 	{
 		input = readline("minishell>$ ");
@@ -29,17 +46,15 @@ int	main(int ac, char **av, char **env)
 			ft_printf("exit\n");
 			break ;
 		}
-		if (syntax_error_checker(input) == EXIT_FAILURE)
+		if (parsing(input, &token_list) == EXIT_FAILURE)
 		{
 			free(input);
 			continue ;
 		}
 		if (*input)
 			add_history(input);
-		ft_printf("input: %s\n", input);
-		token_list = tokenize_input(input);
 		print_tokens(token_list);
-		ft_printf("\n\n", input);
+		//ft_printf("\n", input);
 		free(input);
 		free_token_list(token_list);
 	}

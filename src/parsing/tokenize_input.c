@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:15:09 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/18 16:39:48 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/19 15:39:06 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ t_token_node	*tokenize_input(char *input)
 			create_special_node(input, &i, &token_list);
 		else if (!is_pipe_redirin_redirout_character(input[i]))
 			create_word_node(input, &i, &token_list);
+		if (check_error_token(token_list) == EXIT_FAILURE)
+			return (NULL);
 		//i++; pas besoin d'incrementer ici car le i est deja incremente dans les fonctions de creation de nodes
 	}
 	return (token_list);

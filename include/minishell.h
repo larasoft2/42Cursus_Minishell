@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:59:18 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/18 15:14:05 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/19 15:11:45 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,10 @@ void	print_error_exec_message(t_error error, char *word);
 
 // FREE
 void	free_token_list(t_token_node *list);
+
+// INIT
+void	init_struct(t_token_node *token_list);
+
+int		parsing(char *input, t_token_node **token_list);
 
 #endif
