@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_exec.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:26:15 by racoutte          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/12/11 13:43:46 by racoutte         ###   ########.fr       */
+=======
+/*   Updated: 2024/12/19 15:15:44 by lusavign         ###   ########.fr       */
+>>>>>>> luna_exec
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +18,7 @@
 # define MINISHELL_EXEC_H
 
 # include "minishell.h"
+# include "minishell_parsing.h"
 
 # define CD 0
 # define ECHO 1
@@ -23,12 +28,37 @@
 # define PWD 5
 # define UNSET 6
 
-//Built-in functions
+typedef struct s_exec
+{
+	char **arg;          // contains args for one cmd {ls "-l", ...}
+	t_token_node *type;  // list of redirs
+	int fd_in;           // fd for stdin
+	int fd_out;          // fd for stdout
+	struct s_exec *next; // next cmd
+}					t_exec;
 
-int ft_echo(char **array, int fd_out);
-int ft_exit(char **array, int fd_out);
-int ft_pwd(int fd_out);
-int ft_cd(char **array);
-int nbr_of_args(char **array);
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}					t_env;
 
+<<<<<<< HEAD
+=======
+// BUILTINS//
+int					ft_echo(t_exec *ex, int fd_out);
+int					ft_pwd(int fd_out);
+int					ft_unset(t_env *env, t_exec *ex);
+
+void				ft_env(t_env *env);
+
+// EXEC UTILS//
+int					ft_strcmp(char *s1, char *s2);
+int					nbr_of_args(t_exec *ex);
+
+// EXEC//
+int					is_builtin(t_exec *ex);
+
+>>>>>>> luna_exec
 #endif

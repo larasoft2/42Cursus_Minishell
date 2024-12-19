@@ -1,27 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_export.c                                        :+:      :+:    :+:   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/10 18:55:28 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/19 16:27:34 by lusavign         ###   ########.fr       */
+/*   Created: 2024/12/10 21:29:09 by lusavign          #+#    #+#             */
+/*   Updated: 2024/12/10 21:55:24 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell_exec.h"
 
-// export with no options;
-// sets environment variables
-//
-// export can set a null variable that won't show in env
-// but will show when typing export
-// export alone shows all variables
-
-// export	a = $b
-// export b = $a must not loop
-
-// void    ft_export(t_exec *exec, t_env *env)
-// {
-// }
+void	ft_env(t_env *env)
+{
+	while (env)
+	{
+		printf("%s=%s\n", env->key, env->value);
+		env = env->next;
+	}
+}
