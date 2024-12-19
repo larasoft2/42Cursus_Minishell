@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:46 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/19 16:27:50 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/19 18:56:12 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,26 @@
 // 	{
 // 	}
 // }
+
+char	*ft_strndup(const char *s, size_t n) // protection si string vide??
+{
+	int i;
+	char *dest;
+	char *src;
+
+	i = 0;
+	src = (char *)s;
+	dest = (char *)malloc(sizeof(char) * (n + 1));
+	if (!dest)
+		return (NULL);
+	while (i < n && s[i])
+	{
+		dest[i] = s[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
 
 int	ft_strcmp(char *s1, char *s2)
 {

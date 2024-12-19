@@ -6,13 +6,29 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 15:00:34 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/19 16:26:20 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/19 19:13:14 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_env	*create_list(char *key)
+void	ft_free_list(t_env *head)
+{
+	t_env	*cleaner;
+
+	if (!head)
+		return ;
+	while (head)
+	{
+		cleaner = head->next;
+		free(head->key);
+		free(head->value);
+		free(head);
+		head = cleaner;
+	}
+}
+
+t_env	*create_list(char *key, char *value)
 {
 	t_env	*list;
 
@@ -23,16 +39,17 @@ t_env	*create_list(char *key)
 		return (NULL);
 	}
 	list->key = key;
-	list->next = list;
+	list->value = value;
+	list->next = NULL;
 	return (list);
 }
 
-void	append_list(t_env **head, char *key)
+void	append_list(t_env **head, char *key, char *value)
 {
 	t_env	*new_node;
 	t_env	*current;
 
-	new_node = create_list(key);
+	new_node = create_list(key, value);
 	if (!new_node)
 	{
 		perror(strerror(errno));
@@ -49,32 +66,37 @@ void	append_list(t_env **head, char *key)
 	current->next = new_node;
 }
 
-t_env	*get_env_list(char **realenv, t_env **envp)
+t_env	*get_env_list(char **realenv)
 {
-	int i;
-	int j;
-	char *key;
+	int		i;
+	char	*value;
+	char	*pos;
+	char	*key;
+	t_env	*envp;
 
 	i = 0;
-	j = 0;
-	key = NULL;
+	envp = NULL;
 	while (realenv[i])
 	{
-		printf("in realenv while\n");
-		//	printf("%s\n", realenv[i]);
-		if (ft_strcmp(realenv[i], "="))
+		pos = ft_strchr(realenv[i], '=');
+		if (pos)
 		{
-			printf("in strcmp");
-			while (j < i)
-			{
-				printf("in j < i");
-				key = ft_strcpy(realenv[j], key);
-				append_list(envp, key);
-				printf("%s\n", (*envp)->key);
-				j++;
-			}
+			key = ft_strndup(realenv[i], pos - realenv[i]);
+			value = ft_strdup(pos + 1);
+			append_list(&envp, key, value);
 		}
 		i++;
 	}
-	return (*envp);
+	return (envp);
 }
+
+// int	main(int ac, char **av, char **realenv)
+// {
+// 	t_env	*envp;
+
+// 	(void)ac;
+// 	(void)av;
+// 	envp = get_env_list(realenv);
+// 	print_list(envp);
+// 	ft_free_list(envp);
+// }
