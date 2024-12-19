@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:26:15 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/17 20:05:07 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/19 15:15:44 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@
 
 typedef struct s_exec
 {
-	char			**arg; 		//arr contains args for one cmd {ls "-l", grep "txt", ...}
-	t_token			*type; 		//list of redirs
-	int				fd_in;		//fd for stdin
-	int				fd_out; 	//fd for stdout
-	struct s_exec 	*next; 		//next cmd
-}	t_exec;
+	char **arg;          // contains args for one cmd {ls "-l", ...}
+	t_token_node *type;  // list of redirs
+	int fd_in;           // fd for stdin
+	int fd_out;          // fd for stdout
+	struct s_exec *next; // next cmd
+}					t_exec;
 
 typedef struct s_env
 {
@@ -40,15 +40,18 @@ typedef struct s_env
 	struct s_env	*next;
 }					t_env;
 
- //BUILTINS//
+// BUILTINS//
 int					ft_echo(t_exec *ex, int fd_out);
 int					ft_pwd(int fd_out);
 int					ft_unset(t_env *env, t_exec *ex);
 
 void				ft_env(t_env *env);
 
-//EXEC UTILS//
+// EXEC UTILS//
 int					ft_strcmp(char *s1, char *s2);
 int					nbr_of_args(t_exec *ex);
+
+// EXEC//
+int					is_builtin(t_exec *ex);
 
 #endif

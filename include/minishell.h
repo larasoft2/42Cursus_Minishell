@@ -3,28 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:59:18 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/05 15:54:48 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/19 15:17:03 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "../Libft/include/libft.h"
+# include "minishell_exec.h"
+# include "minishell_parsing.h"
+# include <errno.h>
+# include <readline/history.h>
+# include <readline/readline.h>
+# include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <unistd.h>
 # include <string.h>
 # include <sys/wait.h>
-# include <signal.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-
-# include "../Libft/include/libft.h"
-# include "minishell_parsing.h"
-# include "minishell_exec.h"
+# include <unistd.h>
 
 // STRUCTURES ///////////////////////////////////////////////////////////////
 typedef enum e_error
@@ -44,7 +44,7 @@ typedef enum e_error
 	NUMERIC_ARGUMENT_REQUIRED,
 	INVALID_OPTION,
 	TOO_MANY_ARGUMENTS,
-}			t_error;
+}		t_error;
 
 // FUNCTIONS ////////////////////////////////////////////////////////////////
 

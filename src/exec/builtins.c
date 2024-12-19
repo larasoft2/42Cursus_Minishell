@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:57:10 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/17 20:05:30 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/19 16:26:50 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,16 @@
 // environment variable name,
 // and returns a pointer to the corresponding value string.
 
-// int	ft_isbuiltin(t_exec *ex)
+// int	is_builtin(t_exec *ex)
 // {
-// 	int tmp = 0;
-//  	while (ex)
-//  	{
-// 		if (ex->type == TOKEN_WORD)
-// 			jsp;
+// 	int	tmp;
+
+// 	tmp = 0;
+// 	while (ex)
+// 	{
+// 		// if (ex->type == TOKEN_WORD)
 // 		if (ft_strcmp(ex->arg, "echo") == 0)
-//     	 	ft_echo(tmp);
+// 			ft_echo(tmp);
 // 		else if (ft_strcmp(ex->arg, "cd") == 0)
 // 			ft_cd(tmp);
 // 		else if (ft_strcmp(ex->arg, "pwd") == 0)
@@ -42,6 +43,6 @@
 // 			ft_exit(tmp);
 // 		else
 // 			ex = ex->next;
-//  	}
-//  	return (-1);
+// 	}
+// 	return (-1);
 // }

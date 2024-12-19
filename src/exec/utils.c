@@ -6,11 +6,20 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:46 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/16 19:02:40 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/19 16:27:50 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell_exec.h"
+
+// void	put_env_in_tab(t_env *env)
+// {
+// 	char	**envp;
+
+// 	while (env->next)
+// 	{
+// 	}
+// }
 
 int	ft_strcmp(char *s1, char *s2)
 {
