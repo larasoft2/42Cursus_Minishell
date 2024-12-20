@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_parsing.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/19 16:34:34 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/19 16:45:04 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,20 +50,6 @@ typedef struct s_token_node
 	struct s_token_node	*next;
 }						t_token_node;
 
-typedef struct s_exec
-{
-	t_token_type		type;
-	char				**arg;
-	struct s_exec		*next;
-}						t_exec;
-
-typedef struct s_env
-{
-	char				*key;
-	char				*value;
-	struct s_env		*next;
-}						t_env;
-
 // FUNCTIONS ////////////////////////////////////////////////////////////////
 
 // SYNTAX_ERROR
@@ -92,7 +78,7 @@ int						is_pipe_redirin_redirout_character(char c);
 t_token_node			*create_token_node(t_token_type type, char *value);
 void					add_token(t_token_node **list, t_token_node *new_token);
 char					*read_word(char *input, int *i);
-void	print_tokens(t_token_node *list); // A ENLEVER A LA FIN
+void					print_tokens(t_token_node *list); // A ENLEVER A LA FIN
 t_token_node			*tokenize_input(char *input);
 void					create_word_node(char *input, int *i,
 							t_token_node **token_list);

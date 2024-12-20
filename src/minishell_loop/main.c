@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:58:59 by racoutte          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/12/19 15:20:08 by racoutte         ###   ########.fr       */
-=======
-/*   Updated: 2024/12/10 21:06:11 by lusavign         ###   ########.fr       */
->>>>>>> luna_exec
+/*   Updated: 2024/12/19 16:47:47 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +33,8 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	(void)env;
 
-<<<<<<< HEAD
 	char			*input;
 	t_token_node	*token_list;
-=======
-	char *input;
->>>>>>> luna_exec
 
 	input = NULL;
 	token_list = NULL;

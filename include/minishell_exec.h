@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_exec.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:26:15 by racoutte          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/12/11 13:43:46 by racoutte         ###   ########.fr       */
-=======
-/*   Updated: 2024/12/19 15:15:44 by lusavign         ###   ########.fr       */
->>>>>>> luna_exec
+/*   Updated: 2024/12/19 16:45:43 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +40,6 @@ typedef struct s_env
 	struct s_env	*next;
 }					t_env;
 
-<<<<<<< HEAD
-=======
 // BUILTINS//
 int					ft_echo(t_exec *ex, int fd_out);
 int					ft_pwd(int fd_out);
@@ -60,5 +54,4 @@ int					nbr_of_args(t_exec *ex);
 // EXEC//
 int					is_builtin(t_exec *ex);
 
->>>>>>> luna_exec
 #endif
