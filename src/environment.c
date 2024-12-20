@@ -6,11 +6,27 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 15:00:34 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/19 20:10:03 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:45:16 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	*ft_free_array(char **ar)
+{
+	int	i;
+
+	i = 0;
+	if (!ar)
+		return (NULL);
+	while (ar[i])
+		i++;
+	while (i > 0)
+		free(ar[--i]);
+	free(ar);
+	ar = NULL;
+	return (NULL);
+}
 
 void	ft_free_list(t_env *head)
 {
@@ -33,6 +49,7 @@ char	**put_env_in_ar(t_env *envp)
 	char	**array_env;
 	int		i;
 	char	*str;
+	char	*tmp;
 
 	i = 0;
 	if (!envp)
@@ -40,12 +57,14 @@ char	**put_env_in_ar(t_env *envp)
 	array_env = malloc(sizeof(char *) * (ft_lstsize(envp) + 1));
 	while (envp)
 	{
-		str = ft_strjoin(envp->key, "=");
-		str = ft_strjoin(str, envp->value);
+		tmp = ft_strjoin(envp->key, "=");
+		str = ft_strjoin(tmp, envp->value);
+		free(tmp);
 		array_env[i++] = str;
 		envp = envp->next;
 		str = NULL;
 	}
+	array_env[i] = NULL;
 	return (array_env);
 }
 
@@ -114,10 +133,21 @@ t_env	*get_env_list(char **realenv)
 // int	main(int ac, char **av, char **realenv)
 // {
 // 	t_env	*envp;
+// 	char	**ar;
+// 	int		i;
 
+// 	i = 0;
 // 	(void)ac;
 // 	(void)av;
 // 	envp = get_env_list(realenv);
 // 	print_list(envp);
+// 	ar = put_env_in_ar(envp);
+// 	while (ar[i])
+// 	{
+// 		printf("%s\n", ar[i]);
+// 		i++;
+// 	}
 // 	ft_free_list(envp);
+// 	ft_free_array(ar);
+// 	ar = NULL;
 // }
