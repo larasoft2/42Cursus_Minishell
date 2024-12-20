@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 15:24:09 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/19 16:45:19 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:12:56 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,11 @@ void	print_error_syntax_message(t_error error)
 	else if (error == SYNTAX_ERROR_PIPE_SINGLE)
 		ft_putendl_fd("minishell: syntax error near unexpected token `|'", 2);
 	else if (error == SYNTAX_ERROR_NEWLINE)
-		ft_putendl_fd("minishell: syntax error near unexpected token `newline'", 2);
+		ft_putendl_fd("minishell: syntax error near unexpected token `newline'",
+			2);
 	else if (error == SYNTAX_ERROR_UNCLOSED_QUOTES)
-		ft_putendl_fd("minishell: syntax error, unclosed quotes, not handled", 2);
+		ft_putendl_fd("minishell: syntax error, unclosed quotes, not handled",
+			2);
 	else if (error == SYNTAX_ERROR_NOT_HANDLED)
 		ft_putendl_fd("minishell: syntax error, not handled", 2);
 }
@@ -52,7 +54,7 @@ void	print_error_not_handled_word(char *word)
 	}
 }
 
-char	*get_error_exec_message(t_error error) //change to putend fd
+char	*get_error_exec_message(t_error error) // change to putend fd
 {
 	if (error == COMMAND_NOT_FOUND)
 		return ("command not found");

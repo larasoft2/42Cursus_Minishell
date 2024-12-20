@@ -6,20 +6,31 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:46 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/19 16:27:50 by lusavign         ###   ########.fr       */
+/*   Updated: 2024/12/19 20:12:54 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell_exec.h"
 
-// void	put_env_in_tab(t_env *env)
-// {
-// 	char	**envp;
+char	*ft_strndup(const char *s, size_t n) // protection si string vide??
+{
+	size_t i;
+	char *dest;
+	char *src;
 
-// 	while (env->next)
-// 	{
-// 	}
-// }
+	i = 0;
+	src = (char *)s;
+	dest = (char *)malloc(sizeof(char) * (n + 1));
+	if (!dest)
+		return (NULL);
+	while (i < n && s[i])
+	{
+		dest[i] = s[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
+}
 
 int	ft_strcmp(char *s1, char *s2)
 {

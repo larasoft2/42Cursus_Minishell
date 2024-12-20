@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:58:59 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/19 16:47:47 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:12:32 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@ int	parsing(char *input, t_token_node **token_list)
 
 int	main(int ac, char **av, char **env)
 {
+	char			*input;
+	t_token_node	*token_list;
+
 	(void)ac;
 	(void)av;
 	(void)env;
@@ -54,7 +57,7 @@ int	main(int ac, char **av, char **env)
 		if (*input)
 			add_history(input);
 		print_tokens(token_list);
-		//ft_printf("\n", input);
+		// ft_printf("\n", input);
 		free(input);
 		free_token_list(token_list);
 	}

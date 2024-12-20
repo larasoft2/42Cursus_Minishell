@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:26:15 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/19 16:45:43 by racoutte         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:13:27 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void				ft_env(t_env *env);
 // EXEC UTILS//
 int					ft_strcmp(char *s1, char *s2);
 int					nbr_of_args(t_exec *ex);
+char				*ft_strndup(const char *s, size_t n);
 
 // EXEC//
 int					is_builtin(t_exec *ex);
