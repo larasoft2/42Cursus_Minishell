@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:26:15 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/19 18:43:13 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/06 18:26:41 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int					ft_unset(t_env *env, t_exec *ex);
 void				ft_env(t_env *env);
 
 // EXEC UTILS//
+void				ft_close_fd(int *pipefd);
 int					ft_strcmp(char *s1, char *s2);
 int					nbr_of_args(t_exec *ex);
 char				*ft_strndup(const char *s, size_t n);

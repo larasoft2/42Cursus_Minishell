@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/19 16:27:23 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/06 18:27:09 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,14 +80,26 @@
 // 	waipit(pid, NULL, 0);
 // }
 
-// void	process(t_env *env, t_exec *ex, int pipefd, int filetype)
-// {
-// 	if (is_builtin(ex))
-// 		return (0);
-// 	else
-// 	{
-// 		pid = fork();
-// 	}
+void	process(t_env *env, t_exec *ex, int pipefd, int filetype)
+{
+    int cmd_nb;
+    int pipefd[2];
+
+    cmd_nb = 0;
+    if (pipe(pipefd) == -1) //before/after builtin check?
+    {
+        ft_close_fd(pipefd);
+        return (1);
+    }
+	if (is_builtin(ex))
+		return (0);
+    //nb de cmd = nb child
+    while (ex->type == TOKEN_WORD && ex->next != NULL)
+    {
+        cmd_nb++;
+        ex = ex->next;
+    }
+}
 
 // 	// check errors, parsing???
 // }

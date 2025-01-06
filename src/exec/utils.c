@@ -6,11 +6,20 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:46 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/19 20:12:54 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/06 18:26:21 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell_exec.h"
+
+void	ft_close_fd(int *pipefd)
+{
+	if (pipefd)
+	{
+		close(pipefd[0]);
+		close(pipefd[1]);
+	}
+}
 
 char	*ft_strndup(const char *s, size_t n) // protection si string vide??
 {
