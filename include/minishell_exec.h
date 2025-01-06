@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:26:15 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/06 18:26:41 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/06 22:01:38 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,9 @@ char				*ft_strndup(const char *s, size_t n);
 
 // EXEC//
 int					is_builtin(t_exec *ex);
+char				**put_env_in_ar(t_env *envp);
+
+// FREE//
+void				*ft_free_array(char **ar);
 
 #endif
