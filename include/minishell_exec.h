@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_exec.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:26:15 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/21 12:07:20 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/21 17:00:28 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int					ft_unset(t_env *env, t_exec *ex);
 void				ft_env(t_env *env);
 
 // EXEC UTILS//
+void				ft_close_fd(int *pipefd);
 int					ft_strcmp(char *s1, char *s2);
 int					nbr_of_args(t_exec *ex);
 char				*ft_strndup(const char *s, size_t n);
