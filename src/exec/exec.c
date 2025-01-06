@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/06 18:27:09 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/06 20:01:13 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,34 @@
 // 	waipit(pid, NULL, 0);
 // }
 
-void	process(t_env *env, t_exec *ex, int pipefd, int filetype)
+void    ft_fork(t_env *env, t_exec *ex)
 {
-    int cmd_nb;
+    pid_t   pid;
     int pipefd[2];
 
-    cmd_nb = 0;
+    while (ex)
+    {
+        pid = fork();
+        if (pid == -1)
+        {
+            ft_close_fd(pipefd); //perror?
+            return (1);
+        }
+        if (pid == 0)
+        {
+            ft_process(env, ex, pipefd, TEST);
+            return (0);
+        }
+        ex = ex->next;
+    }
+    while (wait(NULL) > 0) //if no child, return (-1), else return id
+    {
+    }
+    //ft_close_fd(pipefd); //not sure if we do it here
+}
+
+void	ft_process(t_env *env, t_exec *ex, int *pipefd, int filetype)
+{
     if (pipe(pipefd) == -1) //before/after builtin check?
     {
         ft_close_fd(pipefd);
@@ -93,12 +115,8 @@ void	process(t_env *env, t_exec *ex, int pipefd, int filetype)
     }
 	if (is_builtin(ex))
 		return (0);
-    //nb de cmd = nb child
-    while (ex->type == TOKEN_WORD && ex->next != NULL)
-    {
-        cmd_nb++;
-        ex = ex->next;
-    }
+    else
+        ft_fork();
 }
 
 // 	// check errors, parsing???
