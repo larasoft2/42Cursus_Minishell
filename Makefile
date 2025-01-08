@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+         #
+#    By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/22 14:20:31 by racoutte          #+#    #+#              #
-#    Updated: 2024/12/05 15:53:28 by racoutte         ###   ########.fr        #
+#    Updated: 2025/01/08 19:30:24 by lusavign         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,11 +57,11 @@ $(LIB):
 	@echo "$(YELLOW)Adding Libft$(RESET)"
 	@$(MAKE) -C $(LIBDIR) > /dev/null 2>&1
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)/error $(OBJ_DIR)/parsing $(OBJ_DIR)/exec $(OBJ_DIR)/minishell_loop
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)/error $(OBJ_DIR)/parsing $(OBJ_DIR)/exec $(OBJ_DIR)/builtins $(OBJ_DIR)/minishell_loop 
 	@echo "$(BLUE)Compiling $<...$(RESET)"
 	@$(CC) $(CFLAGS) -c -I $(INCLUDE) $< -o $@
 
-$(OBJ_DIR)/parsing $(OBJ_DIR)/exec $(OBJ_DIR)/minishell_loop $(OBJ_DIR)/error:
+$(OBJ_DIR)/parsing $(OBJ_DIR)/exec $(OBJ_DIR)/minishell_loop $(OBJ_DIR)/error $(OBJ_DIR)/builtins:
 	@mkdir -p $@
 
 $(OBJ_DIR):

@@ -1,37 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_cd.c                                            :+:      :+:    :+:   */
+/*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/10 18:55:09 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/17 15:53:05 by lusavign         ###   ########.fr       */
+/*   Created: 2024/12/10 18:55:39 by lusavign          #+#    #+#             */
+/*   Updated: 2025/01/08 19:26:04 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell_exec.h"
+#include "minishell.h"
 
-// cd with only relative or absolute	path;
-// changes the current working directory
-
-// chdir
-
-void	ft_cd(t_exec *ex)
+int	ft_pwd(int fd_out)
 {
-	char	*buff;
+	char dir[4096]; // posix max
 
-	chdir(ex->arg[1]);
-	buff = malloc(1024);
-	printf("%s\n", getcwd(buff, 1024));
+	if (getcwd(dir, 4096))
+	{
+		if (fd_out >= 0) // securite pas necessaire si handled in parsing
+		{
+			ft_putendl_fd(dir, fd_out);
+			return (0);
+		}
+	}
+	ft_putendl_fd("pwd: error retrieving current directory", 2);
+	return (1);
 }
-
-// int	main(int ac, char **av)
-// {
-// 	(void)ac;
-// 	t_exec ex;
-// 	char *args[] = {av[1], NULL};
-
-// 	ex.arg = args;
-// 	ft_cd(&ex);
-// }

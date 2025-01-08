@@ -6,11 +6,11 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 21:29:09 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/10 21:55:24 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/08 19:25:53 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell_exec.h"
+#include "minishell.h"
 
 void	ft_env(t_env *env)
 {

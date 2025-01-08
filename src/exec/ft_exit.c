@@ -6,11 +6,11 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:24 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/16 19:01:00 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/08 19:25:57 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell_exec.h"
+#include "minishell.h"
 
 // // exit with no options.
 // exits the shell
