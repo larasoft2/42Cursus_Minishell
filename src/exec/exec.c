@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/08 19:19:12 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/09 19:13:18 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,59 +66,99 @@ char	*get_path(t_env *env, char *cmd)
 	return (path);
 }
 
+void	ft_process(t_env *env, t_exec *ex, int *pipefd)
+{
+	int	pipfd[2];
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+        perror(strerror(errno));
+        ft_close_fd(pipefd);
+		return ;
+	}
+    if (pid == 0)
+    {
+        if (redirect() == 0)
+			//blabla;
+        ft_execute();
+    }
+	return ;
+}
+
 void    ft_fork(t_env *env, t_exec *ex)
 {
-    pid_t   pid;
-    int     pipefd[2];
     char    **envp_ar;
     
     envp_ar = put_env_in_ar(env);
-    if (ex && ex->next == NULL)
-    {
-        if (is_builtin(ex, env))
-        {
-            ft_free_array(envp_ar);
-            return ;
-        }
-        ft_free_array(envp_ar);
-        return ;
-    }
-	if (pipe(pipefd) == -1)
+	while (ex)
 	{
-		ft_close_fd(pipefd);
-		return ;
+    	if (ex && ex->next == NULL) //if 1 cmd & builtin, exec immediately
+    	{
+        	if (is_builtin(ex, env)) 
+        	{
+            	ft_free_array(envp_ar);
+            	return ;
+        	}
+        	ft_free_array(envp_ar);
+        	return ;
+   		}
+		else if (ft_process())
+			return ;
 	}
-    while (ex)
-    {
-        pid = fork();
-        if (pid == -1)
-        {
-            perror(strerror(errno));
-            ft_close_fd(pipefd);
-            return ;
-        }
-        if (pid == 0)
-        {
-            //ft_process(env, ex, pipefd, TEST); //close fds? //reverif builtin dedans
-            return ;
-        }
-        ex = ex->next;
-    }
-    while (wait(NULL) > 0) //if no child, return (-1), else return id //need to wait last cmd? 
+	while (wait(NULL) > 0) //if no child, return (-1), else return id //need to wait last cmd? 
     {
     } 
-    ft_close_fd(pipefd);
+	ft_free_array(envp_ar);
+	return ;
 }
 
-void	ft_process(t_env *env, t_exec *ex, int *pipefd)
-{
-	(void)ex;
-	(void)env;
-    if (pipe(pipefd) == -1) //before/after builtin check?
-    {
-        ft_close_fd(pipefd);
-        return ;
-    }
-}
+	// if (pipe(pipefd) == -1)
+	// {
+	// 	ft_close_fd(pipefd);
+	// 	return ;
+	// }
+    // while (ex)
+    // {
+    //     pid = fork();
+    //     if (pid == -1)
+    //     {
+    //         perror(strerror(errno));
+    //         ft_close_fd(pipefd);
+    //         return ;
+    //     }
+    //     if (pid == 0)
+    //     {
+    //         ft_process(env, ex, pipefd); //close fds? //reverif builtin dedans
+    //         return ;
+    //     }
+    //     ex = ex->next;
+    // }
+    // while (wait(NULL) > 0) //if no child, return (-1), else return id //need to wait last cmd? 
+    // {
+    // } 
+    // ft_close_fd(pipefd);
+
+// void	ft_redirect(char **av, int *pipefd, int filetype)
+// {
+// 	int	fd;
+
+// 	fd = ft_open(av, filetype, pipefd);
+// 	if (filetype == 0)
+// 	{
+// 		dup2(fd, STDIN_FILENO);
+// 		dup2(pipefd[1], STDOUT_FILENO);
+// 	}
+// 	else
+// 	{
+// 		dup2(pipefd[0], STDIN_FILENO);
+// 		dup2(fd, STDOUT_FILENO);
+// 	}
+// 	close(fd);
+// 	ft_close_fd(pipefd);
+// }
+
+
 
 // 	// check errors, parsing???

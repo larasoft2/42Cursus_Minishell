@@ -6,13 +6,13 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:55:03 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/08 19:26:07 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/09 15:29:42 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_unset(t_env *env, t_exec *ex)
+int	ft_unset(t_env *env, t_exec *ex) //check sans arg ?
 {
 	t_env	*current;
 	t_env	*prev;
@@ -23,7 +23,7 @@ int	ft_unset(t_env *env, t_exec *ex)
 	prev = NULL;
 	while (current)
 	{
-		if (ft_strcmp(current->key, ex->arg[0]) == 0) //[0] might change bc struct?
+		if (ft_strcmp(current->key, ex->arg[1]) == 0) //[0] might change bc struct?
 		{
 			if (prev)
 				prev->next = current->next;

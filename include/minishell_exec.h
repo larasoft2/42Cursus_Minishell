@@ -6,12 +6,13 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:26:15 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/08 19:29:04 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/09 18:14:02 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_EXEC_H
 # define MINISHELL_EXEC_H
+# include <stdbool.h>
 
 # include "minishell.h"
 # include "minishell_parsing.h"
@@ -37,6 +38,7 @@ typedef struct s_env
 {
 	char			*key;
 	char			*value;
+	bool			exportable;
 	struct s_env	*next;
 }					t_env;
 
