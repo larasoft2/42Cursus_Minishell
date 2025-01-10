@@ -6,13 +6,15 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 12:26:09 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/09 17:58:54 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/10 16:52:44 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //ATTENTION NE PAS OUBLIER DE TRAITER LE CAS $? pour exit !!
+
+//ATTENTION PROTECTION MALLOC
 
 char	*expand_env_var(char *name, t_env **env)
 {
@@ -140,12 +142,58 @@ char	*handle_dollar_sign(char *input, int *i, t_env **env, char *expanded_var)
 	free(extracted_name);
 	if (!expanded_var)
 		return (NULL);
-	free(expanded_var);
+	return (expanded_var);
 }
+
+char	*handle_exit_error(char *final_string, int *i)
+{
+	final_string = ft_strjoin(final_string, "0123456789");
+	*i += 10;
+	return (final_string);
+	// A CHANGER PAR RAPPORT A L'EXIT
+}
+
+char	*expand_double_quote(char *final_string, char *input, int *i, t_env **env)
+{
+	char	*expanded_var;
+
+	expanded_var = handle_dollar_sign(&input, &i, env, &expanded_var);
+	if (!expanded_var)
+		return (NULL);
+	final_string = ft_strjoin(final_string, expanded_var);
+	free(expanded_var);
+	return (final_string);
+}
+
+char	*expand_without_quote(char *final_string, char *input, int *i, t_env **env)
+{
+	char	*expanded_var;
+
+	expanded_var = handle_dollar_sign(&input, &i, env, &expanded_var);
+	if (!expanded_var)
+		return (NULL);
+	expanded_var = compress_spaces(&expanded_var, &i);
+	expanded_var = remove_spaces(&expanded_var, &i);
+	final_string = ft_strjoin(final_string, expanded_var);
+	return (final_string);
+}
+
+// char	*expand_var_depending_quote(char *final_string, char *open_quote, int *i, t_env **env)
+// {
+// 	if (input[i + 1] == '?')
+// 	{
+// 		final_string = handle_exit_error();
+// 		i++; //? je dois avancer de combien par rapport a la fonction ?
+// 	}
+// 	if (open_quote == DOUBLE_QUOTE)
+// 		final_string = expand_double_quote(&final_string, &input, &i, env);
+// 	else if (!open_quote)
+// 		final_string = expand_without_quote(&final_string, &input, &i, env);
+// }
+
 
 char	*search_and_replace(char *input, t_env **env)
 {
-	char	*expanded_var;
 	char	*final_string;
 	char	*open_quote;
 	int		i;
@@ -159,19 +207,26 @@ char	*search_and_replace(char *input, t_env **env)
 		{
 			handle_quote(&input, &i, &open_quote);
 			final_string = str_append(final_string, input[i]);
+			i++;
 		}
-		else if (input[i] == '$' && is_quote(input[i]) != SINGLE_QUOTE)
+		else if (input[i] == '$' && open_quote != SINGLE_QUOTE)
 		{
-			expanded_var = handle_dollar_sign(&input, &i, env, &expanded_var);
-			//if NULL, a gerer
-			if (open_quote == '\0')
-				expanded_var = compress_spaces(expanded_var);
-			final_string = ft_strjoin(final_string, expanded_var);
-			free(expanded_var);
+			if (input[i + 1] == '?')
+			{
+				final_string = handle_exit_error();
+				i++; //? je dois avancer de combien par rapport a la fonction ?
+			}
+			if (open_quote == DOUBLE_QUOTE)
+				final_string = expand_double_quote(&final_string, &input, &i, env);
+			else if (!open_quote)
+				final_string = expand_without_quote(&final_string, &input, &i, env);
 		}
 		else
+		{
 			final_string = str_append(final_string, input[i]);
-		i++;
+			i++;
+		}
+		//pas de i++ ici ? gestion dans les fonctions expand > on met i a la fin du mot expanded
 	}
 	return (final_string);
 }
