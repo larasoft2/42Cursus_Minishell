@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/09 19:13:18 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/10 18:57:37 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	ft_process(t_env *env, t_exec *ex, int *pipefd)
 	}
     if (pid == 0)
     {
-        if (redirect() == 0)
+        if (redirect() == 0) //A CODER
 			//blabla;
         ft_execute();
     }
@@ -90,11 +90,13 @@ void	ft_process(t_env *env, t_exec *ex, int *pipefd)
 void    ft_fork(t_env *env, t_exec *ex)
 {
     char    **envp_ar;
+	int 	command_nb;
     
     envp_ar = put_env_in_ar(env);
+	command_nb = count_command(ex); //A CODER
 	while (ex)
 	{
-    	if (ex && ex->next == NULL) //if 1 cmd & builtin, exec immediately
+    	if (command_nb == 1) //if 1 cmd & builtin, exec immediately
     	{
         	if (is_builtin(ex, env)) 
         	{
@@ -104,8 +106,9 @@ void    ft_fork(t_env *env, t_exec *ex)
         	ft_free_array(envp_ar);
         	return ;
    		}
-		else if (ft_process())
+		else if (ft_process(ex))
 			return ;
+		ex = ex->next;
 	}
 	while (wait(NULL) > 0) //if no child, return (-1), else return id //need to wait last cmd? 
     {
