@@ -6,13 +6,13 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:55:03 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/09 15:29:42 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/09 15:28:29 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_unset(t_env *env, t_exec *ex) //check sans arg ?
+int	ft_unset(t_env *env, t_exec *ex) //unset sans arg ?
 {
 	t_env	*current;
 	t_env	*prev;

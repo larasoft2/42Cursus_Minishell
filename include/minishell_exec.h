@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:26:15 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/09 18:14:02 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/14 22:17:53 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # define PWD 5
 # define UNSET 6
 
+typedef struct s_token_node t_token_node;
+
 typedef struct s_exec
 {
 	char **arg;          // contains args for one cmd {ls "-l", ...}
@@ -33,6 +35,7 @@ typedef struct s_exec
 	int fd_out;          // fd for stdout
 	struct s_exec *next; // next cmd
 }					t_exec;
+
 
 typedef struct s_env
 {
@@ -53,11 +56,13 @@ void				ft_env(t_env *env);
 void				ft_close_fd(int *pipefd);
 int					ft_strcmp(char *s1, char *s2);
 int					nbr_of_args(t_exec *ex);
+int					count_command(t_exec *ex);
 char				*ft_strndup(const char *s, size_t n);
 
+
 // EXEC//
-int					is_builtin(t_exec *ex, t_env *env);
-void    			ft_fork(t_env *env, t_exec *ex);
+int					exec_builtin(t_exec *ex, t_env *env);
+int					is_builtin(t_exec *ex);
 char				**put_env_in_ar(t_env *envp);
 
 // FREE//

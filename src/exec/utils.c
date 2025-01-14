@@ -6,11 +6,11 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:46 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/08 19:17:39 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/14 21:23:46 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell_exec.h"
+#include "minishell.h"
 
 void	ft_close_fd(int *pipefd)
 {
@@ -25,10 +25,8 @@ char	*ft_strndup(const char *s, size_t n) // protection si string vide??
 {
 	size_t i;
 	char *dest;
-	char *src;
 
 	i = 0;
-	src = (char *)s;
 	dest = (char *)malloc(sizeof(char) * (n + 1));
 	if (!dest)
 		return (NULL);
@@ -61,6 +59,23 @@ int	ft_strcmp(char *s1, char *s2)
 			return (s1[i] - s2[i]);
 	}
 	return (0);
+}
+
+int	count_command(t_exec *ex)
+{
+	int	i;
+
+	if (!ex)
+		return (0);
+	i = 0;
+	while (ex)
+	{
+		if (ex->type && ex->type->type == TOKEN_WORD)
+			i++;
+		ex = ex->next;
+	}
+	printf("COMMAND COUNT: %i\n", i);
+	return (i);
 }
 
 int	nbr_of_args(t_exec *ex)

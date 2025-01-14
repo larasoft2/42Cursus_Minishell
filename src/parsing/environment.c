@@ -6,11 +6,24 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 15:00:34 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/08 19:09:09 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/14 22:19:41 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int		env_list_size(t_env *env) 
+{
+    int size;
+	
+	size = 0;
+    while (env) 
+	{
+        size++;
+        env = env->next;
+    }
+    return (size);
+}
 
 void	*ft_free_array(char **ar)
 {
@@ -42,19 +55,6 @@ void	ft_free_list(t_env *head)
 		free(head);
 		head = cleaner;
 	}
-}
-
-int		env_list_size(t_env *env) 
-{
-    int size;
-	
-	size = 0;
-    while (env) 
-	{
-        size++;
-        env = env->next;
-    }
-    return (size);
 }
 
 char	**put_env_in_ar(t_env *envp)

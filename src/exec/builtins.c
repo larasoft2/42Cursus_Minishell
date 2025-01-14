@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:57:10 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/08 19:26:29 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/14 20:39:11 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,37 @@
 // environment variable name,
 // and returns a pointer to the corresponding value string.
 
-int	is_builtin(t_exec *ex, t_env *env)
+int is_builtin(t_exec *ex)
 {
-	int	tmp;
-
-	tmp = 0;
+	if (!ex || !ex->arg || !ex->arg[0])
+		return (-1);
 	while (ex)
 	{
-		printf("4\n");
+		if (ft_strcmp(ex->arg[0], "echo") == 0)
+			return (1);
+		//else if (ft_strcmp(ex->arg[0], "cd") == 0)
+			// return (1);
+		else if (ft_strcmp(ex->arg[0], "pwd") == 0)
+			return (1);
+		//else if (ft_strcmp(ex->arg[0], "export") == 0)
+		//	return (1);
+		else if (ft_strcmp(ex->arg[0], "unset") == 0)
+			return (1);
+		else if (ft_strcmp(ex->arg[0], "env") == 0)
+			return (1);
+		ex = ex->next;
+	}
+	return (-1);
+}
+
+int	exec_builtin(t_exec *ex, t_env *env)
+{
+	printf("IN BUILTIN 1\n");
+	if (!ex || !ex->arg || !ex->arg[0])
+		return (-1);
+	printf("IN BUILTIN 2\n");
+	while (ex)
+	{
 		// if (ex->type == TOKEN_WORD)
 		if (ft_strcmp(ex->arg[0], "echo") == 0)
 			ft_echo(ex, 0);

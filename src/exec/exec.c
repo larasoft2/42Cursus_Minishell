@@ -6,11 +6,11 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/10 18:57:37 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/14 22:13:27 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell_exec.h"
+#include "minishell.h"
 
 // execve will receive cmd path as first arg
 // then options and args as second
@@ -51,14 +51,14 @@ char	*get_path(t_env *env, char *cmd)
 	full_paths = NULL;
 	path = NULL;
 	i = 0;
-	while (env->key[i])
+	while (env)
 	{
-		if (ft_strncmp(&env->key[i], "PATH=", 5) == 0)
-		{
-			full_paths = ft_split(&env->value[i], ':');
-			break ;
-		}
-		i++;
+    	if (ft_strncmp(env->key, "PATH", 4) == 0 && env->key[4] == '\0')
+   		{
+        	full_paths = ft_split(env->value, ':');
+        	break;
+    	}
+    	env = env->next;
 	}
 	if (!full_paths)
 		return (NULL);
@@ -66,54 +66,101 @@ char	*get_path(t_env *env, char *cmd)
 	return (path);
 }
 
-void	ft_process(t_env *env, t_exec *ex, int *pipefd)
+void	ft_process(t_exec *cmd, t_env *env)//handle pipe after 
 {
-	int	pipfd[2];
+	int	pipefd[2];
+	int	in_fd = 0;
 	pid_t	pid;
+	char *path_cmd;
 
-	pid = fork();
-	if (pid == -1)
+	if (pipe(pipefd) == -1)
 	{
+    	perror("pipe failed");
+    	exit(1);
+	}
+	while (cmd)
+	{
+		if (cmd->next && pipe(pipefd) == -1)
+		{
+			perror("pipe");
+			return ;
+		}
+		pid = fork();
+		if (pid == -1)
+		{	
         perror(strerror(errno));
         ft_close_fd(pipefd);
 		return ;
+		}
+    	if (pid == 0)
+    	{
+        if (cmd->fd_in != -1) 
+		{
+            dup2(cmd->fd_in, STDIN_FILENO);
+			if (cmd->fd_in >= 0)
+        		close(cmd->fd_in);
+        } 
+		else 
+        	dup2(in_fd, STDIN_FILENO);
+		if (cmd->fd_out != -1) 
+		{
+            dup2(cmd->fd_out, STDOUT_FILENO);
+			if (cmd->fd_in >= 0)
+            	close(cmd->fd_out);
+        }
+		else if (cmd->next)
+        	dup2(pipefd[1], STDOUT_FILENO);
+		ft_close_fd(pipefd);
+		path_cmd = get_path(env, cmd->arg[0]);
+		if (!path_cmd)
+		{
+			printf("command not found: %s\n", cmd->arg[0]);
+			return ;
+		}
+		printf("PATH: %s\n", cmd->arg[0]);
+        execve(get_path(env, cmd->arg[0]), cmd->arg, put_env_in_ar(env));
+        perror("execve");
+        exit(EXIT_FAILURE);
+    	} 
+		else if (pid > 0) 
+		{
+        	waitpid(pid, NULL, 0);
+        	close(pipefd[1]);
+        	in_fd = pipefd[0];
+    	}
+		else
+		{
+    	    perror("fork");
+        	return;
+    	}
+		cmd = cmd->next;
 	}
-    if (pid == 0)
-    {
-        if (redirect() == 0) //A CODER
-			//blabla;
-        ft_execute();
-    }
-	return ;
+    
 }
+
 
 void    ft_fork(t_env *env, t_exec *ex)
 {
-    char    **envp_ar;
 	int 	command_nb;
     
-    envp_ar = put_env_in_ar(env);
-	command_nb = count_command(ex); //A CODER
+	command_nb = count_command(ex);
 	while (ex)
 	{
-    	if (command_nb == 1) //if 1 cmd & builtin, exec immediately
+    	if ((command_nb == 1) && (is_builtin(ex) == 1))
     	{
-        	if (is_builtin(ex, env)) 
-        	{
-            	ft_free_array(envp_ar);
-            	return ;
-        	}
-        	ft_free_array(envp_ar);
-        	return ;
-   		}
-		else if (ft_process(ex))
-			return ;
+			exec_builtin(ex, env);
+            return ;
+        }
+		else
+		{
+			ft_process(ex, env);
+		 	return ;
+		}
 		ex = ex->next;
 	}
 	while (wait(NULL) > 0) //if no child, return (-1), else return id //need to wait last cmd? 
     {
     } 
-	ft_free_array(envp_ar);
 	return ;
 }
 

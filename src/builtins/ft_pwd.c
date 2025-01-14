@@ -1,22 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/10 21:29:09 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/08 19:25:53 by lusavign         ###   ########.fr       */
+/*   Created: 2024/12/10 18:55:39 by lusavign          #+#    #+#             */
+/*   Updated: 2025/01/08 17:50:01 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_env(t_env *env)
+int	ft_pwd(int fd_out)
 {
-	while (env)
+	char dir[4096]; // posix max
+
+	if (getcwd(dir, 4096))
 	{
-		printf("%s=%s\n", env->key, env->value);
-		env = env->next;
+		if (fd_out >= 0) // securite pas necessaire si handled in parsing
+		{
+			ft_putendl_fd(dir, fd_out);
+			return (0);
+		}
 	}
+	ft_putendl_fd("pwd: error retrieving current directory", 2);
+	return (1);
 }
