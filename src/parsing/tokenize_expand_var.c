@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 12:26:09 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/10 16:52:44 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/14 17:24:39 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,35 +92,61 @@ char	*str_append(char *str, char c)
 	return (new_str);
 }
 
-char	*compress_spaces(char *str)
+void	keep_one_space_at_start(char *str, char *str_trimmed, int *i, int *j)
 {
-	char	*dest;
-	int		in_word;
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	j = 0;
-	in_word = 0;
-	dest = (char *)malloc(sizeof(char) * ft_strlen(str) + 1);
-	while (str[i])
+	if (ft_isspace(str[*i]))
 	{
-		while (ft_isspace(str[i]))
-			i++;
-		if (!ft_isspace(str[i]))
+		str_trimmed[(*j)++] = ' ';
+		while (ft_isspace(str[*i]))
+			(*i)++;
+	}
+}
+
+void	copy_and_compress_spaces(char *str, char *str_trimmed, int *i, int *j)
+{
+	bool space_added = false;
+
+	while (str[*i])
+	{
+		if (!ft_isspace(str[*i]))
 		{
-			dest[j++] = str[i++];
-			in_word = 1;
+			str_trimmed[(*j)++] = str[(*i)++];
+			space_added = false;
 		}
-		else if (in_word == 1)
+		else if (!space_added)
 		{
-			dest[j] = ' ';
-			in_word = 0;
-			i++;
+			str_trimmed[(*j)++] = ' ';
+			space_added = true;
+			while (ft_isspace(str[*i]))
+				(*i)++;
 		}
 	}
-	dest[j] = '\0';
-	return (dest);
+}
+
+void	keep_one_space_at_the_end(char *str, char *str_trimmed, int *j)
+{
+	if (*j > 0 && ft_isspace(str[ft_strlen(str) - 1]) && !ft_isspace(str_trimmed[*j - 1]))
+		str_trimmed[(*j)++] = ' ';
+}
+
+char	*strtrim_spaces(char *str)
+{
+	char	*str_trimmed;
+	int		i;
+	int		j;
+
+	if (!str)
+		return (NULL);
+	str_trimmed = (char *)malloc(sizeof(char) * (ft_strlen(str) + 1));
+	if (!str_trimmed)
+		return (NULL);
+	i = 0;
+	j = 0;
+	keep_one_space_at_start(str, str_trimmed, &i, &j);
+	copy_and_compress_spaces(str, str_trimmed, &i, &j);
+	keep_one_space_at_the_end(str, str_trimmed, &j);
+	str_trimmed[j] = '\0';
+	return (str_trimmed);
 }
 
 void	handle_quote(char *input, int *i, char *open_quote)
@@ -172,25 +198,10 @@ char	*expand_without_quote(char *final_string, char *input, int *i, t_env **env)
 	expanded_var = handle_dollar_sign(&input, &i, env, &expanded_var);
 	if (!expanded_var)
 		return (NULL);
-	expanded_var = compress_spaces(&expanded_var, &i);
-	expanded_var = remove_spaces(&expanded_var, &i);
+	expanded_var = strtrim_spaces(&expanded_var);
 	final_string = ft_strjoin(final_string, expanded_var);
 	return (final_string);
 }
-
-// char	*expand_var_depending_quote(char *final_string, char *open_quote, int *i, t_env **env)
-// {
-// 	if (input[i + 1] == '?')
-// 	{
-// 		final_string = handle_exit_error();
-// 		i++; //? je dois avancer de combien par rapport a la fonction ?
-// 	}
-// 	if (open_quote == DOUBLE_QUOTE)
-// 		final_string = expand_double_quote(&final_string, &input, &i, env);
-// 	else if (!open_quote)
-// 		final_string = expand_without_quote(&final_string, &input, &i, env);
-// }
-
 
 char	*search_and_replace(char *input, t_env **env)
 {
@@ -231,7 +242,12 @@ char	*search_and_replace(char *input, t_env **env)
 	return (final_string);
 }
 
-t_token_node	*expand_input(t_token_node **token_list, t_env **env_final)
+char	*remove_double_quotes()
+{
+
+}
+
+t_token_node	*clean_tokens(t_token_node **token_list, t_env **env_final)
 {
 	t_token_node	*temp;
 	char			*new_string;
@@ -249,5 +265,7 @@ t_token_node	*expand_input(t_token_node **token_list, t_env **env_final)
 		}
 		temp = temp->next;
 	}
+	//fonction supp_node if empty
+	//fonction remove_quote
 	return (*token_list);
 }
