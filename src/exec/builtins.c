@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:57:10 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/14 20:39:11 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/15 17:11:20 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,8 @@ int is_builtin(t_exec *ex)
 
 int	exec_builtin(t_exec *ex, t_env *env)
 {
-	printf("IN BUILTIN 1\n");
 	if (!ex || !ex->arg || !ex->arg[0])
 		return (-1);
-	printf("IN BUILTIN 2\n");
 	while (ex)
 	{
 		// if (ex->type == TOKEN_WORD)

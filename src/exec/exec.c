@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/14 22:13:27 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/15 19:14:20 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,55 +15,43 @@
 // execve will receive cmd path as first arg
 // then options and args as second
 // env as last
+// ft_close_fd at the end
 
-char	*is_path_exec(char *cmd, char **full_paths)
+int	ft_open(t_exec *ex, int *pipefd)
 {
-	int		i;
-	char	*tmp;
-	char	*path;
-
-	i = -1;
-	tmp = NULL;
-	path = NULL;
-	while (full_paths[++i])
+	int fd;
+	if (ex->type && ex->type->type == TOKEN_REDIR_IN)
+		fd = open(ARGIN, O_RDONLY);
+	if (ex->type && ex->type->type == TOKEN_REDIR_OUT)
+		fd = open(ARGOUT, O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (fd < 0)
 	{
-		tmp = ft_strjoin(full_paths[i], "/");
-		path = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (access(path, F_OK | X_OK) == 0)
-		{
-			full_paths = ft_free_array(full_paths);
-			return (path);
-		}
-		free(path);
+		ft_putstr_fd(strerror(errno), STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
+		if (ex->type->type == TOKEN_REDIR_IN)
+			ft_putendl_fd(ARGIN, STDERR_FILENO);
+		else if (ex->type->type == TOKEN_REDIR_OUT)
+			ft_putendl_fd(ARGOUT, STDERR_FILENO);
+		ft_close_fd(pipefd);
+		exit(1);
 	}
-	if (full_paths)
-		full_paths = ft_free_array(full_paths);
-	return (NULL);
+	return (fd);
 }
 
-char	*get_path(t_env *env, char *cmd)
+void	ft_redirect(t_exec *ex)
 {
-	char	**full_paths;
-	char	*path;
-	int		i;
+	int		pipefd[2];
+	pid_t	pid;
 
-	full_paths = NULL;
-	path = NULL;
-	i = 0;
-	while (env)
+	// errors are handled here in pipex
+	if (pipe(pipefd) == -1)
 	{
-    	if (ft_strncmp(env->key, "PATH", 4) == 0 && env->key[4] == '\0')
-   		{
-        	full_paths = ft_split(env->value, ':');
-        	break;
-    	}
-    	env = env->next;
+		perror("pipe failed\n");
+		exit(1);
 	}
-	if (!full_paths)
-		return (NULL);
-	path = is_path_exec(cmd, full_paths);
-	return (path);
+	while (ex)
+
+
 }
 
 void	ft_process(t_exec *cmd, t_env *env)//handle pipe after 
@@ -88,39 +76,39 @@ void	ft_process(t_exec *cmd, t_env *env)//handle pipe after
 		pid = fork();
 		if (pid == -1)
 		{	
-        perror(strerror(errno));
-        ft_close_fd(pipefd);
-		return ;
+       		perror(strerror(errno));
+        	ft_close_fd(pipefd);
+			return ;
 		}
     	if (pid == 0)
     	{
-        if (cmd->fd_in != -1) 
-		{
-            dup2(cmd->fd_in, STDIN_FILENO);
-			if (cmd->fd_in >= 0)
-        		close(cmd->fd_in);
-        } 
-		else 
-        	dup2(in_fd, STDIN_FILENO);
-		if (cmd->fd_out != -1) 
-		{
-            dup2(cmd->fd_out, STDOUT_FILENO);
-			if (cmd->fd_in >= 0)
-            	close(cmd->fd_out);
-        }
-		else if (cmd->next)
-        	dup2(pipefd[1], STDOUT_FILENO);
-		ft_close_fd(pipefd);
-		path_cmd = get_path(env, cmd->arg[0]);
-		if (!path_cmd)
-		{
-			printf("command not found: %s\n", cmd->arg[0]);
-			return ;
-		}
-		printf("PATH: %s\n", cmd->arg[0]);
-        execve(get_path(env, cmd->arg[0]), cmd->arg, put_env_in_ar(env));
-        perror("execve");
-        exit(EXIT_FAILURE);
+        	if (cmd->fd_in != -1) 
+			{
+            	dup2(cmd->fd_in, STDIN_FILENO);
+				if (cmd->fd_in >= 0)
+        			close(cmd->fd_in);
+       		} 
+			else 
+        		dup2(in_fd, STDIN_FILENO);
+			if (cmd->fd_out != -1) 
+			{
+           		dup2(cmd->fd_out, STDOUT_FILENO);
+				if (cmd->fd_in >= 0)
+            		close(cmd->fd_out);
+        	}
+			else if (cmd->next)
+        		dup2(pipefd[1], STDOUT_FILENO);
+			ft_close_fd(pipefd);
+			path_cmd = get_path(env, cmd->arg[0]);
+			if (!path_cmd)
+			{
+				printf("command not found: %s\n", cmd->arg[0]); //stderr
+				return ;
+			}
+			printf("PATH: %s\n", cmd->arg[0]);
+        	execve(get_path(env, cmd->arg[0]), cmd->arg, put_env_in_ar(env));
+        	perror("execve");
+        	exit(EXIT_FAILURE);
     	} 
 		else if (pid > 0) 
 		{
@@ -135,9 +123,7 @@ void	ft_process(t_exec *cmd, t_env *env)//handle pipe after
     	}
 		cmd = cmd->next;
 	}
-    
 }
-
 
 void    ft_fork(t_env *env, t_exec *ex)
 {

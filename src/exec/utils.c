@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:46 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/14 21:23:46 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/15 17:12:29 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	count_command(t_exec *ex)
 			i++;
 		ex = ex->next;
 	}
-	printf("COMMAND COUNT: %i\n", i);
+	printf("\nCOMMAND COUNT: %i\n\n", i);
 	return (i);
 }
 

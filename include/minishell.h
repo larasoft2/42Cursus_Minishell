@@ -6,14 +6,14 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:59:18 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/08 19:31:15 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/08 18:36:11 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../Libft/include/libft.h"
+# include "libft.h"
 # include "minishell_exec.h"
 # include "minishell_parsing.h"
 # include <errno.h>
@@ -63,5 +63,8 @@ void	free_token_list(t_token_node *list);
 void	init_struct(t_token_node *token_list);
 
 int		parsing(char *input, t_token_node **token_list);
+
+void    ft_fork(t_env *env, t_exec *ex);
+t_env	*get_env_list(char **realenv);
 
 #endif

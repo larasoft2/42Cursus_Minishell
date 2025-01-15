@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/19 20:10:59 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/08 17:38:43 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef enum e_token_type
 	TOKEN_REDIR_APPEND,  // For '>>'
 	TOKEN_REDIR_HEREDOC, // For '<<'
 	TOKEN_ENV_VAR,       // For environment variables
+	TOKEN_FILENAME
 }						t_token_type;
 
 typedef struct s_token_node
@@ -73,30 +74,11 @@ int						is_quote(char c);
 int						check_if_unclosed_quotes(char *input);
 int						check_if_not_handled_char_outside_quotes(char *input);
 
-// TOKENIZE
-int						is_pipe_redirin_redirout_character(char c);
-t_token_node			*create_token_node(t_token_type type, char *value);
-void					add_token(t_token_node **list, t_token_node *new_token);
-char					*read_word(char *input, int *i);
-void	print_tokens(t_token_node *list); // A ENLEVER A LA FIN
-t_token_node			*tokenize_input(char *input);
-void					create_word_node(char *input, int *i,
-							t_token_node **token_list);
-void					create_special_node(char *input, int *i,
-							t_token_node **token_list);
-void					create_pipe_node(int *i, t_token_node **token_list);
-void					create_redir_in_node(char *input, int *i,
-							t_token_node **token_list);
-void					create_redir_out_node(char *input, int *i,
-							t_token_node **token_list);
-void					create_redir_append_node(char *input, int *i,
-							t_token_node **token_list);
-void					create_heredoc_node(char *input, int *i,
-							t_token_node **token_list);
-void					skip_spaces(char *input, int *i);
-int						check_error_token_pipe(t_token_node *token_list);
-int						check_error_token_redir(t_token_node *token_list);
-int						check_error_token(t_token_node *token_list);
-void					print_error_token(t_token_node *token_list);
+// EXEC UTILS//
+void				ft_close_fd(int *pipefd);
+int					ft_strcmp(char *s1, char *s2);
+char				*ft_strndup(const char *s, size_t n);
+
+// FREE//
 
 #endif

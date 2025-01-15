@@ -6,16 +6,18 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:26:15 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/14 22:17:53 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/15 18:19:16 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_EXEC_H
 # define MINISHELL_EXEC_H
-# include <stdbool.h>
 
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
 # include "minishell.h"
-# include "minishell_parsing.h"
+# include <stdbool.h>
 
 # define CD 0
 # define ECHO 1
@@ -64,6 +66,8 @@ char				*ft_strndup(const char *s, size_t n);
 int					exec_builtin(t_exec *ex, t_env *env);
 int					is_builtin(t_exec *ex);
 char				**put_env_in_ar(t_env *envp);
+char				*is_path_exec(char *cmd, char **full_paths);
+char				*get_path(t_env *env, char *cmd);
 
 // FREE//
 void				*ft_free_array(char **ar);
