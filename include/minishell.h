@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:59:18 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/20 14:13:06 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/15 17:55:36 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <stdbool.h>
 
 // STRUCTURES ///////////////////////////////////////////////////////////////
 typedef enum e_error
@@ -62,6 +63,7 @@ void	free_token_list(t_token_node *list);
 // INIT
 void	init_struct(t_token_node *token_list);
 
-int		parsing(char *input, t_token_node **token_list);
+int		parsing(char *input, t_token_node **token_list, char **env);
+t_env	*get_env_list(char **realenv);
 
 #endif

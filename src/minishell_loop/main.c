@@ -6,32 +6,31 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:58:59 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/02 11:58:09 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/15 18:06:35 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	parsing(char *input, t_token_node **token_list)
+int	parsing(char *input, t_token_node **token_list, char **env)
 {
+	t_env	*env_final;
+
+	env_final = NULL;
 	if (syntax_error_checker(input) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	*token_list = tokenize_input(input);
 	if (token_list == NULL)
 		return (EXIT_FAILURE);
+	env_final = get_env_list(env);
+	*token_list = clean_tokens(token_list, &env_final);
 	return (EXIT_SUCCESS);
 }
-
-// char	*create_prompt(char *input)
-// {
-
-// }
 
 int	main(int ac, char **av, char **env)
 {
 	(void)ac;
 	(void)av;
-	(void)env;
 
 	char			*input;
 	t_token_node	*token_list;
@@ -46,7 +45,7 @@ int	main(int ac, char **av, char **env)
 			ft_printf("exit\n");
 			break ;
 		}
-		if (parsing(input, &token_list) == EXIT_FAILURE)
+		if (parsing(input, &token_list, env) == EXIT_FAILURE)
 		{
 			free(input);
 			continue ;
@@ -54,9 +53,8 @@ int	main(int ac, char **av, char **env)
 		if (*input)
 			add_history(input);
 		print_tokens(token_list);
-		// ft_printf("\n", input);
 		free(input);
-		free_token_list(token_list);
+		//free_token_list(token_list);
 	}
 	return (EXIT_SUCCESS);
 }

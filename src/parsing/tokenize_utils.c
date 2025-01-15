@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 14:59:07 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/18 15:21:50 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/15 17:58:44 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	print_tokens(t_token_node *list)
 {
 	while (list)
 	{
-		ft_printf("Type: %d, Value: %s\n", list->type, list->value);
+		printf("Type: %d, Value: %s\n", list->type, list->value);
 		list = list->next;
 	}
 }

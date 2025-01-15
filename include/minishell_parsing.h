@@ -6,13 +6,14 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/20 14:13:15 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/15 17:23:11 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_PARSING_H
 # define MINISHELL_PARSING_H
 
+# include "minishell_exec.h"
 # include "minishell.h"
 
 # define NOT_EMPTY_STRING 0
@@ -49,6 +50,9 @@ typedef struct s_token_node
 	char				*value;
 	struct s_token_node	*next;
 }						t_token_node;
+
+struct s_env;
+typedef struct s_env t_env;
 
 // FUNCTIONS ////////////////////////////////////////////////////////////////
 
@@ -98,5 +102,18 @@ int						check_error_token_pipe(t_token_node *token_list);
 int						check_error_token_redir(t_token_node *token_list);
 int						check_error_token(t_token_node *token_list);
 void					print_error_token(t_token_node *token_list);
+
+// EXPANDER
+char					*expand_env_var(char *name, t_env **env);
+char					*remove_char(char *str, char to_remove);
+void					update_index(int *i, char *word);
+char					*extract_name_after_dollar(char *input, int *i);
+char					*str_append(char *str, char c);
+void					handle_quote(char *input, int *i, char *open_quote);
+char					*handle_dollar_sign(char *input, int *i, t_env **env, char *expanded_var);
+char					*handle_exit_error(char *final_string, int *i);
+char					*expand(char *final_string, char *input, int *i, t_env **env);
+char					*search_and_replace(char *input, t_env **env);
+t_token_node			*clean_tokens(t_token_node **token_list, t_env **env_final);
 
 #endif
