@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 12:26:09 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/15 18:59:12 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/16 16:08:09 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,31 +36,8 @@ char	*expand_env_var(char *name, t_env **env)
 	return (ft_strdup("")); // si la variable (key) n'est pas trouvee, on renvoie une chaine vide
 }
 
-char	*remove_char(char *str, char to_remove)
-{
-	char	*dest;
-	int		i = 0;
-	int		j = 0;
-
-	dest = (char *)malloc(sizeof(char) * (ft_strlen(str) + 1));
-	if (!dest)
-		return (NULL);
-
-	while (str[i])
-	{
-		if (str[i] != to_remove)
-			dest[j++] = str[i];
-		i++;
-	}
-	dest[j] = '\0';
-	return (dest);
-}
-
 void	update_index(int *i, char *word)
 {
-	int	len;
-
-	len = ft_strlen(word);
 	*i += ft_strlen(word);
 }
 
@@ -83,7 +60,7 @@ char	*extract_name_after_dollar(char *input, int *i)
 		ft_putstr_fd("Error: Memory allocation failed\n", STDERR_FILENO);
 		return (NULL);
 	}
-	update_index(i, extracted_name);
+	// update_index(i, extracted_name);
 	return (extracted_name);
 }
 
@@ -137,9 +114,10 @@ char	*handle_dollar_sign(char *input, int *i, t_env **env, char *expanded_var)
 char	*handle_exit_error(char *final_string, int *i)
 {
 	final_string = ft_strjoin(final_string, "0123456789"); //attention: free noeuds ??
-	*i += 10;
+	*i += 11;
 	return (final_string);
 	// A CHANGER PAR RAPPORT A L'EXIT
+	// ATTENTION : MAUVAIS INDEX QUAND J'AI $?
 }
 
 char	*expand(char *final_string, char *input, int *i, t_env **env)
@@ -157,6 +135,26 @@ char	*expand(char *final_string, char *input, int *i, t_env **env)
 	free(expanded_var);
 	free(final_string);
 	return (temp);
+}
+
+char	*remove_char(char *str, char to_remove)
+{
+	char	*dest;
+	int		i = 0;
+	int		j = 0;
+
+	dest = (char *)malloc(sizeof(char) * (ft_strlen(str) + 1));
+	if (!dest)
+		return (NULL);
+
+	while (str[i])
+	{
+		if (str[i] != to_remove)
+			dest[j++] = str[i];
+		i++;
+	}
+	dest[j] = '\0';
+	return (dest);
 }
 
 char	*search_and_replace(char *input, t_env **env)

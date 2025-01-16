@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:58:59 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/15 18:06:35 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/16 13:50:43 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	main(int ac, char **av, char **env)
 	token_list = NULL;
 	while (1)
 	{
-		input = readline("minishell>$ ");
+		input = readline("minishell> ");
 		if (!input)
 		{
 			ft_printf("exit\n");

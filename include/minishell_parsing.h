@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/15 17:23:11 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/16 14:02:14 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void					print_error_token(t_token_node *token_list);
 
 // EXPANDER
 char					*expand_env_var(char *name, t_env **env);
-char					*remove_char(char *str, char to_remove);
+char					*remove_quotes(char *str);
 void					update_index(int *i, char *word);
 char					*extract_name_after_dollar(char *input, int *i);
 char					*str_append(char *str, char c);
