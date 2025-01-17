@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/16 14:02:14 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/17 13:02:49 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ typedef enum e_token_type
 	TOKEN_REDIR_OUT,     // For '>'
 	TOKEN_REDIR_APPEND,  // For '>>'
 	TOKEN_REDIR_HEREDOC, // For '<<'
-	TOKEN_ENV_VAR,       // For environment variables
 }						t_token_type;
 
 typedef struct s_token_node

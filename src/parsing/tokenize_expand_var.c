@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 12:26:09 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/16 16:08:09 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/17 15:24:35 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ char	*remove_char(char *str, char to_remove)
 char	*search_and_replace(char *input, t_env **env)
 {
 	char	*final_string;
-	char	*cleaned_string;
+	//char	*cleaned_string;
 	char	open_quote;
 	int		i;
 
@@ -187,9 +187,9 @@ char	*search_and_replace(char *input, t_env **env)
 			i++;
 		}
 	}
-	cleaned_string = remove_char(final_string, '"');
-	free(final_string);
-	return (cleaned_string);
+	// cleaned_string = remove_char(final_string, '"');
+	// free(final_string);
+	return (final_string);
 }
 
 t_token_node	*clean_tokens(t_token_node **token_list, t_env **env_final)
