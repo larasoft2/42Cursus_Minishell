@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 12:26:09 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/17 15:24:35 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/20 17:26:45 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,8 +187,8 @@ char	*search_and_replace(char *input, t_env **env)
 			i++;
 		}
 	}
-	// cleaned_string = remove_char(final_string, '"');
-	// free(final_string);
+	//cleaned_string = remove_char(final_string, '"');
+	//free(final_string);
 	return (final_string);
 }
 

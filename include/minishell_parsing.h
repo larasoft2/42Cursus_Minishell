@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/17 13:02:49 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/20 16:00:47 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # define PIPE 1
 # define REDIR_IN 2
 # define REDIR_OUT 3
+# define MAX_ARGS 50
 
 // STRUCTURES ///////////////////////////////////////////////////////////////
 
@@ -52,6 +53,9 @@ typedef struct s_token_node
 
 struct s_env;
 typedef struct s_env t_env;
+
+struct s_exec;
+typedef struct s_exec t_exec;
 
 // FUNCTIONS ////////////////////////////////////////////////////////////////
 
@@ -81,7 +85,6 @@ int						is_pipe_redirin_redirout_character(char c);
 t_token_node			*create_token_node(t_token_type type, char *value);
 void					add_token(t_token_node **list, t_token_node *new_token);
 char					*read_word(char *input, int *i);
-void					print_tokens(t_token_node *list); // A ENLEVER A LA FIN
 t_token_node			*tokenize_input(char *input);
 void					create_word_node(char *input, int *i,
 							t_token_node **token_list);
@@ -114,5 +117,17 @@ char					*handle_exit_error(char *final_string, int *i);
 char					*expand(char *final_string, char *input, int *i, t_env **env);
 char					*search_and_replace(char *input, t_env **env);
 t_token_node			*clean_tokens(t_token_node **token_list, t_env **env_final);
+
+// FINAL_EXEC_LIST
+int						init_struct_exec(t_exec **exec_list);
+void					init_exec_node(t_exec *new_node, t_token_type type, char *value);
+t_exec					*add_exec_node_with_type(t_exec **exec_list, t_token_type type, char *value);
+void					add_word(char **arg, char *value, int i);
+t_exec					*add_word_to_exec_word_node(t_exec **exec_list, char *value, int *word_count);
+t_exec					*add_all_tokens(t_token_node **token_list);
+
+// PRINT
+void					print_tokens(t_token_node *list); // A ENLEVER A LA FIN
+void					print_tokens_exec_list(t_exec *exec_list); // A ENLEVER A LA FIN
 
 #endif
