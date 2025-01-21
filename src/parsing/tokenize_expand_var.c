@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 12:26:09 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/21 14:24:43 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/21 14:36:34 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ char	*remove_char(char *str, char to_remove)
 char	*search_and_replace(char *input, t_env **env)
 {
 	char	*final_string;
-	//char	*cleaned_string;
+	char	*cleaned_string;
 	char	open_quote;
 	int		i;
 
@@ -187,8 +187,18 @@ char	*search_and_replace(char *input, t_env **env)
 		}
 	}
 	//cleaned_string = remove_char(final_string, '"');
-	//free(final_string);
-	return (final_string);
+	//cleaned_string = remove_char(final_string, '\'');
+	cleaned_string= malloc(sizeof(char) * ft_strlen(final_string) + 1);
+	if (!cleaned_string)
+		return (NULL);
+	if (final_string[0] == '"')
+		cleaned_string = ft_strtrim(final_string, "\"");
+	else if (final_string[0] == '\'')
+		cleaned_string = ft_strtrim(final_string, "\'");
+	else
+		cleaned_string = ft_strcpy(cleaned_string, final_string);
+	free(final_string);
+	return (cleaned_string);
 }
 
 t_token_node	*clean_tokens(t_token_node **token_list, t_env **env_final)
