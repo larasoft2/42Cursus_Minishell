@@ -5,16 +5,21 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/02 14:26:15 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/21 17:11:09 by lusavign         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2025/01/21 18:03:06 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef MINISHELL_EXEC_H
 # define MINISHELL_EXEC_H
 
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
 # include "minishell.h"
-# include "minishell_parsing.h"
+# include "minishell_parsing.h" 
+# include <stdbool.h>
 
 # define CD 0
 # define ECHO 1
@@ -24,21 +29,21 @@
 # define PWD 5
 # define UNSET 6
 
-typedef t_list * cmd_pipeline;
-
 typedef struct s_exec
 {
 	char **arg;          // contains args for one cmd {ls "-l", ...}
-	t_token_type type;  // list of redirs
+	t_token_node *type;  // list of redirs
 	int fd_in;           // fd for stdin
 	int fd_out;          // fd for stdout
 	struct s_exec *next; // next cmd
 }					t_exec;
 
+
 typedef struct s_env
 {
 	char			*key;
 	char			*value;
+	bool			exportable;
 	struct s_env	*next;
 }					t_env;
 
@@ -53,12 +58,21 @@ void				ft_env(t_env *env);
 void				ft_close_fd(int *pipefd);
 int					ft_strcmp(char *s1, char *s2);
 int					nbr_of_args(t_exec *ex);
+int					count_command(t_exec *ex);
 char				*ft_strndup(const char *s, size_t n);
 
+
 // EXEC//
+int					exec_builtin(t_exec *ex, t_env *env);
 int					is_builtin(t_exec *ex, t_env *env);
 void    			ft_fork(t_env *env, t_exec *ex);
 char				**put_env_in_ar(t_env *envp);
+
+// FREE//
+void				*ft_free_array(char **ar);
+char				**put_env_in_ar(t_env *envp);
+char				*is_path_exec(char *cmd, char **full_paths);
+char				*get_path(t_env *env, char *cmd);
 
 // FREE//
 void				*ft_free_array(char **ar);

@@ -1,30 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_export.c                                        :+:      :+:    :+:   */
+/*   new.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/10 18:55:28 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/08 19:26:01 by lusavign         ###   ########.fr       */
+/*   Created: 2025/01/10 15:37:43 by lusavign          #+#    #+#             */
+/*   Updated: 2025/01/10 18:52:44 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// export with no options;
-// sets environment variables
-//
-// export can set a null variable that won't show in env
-// but will show when typing export
-// export alone shows all variables
-
-// export	a = $b
-// export b = $a must not loop
-//
-// export sans $
-
-
-// void    ft_export(t_exec *exec, t_env *env)
+// int ft_open(char **av, int filetype, int pipefd)
 // {
+//     //pas d'open pour word
+//     if (ex->type == TOKEN_PIPE)
+//         blabla;
+//     if (ex->type == TOKEN_REDIR_IN)
+//         blabla; //o rdonly
+//     if (ex->type == TOKEN_REDIR_OUT)
+//         blabla; //o creat
+//     if (ex->type == TOKEN_REDIR_APPEND)
+//         blabla;
+//     if (ex->type == TOKEN_REDIR_HEREDOC)
+//         blabla;
 // }
