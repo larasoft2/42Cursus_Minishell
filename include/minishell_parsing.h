@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/20 16:00:47 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:07:45 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ int						init_struct_exec(t_exec **exec_list);
 void					init_exec_node(t_exec *new_node, t_token_type type, char *value);
 t_exec					*add_exec_node_with_type(t_exec **exec_list, t_token_type type, char *value);
 void					add_word(char **arg, char *value, int i);
-t_exec					*add_word_to_exec_word_node(t_exec **exec_list, char *value, int *word_count);
+t_exec					*add_word_to_exec_word_node(t_exec **exec_list, char *value, int *word_count, t_exec **last_exec_node);
 t_exec					*add_all_tokens(t_token_node **token_list);
 
 // PRINT

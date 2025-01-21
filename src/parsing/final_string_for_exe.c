@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 11:30:59 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/20 21:38:13 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:30:23 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,47 +91,44 @@ void	add_word(char **arg, char *value, int i)
 	arg[i + 1] = NULL;
 }
 
-t_exec	*add_word_to_exec_word_node(t_exec **exec_list, char *value, int *word_count)
+t_exec	*add_word_to_exec_word_node(t_exec **exec_list, char *value, int *word_count, t_exec **last_exec_node)
 {
 	t_exec	*temp;
 
 	temp = *exec_list;
-	if (*exec_list == NULL)
+	if (*exec_list == NULL || *word_count == 0)
 	{
 		add_exec_node_with_type(exec_list, TOKEN_WORD, value);
-		*word_count = 1;  // On initialise le compteur de mots à 1
+		*last_exec_node = *exec_list;
+		while ((*last_exec_node)->next)
+			*last_exec_node = (*last_exec_node)->next;
+		*word_count = 1;
 		return (*exec_list);
 	}
-	// while (temp->next)
-	// 	temp = temp->next;
-	// if (temp->type == TOKEN_WORD)
-	// {
-		add_word(temp->arg, value, *word_count);
+	if (*last_exec_node && (*last_exec_node)->type == TOKEN_WORD && *word_count > 0)
+	{
+		add_word((*last_exec_node)->arg, value, *word_count);
 		(*word_count)++;
-	//}
-	// else if (temp->type == TOKEN_PIPE)
-	// {
-	// 	add_exec_node_with_type(exec_list, TOKEN_WORD, value);
-	// 	*word_count = 1;  // On réinitialise le compteur de mots
-	// }
+	}
 	return (*exec_list);
 }
 
 t_exec	*add_all_tokens(t_token_node **token_list)
 {
 	t_exec			*exec_list;
+	t_exec			*last_exec_node;
 	t_token_node	*current_token;
 	int				word_count;
 
 	exec_list = NULL;
+	last_exec_node = NULL;
 	current_token = *token_list;
 	word_count = 0;
 	while (current_token != NULL)
 	{
 		if (current_token->type == TOKEN_WORD) // all TOKEN_WORD into a single node = CMD with OPTIONS
 		{
-			add_word_to_exec_word_node(&exec_list, current_token->value, &word_count);
-
+			add_word_to_exec_word_node(&exec_list, current_token->value, &word_count, &last_exec_node);
 		}
 		else if (current_token->type == TOKEN_REDIR_IN
 				|| current_token->type == TOKEN_REDIR_OUT
@@ -144,6 +141,7 @@ t_exec	*add_all_tokens(t_token_node **token_list)
 		{
 			add_exec_node_with_type(&exec_list, current_token->type, current_token->value);
 			word_count = 0;
+			last_exec_node = NULL;
 		}
 		current_token = current_token->next;
 	}
