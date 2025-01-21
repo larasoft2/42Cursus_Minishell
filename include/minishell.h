@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/25 11:59:18 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/21 16:20:00 by lusavign         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2025/01/21 18:03:28 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 
 #ifndef MINISHELL_H
@@ -26,7 +27,6 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <stdbool.h>
 
 // STRUCTURES ///////////////////////////////////////////////////////////////
 typedef enum e_error
