@@ -5,15 +5,17 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/25 11:59:18 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/21 17:39:08 by lusavign         ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2025/01/21 18:03:28 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../Libft/include/libft.h"
+# include "libft.h"
 # include "minishell_exec.h"
 # include "minishell_parsing.h"
 # include <errno.h>
@@ -25,7 +27,6 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <stdbool.h>
 
 // STRUCTURES ///////////////////////////////////////////////////////////////
 typedef enum e_error
@@ -64,6 +65,9 @@ void	free_token_list(t_token_node *list);
 void	init_struct(t_token_node *token_list);
 
 int		parsing(char *input, t_token_node **token_list, char **env);
+t_env	*get_env_list(char **realenv);
+
+void    ft_fork(t_env *env, t_exec *ex);
 t_env	*get_env_list(char **realenv);
 
 #endif

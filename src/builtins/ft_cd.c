@@ -1,22 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/10 21:29:09 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/08 19:25:53 by lusavign         ###   ########.fr       */
+/*   Created: 2024/12/10 18:55:09 by lusavign          #+#    #+#             */
+/*   Updated: 2025/01/21 18:04:00 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_env(t_env *env)
+// cd with only relative or absolute	path;
+// changes the current working directory
+
+// chdir
+
+void	ft_cd(t_exec *ex)
 {
-	while (env)
-	{
-		printf("%s=%s\n", env->key, env->value);
-		env = env->next;
-	}
+	char	*buff;
+
+	chdir(ex->arg[1]);
+	buff = malloc(1024);
+	printf("%s\n", getcwd(buff, 1024));
 }
+
+// int	main(int ac, char **av)
+// {
+// 	(void)ac;
+// 	t_exec ex;
+// 	char *args[] = {av[1], NULL};
+
+// 	ex.arg = args;
+// 	ft_cd(&ex);
+// }
