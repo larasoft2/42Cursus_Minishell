@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 15:00:34 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/21 16:13:08 by lusavign         ###   ########.fr       */
+<<<<<<<< HEAD:src/exec/environment.c
+/*   Updated: 2025/01/08 17:59:43 by lusavign         ###   ########.fr       */
+========
+/*   Updated: 2025/01/15 17:56:03 by racoutte         ###   ########.fr       */
+>>>>>>>> origin/main:src/environnement/environment.c
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +61,14 @@ void	ft_free_list(t_env *head)
 	}
 }
 
-char	**put_env_in_ar(t_env *envp)
-{
-	char	**array_env;
-	int		i;
-	char	*str;
-	char	*tmp;
+// char	**put_env_in_ar(t_env *envp)
+// {
+// 	char	**array_env;
+// 	int		i;
+// 	char	*str;
+// 	char	*tmp;
 
+<<<<<<<< HEAD:src/exec/environment.c
 	i = 0;
 	if (!envp)
 		return (NULL);
@@ -80,6 +85,24 @@ char	**put_env_in_ar(t_env *envp)
 	array_env[i] = NULL;
 	return (array_env);
 }
+========
+// 	i = 0;
+// 	if (!envp)
+// 		return (NULL);
+// 	array_env = malloc(sizeof(char *) * (ft_lstsize(envp) + 1));
+// 	while (envp)
+// 	{
+// 		tmp = ft_strjoin(envp->key, "=");
+// 		str = ft_strjoin(tmp, envp->value);
+// 		free(tmp);
+// 		array_env[i++] = str;
+// 		envp = envp->next;
+// 		str = NULL;
+// 	}
+// 	array_env[i] = NULL;
+// 	return (array_env);
+// }
+>>>>>>>> origin/main:src/environnement/environment.c
 
 t_env	*create_list(char *key, char *value)
 {

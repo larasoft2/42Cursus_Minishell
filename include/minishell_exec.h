@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:26:15 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/15 18:19:16 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:18:32 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@
 # define PWD 5
 # define UNSET 6
 
-typedef struct s_token_node t_token_node;
+typedef t_list * cmd_pipeline;
 
 typedef struct s_exec
 {
 	char **arg;          // contains args for one cmd {ls "-l", ...}
-	t_token_node *type;  // list of redirs
+	t_token_type type;  // list of redirs
 	int fd_in;           // fd for stdin
 	int fd_out;          // fd for stdout
 	struct s_exec *next; // next cmd

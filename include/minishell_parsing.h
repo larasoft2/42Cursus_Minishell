@@ -6,13 +6,14 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/08 17:38:43 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:18:43 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_PARSING_H
 # define MINISHELL_PARSING_H
 
+# include "minishell_exec.h"
 # include "minishell.h"
 
 # define NOT_EMPTY_STRING 0
@@ -29,6 +30,7 @@
 # define PIPE 1
 # define REDIR_IN 2
 # define REDIR_OUT 3
+# define MAX_ARGS 50
 
 // STRUCTURES ///////////////////////////////////////////////////////////////
 
@@ -40,8 +42,6 @@ typedef enum e_token_type
 	TOKEN_REDIR_OUT,     // For '>'
 	TOKEN_REDIR_APPEND,  // For '>>'
 	TOKEN_REDIR_HEREDOC, // For '<<'
-	TOKEN_ENV_VAR,       // For environment variables
-	TOKEN_FILENAME
 }						t_token_type;
 
 typedef struct s_token_node
@@ -50,6 +50,12 @@ typedef struct s_token_node
 	char				*value;
 	struct s_token_node	*next;
 }						t_token_node;
+
+struct s_env;
+typedef struct s_env t_env;
+
+struct s_exec;
+typedef struct s_exec t_exec;
 
 // FUNCTIONS ////////////////////////////////////////////////////////////////
 
@@ -74,11 +80,54 @@ int						is_quote(char c);
 int						check_if_unclosed_quotes(char *input);
 int						check_if_not_handled_char_outside_quotes(char *input);
 
-// EXEC UTILS//
-void				ft_close_fd(int *pipefd);
-int					ft_strcmp(char *s1, char *s2);
-char				*ft_strndup(const char *s, size_t n);
+// TOKENIZE
+int						is_pipe_redirin_redirout_character(char c);
+t_token_node			*create_token_node(t_token_type type, char *value);
+void					add_token(t_token_node **list, t_token_node *new_token);
+char					*read_word(char *input, int *i);
+t_token_node			*tokenize_input(char *input);
+void					create_word_node(char *input, int *i,
+							t_token_node **token_list);
+void					create_special_node(char *input, int *i,
+							t_token_node **token_list);
+void					create_pipe_node(int *i, t_token_node **token_list);
+void					create_redir_in_node(char *input, int *i,
+							t_token_node **token_list);
+void					create_redir_out_node(char *input, int *i,
+							t_token_node **token_list);
+void					create_redir_append_node(char *input, int *i,
+							t_token_node **token_list);
+void					create_heredoc_node(char *input, int *i,
+							t_token_node **token_list);
+void					skip_spaces(char *input, int *i);
+int						check_error_token_pipe(t_token_node *token_list);
+int						check_error_token_redir(t_token_node *token_list);
+int						check_error_token(t_token_node *token_list);
+void					print_error_token(t_token_node *token_list);
 
-// FREE//
+// EXPANDER
+char					*expand_env_var(char *name, t_env **env);
+char					*remove_quotes(char *str);
+void					update_index(int *i, char *word);
+char					*extract_name_after_dollar(char *input, int *i);
+char					*str_append(char *str, char c);
+void					handle_quote(char *input, int *i, char *open_quote);
+char					*handle_dollar_sign(char *input, int *i, t_env **env, char *expanded_var);
+char					*handle_exit_error(char *final_string, int *i);
+char					*expand(char *final_string, char *input, int *i, t_env **env);
+char					*search_and_replace(char *input, t_env **env);
+t_token_node			*clean_tokens(t_token_node **token_list, t_env **env_final);
+
+// FINAL_EXEC_LIST
+int						init_struct_exec(t_exec **exec_list);
+void					init_exec_node(t_exec *new_node, t_token_type type, char *value);
+t_exec					*add_exec_node_with_type(t_exec **exec_list, t_token_type type, char *value);
+void					add_word(char **arg, char *value, int i);
+t_exec					*add_word_to_exec_word_node(t_exec **exec_list, char *value, int *word_count, t_exec **last_exec_node);
+t_exec					*add_all_tokens(t_token_node **token_list);
+
+// PRINT
+void					print_tokens(t_token_node *list); // A ENLEVER A LA FIN
+void					print_tokens_exec_list(t_exec *exec_list); // A ENLEVER A LA FIN
 
 #endif
