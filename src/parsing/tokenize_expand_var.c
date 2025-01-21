@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 12:26:09 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/20 17:26:45 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/21 14:24:43 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ char	*extract_name_after_dollar(char *input, int *i)
 		ft_putstr_fd("Error: Memory allocation failed\n", STDERR_FILENO);
 		return (NULL);
 	}
-	// update_index(i, extracted_name);
 	return (extracted_name);
 }
 
@@ -114,7 +113,7 @@ char	*handle_dollar_sign(char *input, int *i, t_env **env, char *expanded_var)
 char	*handle_exit_error(char *final_string, int *i)
 {
 	final_string = ft_strjoin(final_string, "0123456789"); //attention: free noeuds ??
-	*i += 11;
+	*i += 2;
 	return (final_string);
 	// A CHANGER PAR RAPPORT A L'EXIT
 	// ATTENTION : MAUVAIS INDEX QUAND J'AI $?
@@ -204,7 +203,10 @@ t_token_node	*clean_tokens(t_token_node **token_list, t_env **env_final)
 		{
 			new_string = search_and_replace(temp->value, env_final);
 			if (!new_string)
+			{
+				printf("Erreur: search_and_replace a retourné NULL pour la valeur : %s\n", temp->value);
 				return (NULL); //free tous les autres noeuds qui ont ete modif ?
+			}
 			free(temp->value);
 			temp->value = new_string;
 		}
