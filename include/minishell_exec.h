@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:26:15 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/21 17:01:09 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/21 17:11:09 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ int					nbr_of_args(t_exec *ex);
 char				*ft_strndup(const char *s, size_t n);
 
 // EXEC//
-int					is_builtin(t_exec *ex);
+int					is_builtin(t_exec *ex, t_env *env);
+void    			ft_fork(t_env *env, t_exec *ex);
 char				**put_env_in_ar(t_env *envp);
 
 // FREE//

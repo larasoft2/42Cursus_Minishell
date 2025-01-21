@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:46 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/06 18:26:21 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/08 19:17:39 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,13 @@ int	ft_strcmp(char *s1, char *s2)
 	int	i;
 
 	i = 0;
+	if (!s1 || !s2)
+	{
+		if (s1)
+			return (s1[0]);
+		else
+			return (-s2[0]);
+	}
 	while (s1[i] || s2[i])
 	{
 		if (s1[i] == s2[i])

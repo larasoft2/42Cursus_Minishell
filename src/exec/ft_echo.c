@@ -6,11 +6,11 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:16 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/16 19:00:23 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/08 19:25:48 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell_exec.h"
+#include "minishell.h"
 
 // echo, with option - n;
 // outputs the arguments passed to it

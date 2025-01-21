@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/06 22:01:27 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/08 19:19:12 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ char	*get_path(t_env *env, char *cmd)
 	i = 0;
 	while (env->key[i])
 	{
-		if (ft_strncmp(env->key[i], "PATH=", 5) == 0)
+		if (ft_strncmp(&env->key[i], "PATH=", 5) == 0)
 		{
-			full_paths = ft_split(env->value[i], ':');
+			full_paths = ft_split(&env->value[i], ':');
 			break ;
 		}
 		i++;
@@ -73,18 +73,21 @@ void    ft_fork(t_env *env, t_exec *ex)
     char    **envp_ar;
     
     envp_ar = put_env_in_ar(env);
-    if (ex->next == NULL)
+    if (ex && ex->next == NULL)
     {
-        if (is_builtin(ex)) //exec when checking?
+        if (is_builtin(ex, env))
         {
             ft_free_array(envp_ar);
-            return (0);
+            return ;
         }
-        else
-            execve(ft_get_path(ex->arg[0], ex->arg, envp_ar); //perror
         ft_free_array(envp_ar);
-        return(0);
+        return ;
     }
+	if (pipe(pipefd) == -1)
+	{
+		ft_close_fd(pipefd);
+		return ;
+	}
     while (ex)
     {
         pid = fork();
@@ -92,27 +95,29 @@ void    ft_fork(t_env *env, t_exec *ex)
         {
             perror(strerror(errno));
             ft_close_fd(pipefd);
-            return (1);
+            return ;
         }
         if (pid == 0)
         {
             //ft_process(env, ex, pipefd, TEST); //close fds? //reverif builtin dedans
-            return (0);
+            return ;
         }
         ex = ex->next;
     }
-    while (wait(NULL) > 0) //if no child, return (-1), else return id
+    while (wait(NULL) > 0) //if no child, return (-1), else return id //need to wait last cmd? 
     {
-    }
+    } 
     ft_close_fd(pipefd);
 }
 
-void	ft_process(t_env *env, t_exec *ex, int *pipefd, int filetype)
+void	ft_process(t_env *env, t_exec *ex, int *pipefd)
 {
+	(void)ex;
+	(void)env;
     if (pipe(pipefd) == -1) //before/after builtin check?
     {
         ft_close_fd(pipefd);
-        return (1);
+        return ;
     }
 }
 

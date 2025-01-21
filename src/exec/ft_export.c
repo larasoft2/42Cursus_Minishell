@@ -1,37 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_cd.c                                            :+:      :+:    :+:   */
+/*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/10 18:55:09 by lusavign          #+#    #+#             */
-/*   Updated: 2024/12/17 15:53:05 by lusavign         ###   ########.fr       */
+/*   Created: 2024/12/10 18:55:28 by lusavign          #+#    #+#             */
+/*   Updated: 2025/01/08 19:26:01 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell_exec.h"
+#include "minishell.h"
 
-// cd with only relative or absolute	path;
-// changes the current working directory
+// export with no options;
+// sets environment variables
+//
+// export can set a null variable that won't show in env
+// but will show when typing export
+// export alone shows all variables
 
-// chdir
+// export	a = $b
+// export b = $a must not loop
+//
+// export sans $
 
-void	ft_cd(t_exec *ex)
-{
-	char	*buff;
 
-	chdir(ex->arg[1]);
-	buff = malloc(1024);
-	printf("%s\n", getcwd(buff, 1024));
-}
-
-// int	main(int ac, char **av)
+// void    ft_export(t_exec *exec, t_env *env)
 // {
-// 	(void)ac;
-// 	t_exec ex;
-// 	char *args[] = {av[1], NULL};
-
-// 	ex.arg = args;
-// 	ft_cd(&ex);
 // }
