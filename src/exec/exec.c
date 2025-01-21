@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/08 19:19:12 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/21 18:00:10 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,49 +66,49 @@ char	*get_path(t_env *env, char *cmd)
 	return (path);
 }
 
-void    ft_fork(t_env *env, t_exec *ex)
-{
-    pid_t   pid;
-    int     pipefd[2];
-    char    **envp_ar;
-    
-    envp_ar = put_env_in_ar(env);
-    if (ex && ex->next == NULL)
-    {
-        if (is_builtin(ex, env))
-        {
-            ft_free_array(envp_ar);
-            return ;
-        }
-        ft_free_array(envp_ar);
-        return ;
-    }
-	if (pipe(pipefd) == -1)
-	{
-		ft_close_fd(pipefd);
-		return ;
-	}
-    while (ex)
-    {
-        pid = fork();
-        if (pid == -1)
-        {
-            perror(strerror(errno));
-            ft_close_fd(pipefd);
-            return ;
-        }
-        if (pid == 0)
-        {
-            //ft_process(env, ex, pipefd, TEST); //close fds? //reverif builtin dedans
-            return ;
-        }
-        ex = ex->next;
-    }
-    while (wait(NULL) > 0) //if no child, return (-1), else return id //need to wait last cmd? 
-    {
-    } 
-    ft_close_fd(pipefd);
-}
+// void    ft_fork(t_env *env, t_exec *ex)
+// {
+//     pid_t   pid;
+//     int     pipefd[2];
+//     char    **envp_ar;
+
+//     envp_ar = put_env_in_ar(env);
+//     if (ex && ex->next == NULL)
+//     {
+//         if (is_builtin(ex, env))
+//         {
+//             ft_free_array(envp_ar);
+//             return ;
+//         }
+//         ft_free_array(envp_ar);
+//         return ;
+//     }
+// 	if (pipe(pipefd) == -1)
+// 	{
+// 		ft_close_fd(pipefd);
+// 		return ;
+// 	}
+//     while (ex)
+//     {
+//         pid = fork();
+//         if (pid == -1)
+//         {
+//             perror(strerror(errno));
+//             ft_close_fd(pipefd);
+//             return ;
+//         }
+//         if (pid == 0)
+//         {
+//             //ft_process(env, ex, pipefd, TEST); //close fds? //reverif builtin dedans
+//             return ;
+//         }
+//         ex = ex->next;
+//     }
+//     while (wait(NULL) > 0) //if no child, return (-1), else return id //need to wait last cmd?
+//     {
+//     }
+//     ft_close_fd(pipefd);
+// }
 
 void	ft_process(t_env *env, t_exec *ex, int *pipefd)
 {
