@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:26:15 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/21 16:18:32 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:52:34 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include "minishell.h"
+# include "minishell_parsing.h" 
 # include <stdbool.h>
 
 # define CD 0
@@ -28,6 +29,9 @@
 # define UNSET 6
 
 typedef t_list * cmd_pipeline;
+
+enum e_token_type;
+typedef enum e_token_type t_token_type;
 
 typedef struct s_exec
 {
