@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:58:59 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/21 15:50:49 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/22 15:34:24 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	parsing(char *input, t_token_node **token_list, char **env)
 	if (!exec_list)
 		return (EXIT_FAILURE);
 	print_tokens_exec_list(exec_list);
+	ft_process(env_final, exec_list);
 	printf("\n");
 	return (EXIT_SUCCESS);
 }

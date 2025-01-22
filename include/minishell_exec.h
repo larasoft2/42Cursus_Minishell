@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/01/21 18:03:06 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/22 15:37:19 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 typedef struct s_exec
 {
 	char **arg;          // contains args for one cmd {ls "-l", ...}
-	t_token_node *type;  // list of redirs
+	t_token_type type;  // list of redirs
 	int fd_in;           // fd for stdin
 	int fd_out;          // fd for stdout
 	struct s_exec *next; // next cmd
@@ -64,9 +64,10 @@ char				*ft_strndup(const char *s, size_t n);
 
 // EXEC//
 int					exec_builtin(t_exec *ex, t_env *env);
-int					is_builtin(t_exec *ex, t_env *env);
-void    			ft_fork(t_env *env, t_exec *ex);
+int					is_builtin(t_exec *ex);
+void				ft_fork(t_exec *cmd, t_env *env, int *pipefd);
 char				**put_env_in_ar(t_env *envp);
+void    			ft_process(t_env *env, t_exec *ex);
 
 // FREE//
 void				*ft_free_array(char **ar);

@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/01/21 18:05:57 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/21 18:32:21 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,19 +58,6 @@ void	ft_free_list(t_env *head)
 	}
 }
 
-int		env_list_size(t_env *env) 
-{
-    int size;
-	
-	size = 0;
-    while (env) 
-	{
-        size++;
-        env = env->next;
-    }
-    return (size);
-}
-
 char	**put_env_in_ar(t_env *envp)
 {
 	char	**array_env;
@@ -78,22 +65,6 @@ char	**put_env_in_ar(t_env *envp)
 	char	*str;
 	char	*tmp;
 
-	i = 0;
-	if (!envp)
-		return (NULL);
-	array_env = malloc(sizeof(char *) * (env_list_size(envp) + 1));
-	while (envp)
-	{
-		tmp = ft_strjoin(envp->key, "=");
-		str = ft_strjoin(tmp, envp->value);
-		free(tmp);
-		array_env[i++] = str;
-		envp = envp->next;
-		str = NULL;
-	}
-	array_env[i] = NULL;
-	return (array_env);
-}
 	i = 0;
 	if (!envp)
 		return (NULL);

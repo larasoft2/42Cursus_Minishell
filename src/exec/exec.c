@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/21 18:08:13 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/22 19:15:23 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,128 +16,43 @@
 // execve will receive cmd path as first arg
 // then options and args as second
 // env as last
-
-char	*is_path_exec(char *cmd, char **full_paths)
-{
-	int		i;
-	char	*tmp;
-	char	*path;
-
-	i = -1;
-	tmp = NULL;
-	path = NULL;
-	while (full_paths[++i])
-	{
-		tmp = ft_strjoin(full_paths[i], "/");
-		path = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (access(path, F_OK | X_OK) == 0)
-		{
-			full_paths = ft_free_array(full_paths);
-			return (path);
-		}
-		free(path);
-	}
-	if (full_paths)
-		full_paths = ft_free_array(full_paths);
-	return (NULL);
-}
-
-char	*get_path(t_env *env, char *cmd)
-{
-	char	**full_paths;
-	char	*path;
-	int		i;
-
-	full_paths = NULL;
-	path = NULL;
-	i = 0;
-	while (env->key[i])
-	{
-		if (ft_strncmp(&env->key[i], "PATH=", 5) == 0)
-		{
-			full_paths = ft_split(&env->value[i], ':');
-			break ;
-		}
-		i++;
-	}
-	if (!full_paths)
-		return (NULL);
-	path = is_path_exec(cmd, full_paths);
-	return (path);
-}
-
-void    ft_fork(t_env *env, t_exec *ex)
-{
-    pid_t   pid;
-    int     pipefd[2];
-    char    **envp_ar;
-    
-    envp_ar = put_env_in_ar(env);
-    if (ex && ex->next == NULL)
-    {
-        if (is_builtin(ex, env))
-        {
-            ft_free_array(envp_ar);
-            return ;
-        }
-        ft_free_array(envp_ar);
-        return ;
-    }
-	if (pipe(pipefd) == -1)
-	{
-		ft_close_fd(pipefd);
-		return ;
-	}
-    while (ex)
-    {
-        pid = fork();
-        if (pid == -1)
-        {
-            perror(strerror(errno));
-            ft_close_fd(pipefd);
-            return ;
-        }
-        if (pid == 0)
-        {
-            //ft_process(env, ex, pipefd, TEST); //close fds? //reverif builtin dedans
-            return ;
-        }
-        ex = ex->next;
-    }
-    while (wait(NULL) > 0) //if no child, return (-1), else return id //need to wait last cmd? 
-    {
-    } 
-    ft_close_fd(pipefd);
-}
-
-void	ft_process(t_env *env, t_exec *ex, int *pipefd)
-{
-	(void)ex;
-	(void)env;
-    if (pipe(pipefd) == -1) //before/after builtin check?
-    {
-        ft_close_fd(pipefd);
-        return ;
-    }
-}
 // ft_close_fd at the end
 
-// int	ft_open(t_exec *ex, int *pipefd)
+// int ft_redirections(t_exec *ex, char *redirect[])
+// {
+// 	t_token_node  *current;
+// 	int		append_flag;
+
+// 	redirect[0] = NULL;
+// 	redirect[1] = NULL;
+// 	append_flag = 0;
+// 	if (!ex || !ex->type)
+// 		return (append_flag);
+// 	current = ex->type;
+// 	while (current)
+// 	{
+// 		if (current->type == TOKEN_REDIR_IN)
+// 			redir_in = ex->arg
+
+// 	}
+
+// }
+
+// int	ft_open(int *pipefd)
 // {
 // 	int fd;
 // 	if (ex->type && ex->type->type == TOKEN_REDIR_IN)
-// 		fd = open(ARGIN, O_RDONLY);
+// 		fd = open(ex->arg[0], O_RDONLY);
 // 	if (ex->type && ex->type->type == TOKEN_REDIR_OUT)
-// 		fd = open(ARGOUT, O_CREAT | O_RDWR | O_TRUNC, 0644);
+// 		fd = open(ex->arg[0], O_CREAT | O_RDWR | O_TRUNC, 0644);
 // 	if (fd < 0)
 // 	{
 // 		ft_putstr_fd(strerror(errno), STDERR_FILENO);
 // 		ft_putstr_fd(": ", STDERR_FILENO);
 // 		if (ex->type->type == TOKEN_REDIR_IN)
-// 			ft_putendl_fd(ARGIN, STDERR_FILENO);
+// 			ft_putendl_fd(ex->arg[0], STDERR_FILENO);
 // 		else if (ex->type->type == TOKEN_REDIR_OUT)
-// 			ft_putendl_fd(ARGOUT, STDERR_FILENO);
+// 			ft_putendl_fd(ex->arg[0], STDERR_FILENO);
 // 		ft_close_fd(pipefd);
 // 		exit(1);
 // 	}
@@ -155,104 +70,12 @@ void	ft_process(t_env *env, t_exec *ex, int *pipefd)
 // 		perror("pipe failed\n");
 // 		exit(1);
 // 	}
-// 	// while (ex)
-// }
-
-// void	ft_process(t_exec *cmd, t_env *env)//handle pipe after 
-// {
-// 	int	pipefd[2];
-// 	int	in_fd = 0;
-// 	pid_t	pid;
-// 	char *path_cmd;
-
-// 	if (pipe(pipefd) == -1)
-// 	{
-//     	perror("pipe failed");
-//     	exit(1);
-// 	}
-// 	while (cmd)
-// 	{
-// 		if (cmd->next && pipe(pipefd) == -1)
-// 		{
-// 			perror("pipe");
-// 			return ;
-// 		}
-// 		pid = fork();
-// 		if (pid == -1)
-// 		{	
-//        		perror(strerror(errno));
-//         	ft_close_fd(pipefd);
-// 			return ;
-// 		}
-//     	if (pid == 0)
-//     	{
-//         	if (cmd->fd_in != -1) 
-// 			{
-//             	dup2(cmd->fd_in, STDIN_FILENO);
-// 				if (cmd->fd_in >= 0)
-//         			close(cmd->fd_in);
-//        		} 
-// 			else 
-//         		dup2(in_fd, STDIN_FILENO);
-// 			if (cmd->fd_out != -1) 
-// 			{
-//            		dup2(cmd->fd_out, STDOUT_FILENO);
-// 				if (cmd->fd_in >= 0)
-//             		close(cmd->fd_out);
-//         	}
-// 			else if (cmd->next)
-//         		dup2(pipefd[1], STDOUT_FILENO);
-// 			ft_close_fd(pipefd);
-// 			path_cmd = get_path(env, cmd->arg[0]);
-// 			if (!path_cmd)
-// 			{
-// 				printf("command not found: %s\n", cmd->arg[0]); //stderr
-// 				return ;
-// 			}
-// 			printf("PATH: %s\n", cmd->arg[0]);
-//         	execve(get_path(env, cmd->arg[0]), cmd->arg, put_env_in_ar(env));
-//         	perror("execve");
-//         	exit(EXIT_FAILURE);
-//     	} 
-// 		else if (pid > 0) 
-// 		{
-//         	waitpid(pid, NULL, 0);
-//         	close(pipefd[1]);
-//         	in_fd = pipefd[0];
-//     	}
-// 		else
-// 		{
-//     	    perror("fork");
-//         	return;
-//     	}
-// 		cmd = cmd->next;
-// 	}
-// }
-
-// void    ft_fork(t_env *env, t_exec *ex)
-// {
-// 	int 	command_nb;
-    
-// 	command_nb = count_command(ex);
 // 	while (ex)
-// 	{
-//     	if ((command_nb == 1) && (is_builtin(ex) == 1))
-//     	{
-// 			exec_builtin(ex, env);
-//             return ;
-//         }
-// 		else
-// 		{
-// 			ft_process(ex, env);
-// 		 	return ;
-// 		}
-// 		ex = ex->next;
-// 	}
-// 	while (wait(NULL) > 0) //if no child, return (-1), else return id //need to wait last cmd? 
-//     {
-//     } 
-// 	return ;
+
+
 // }
+
+
 
 	// if (pipe(pipefd) == -1)
 	// {
@@ -299,6 +122,185 @@ void	ft_process(t_env *env, t_exec *ex, int *pipefd)
 // 	ft_close_fd(pipefd);
 // }
 
-
-
 // 	// check errors, parsing???
+
+
+// c le dup pour la suit
+			// if (cmd->fd_in != -1)
+			// {
+    		// 	// dup2(cmd->fd_in, STDIN_FILENO);
+    		// 	// close(cmd->fd_in);
+			// }
+			// else
+    		// 	dup2(in_fd, STDIN_FILENO);
+			// if (cmd->fd_out != -1) 
+			// {
+           	// 	// dup2(cmd->fd_out, STDOUT_FILENO);
+            // 	// close(cmd->fd_out);
+        	// }
+			// else if (cmd->next)
+        	// 	dup2(pipefd[1], STDOUT_FILENO);
+
+
+
+void	ft_fork(t_exec *cmd, t_env *env, int *pipefd)
+{
+	int	in_fd = 0;
+	pid_t	pid;
+	char *path_cmd;
+
+	while (cmd)
+	{
+		if (cmd->next && pipe(pipefd) == -1)
+		{
+			perror("pipe");
+			return ;
+		}
+		pid = fork();
+		if (pid == -1)
+		{	
+       		perror(strerror(errno));
+        	ft_close_fd(pipefd);
+			return ;
+		}
+		printf ("LE FD INNNNNNN %i\n", cmd->fd_in);
+		printf ("LE FD OUTTTTTTTTTT %i\n", cmd->fd_out);
+    	if (pid == 0)
+    	{
+			ft_close_fd(pipefd);
+			path_cmd = get_path(env, cmd->arg[0]);
+			if (!path_cmd)
+			{
+				printf("command not found: %s\n", cmd->arg[0]); //stderr
+				return ;
+			}
+			printf("PATH: %s\n", cmd->arg[0]); //remove later
+        	execve(get_path(env, cmd->arg[0]), cmd->arg, put_env_in_ar(env));
+        	perror("execve");
+        	exit(EXIT_FAILURE);
+    	}
+		else if (pid > 0) 
+		{
+        	waitpid(pid, NULL, 0);
+        	close(pipefd[1]);
+        	in_fd = pipefd[0];
+    	}
+		else
+		{
+    	    perror("fork");
+        	return;
+    	}
+		cmd = cmd->next;
+	}
+}
+
+void ft_error(t_token_node *token, int *pipefd)
+{
+    ft_putstr_fd(strerror(errno), STDERR_FILENO);
+    ft_putstr_fd(": ", STDERR_FILENO);
+    if (token && (token->type == TOKEN_REDIR_IN || token->type == TOKEN_REDIR_OUT || token->type == TOKEN_REDIR_APPEND || token->type == TOKEN_REDIR_HEREDOC))
+    {
+        ft_putendl_fd(token->value, STDERR_FILENO);
+    }
+    else
+        ft_putendl_fd("Invalid redirection or command.", STDERR_FILENO);
+    ft_close_fd(pipefd);
+    //exit(1);
+}
+
+
+void ft_redir(t_exec *ex, int *fd) //error msg, pipefd removed
+{
+    int redir_found = 0;
+
+    if (ex->type == TOKEN_REDIR_IN)
+    {
+		printf("entering token redir in\n");
+        *fd = open(ex->arg[0], O_RDONLY);
+        if (*fd >= 0)
+        {
+			printf("2entering token redir in\n");
+            ex->fd_in = *fd;
+            redir_found = 1;
+        }
+    	if (*fd < 0)
+			printf("					ERROR, FD <0\n\n");
+    }
+    if (ex->type == TOKEN_REDIR_OUT || ex->type == TOKEN_REDIR_APPEND)
+    {
+		printf("entering token redir out/append\n");
+        *fd = open(ex->arg[0], O_CREAT | O_RDWR | O_TRUNC, 0644);
+        if (*fd >= 0)
+        {
+			printf("2entering token redir out/append\n");
+            ex->fd_out = *fd;
+            redir_found = 1;
+        }
+        if (*fd < 0)
+			printf("					ERROR, FD <0\n\n");
+    }
+        // else if (ex->type == TOKEN_REDIR_HEREDOC)
+        // {
+        //     fd = handle_heredoc_redirection(token->value);
+        //     ex->fd_in = fd;
+        // }
+    if (!redir_found)
+        ex->fd_out = STDOUT_FILENO;
+}
+
+void	ft_init(t_exec *ex)
+{
+    ex->fd_in = STDIN_FILENO;
+    ex->fd_out = STDOUT_FILENO;
+}
+
+void print_exec_args(t_exec *ex)
+{
+    while (ex)
+    {
+        printf("Arguments for command:\n");
+        for (int i = 0; ex->arg && ex->arg[i]; i++)
+            printf("  [%d]: %s\n", i, ex->arg[i]);
+        ex = ex->next;
+    }
+}
+
+void    ft_process(t_env *env, t_exec *ex)
+{
+	int 	command_nb;
+	int		fd;
+	int		pipefd[2];
+
+	fd = 0;
+    if (pipe(pipefd) == -1)
+	{
+    	perror("pipe failed");
+    	exit(1);
+	}
+	ft_init(ex);
+	command_nb = count_command(ex);
+	//print_exec_args(ex);
+	while (ex)
+	{
+    	if ((command_nb == 1) && (is_builtin(ex) == 1))
+    	{
+			exec_builtin(ex, env);
+            return ;
+        }
+		else
+		{
+			ft_redir(ex, &fd);
+			printf("FD IN PROCESS %i\n", fd);
+			printf("FD OUT IN PROCESS %i\n", ex->fd_out);
+			ex->fd_in = fd;
+			ft_fork(ex, env, pipefd);
+		 	return ;
+		}
+		ex = ex->next;
+	}
+	while (wait(NULL) > 0) //if no child, return (-1), else return id //need to wait last cmd? 
+    {
+    }
+	ft_close_fd(pipefd);
+	return ;
+}

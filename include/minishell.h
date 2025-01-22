@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/01/21 18:03:28 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/22 15:39:47 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,6 @@ void	free_token_list(t_token_node *list);
 void	init_struct(t_token_node *token_list);
 
 int		parsing(char *input, t_token_node **token_list, char **env);
-t_env	*get_env_list(char **realenv);
-
-void    ft_fork(t_env *env, t_exec *ex);
 t_env	*get_env_list(char **realenv);
 
 #endif
