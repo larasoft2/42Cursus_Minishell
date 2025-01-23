@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:57:10 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/21 18:07:01 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/23 15:34:45 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ int is_builtin(t_exec *ex)
 	{
 		if (ft_strcmp(ex->arg[0], "echo") == 0)
 			return (1);
-		//else if (ft_strcmp(ex->arg[0], "cd") == 0)
-			// return (1);
+		else if (ft_strcmp(ex->arg[0], "cd") == 0)
+			return (1);
 		else if (ft_strcmp(ex->arg[0], "pwd") == 0)
 			return (1);
-		//else if (ft_strcmp(ex->arg[0], "export") == 0)
-		//	return (1);
+		else if (ft_strcmp(ex->arg[0], "export") == 0)
+			return (1);
 		else if (ft_strcmp(ex->arg[0], "unset") == 0)
 			return (1);
 		else if (ft_strcmp(ex->arg[0], "env") == 0)
@@ -42,27 +42,24 @@ int is_builtin(t_exec *ex)
 	return (-1);
 }
 
-int	exec_builtin(t_exec *ex, t_env *env)
+int	exec_builtin(t_exec *ex, t_env **env)
 {
 	if (!ex || !ex->arg || !ex->arg[0])
 		return (-1);
 	while (ex)
 	{
-		// if (ex->type == TOKEN_WORD)
 		if (ft_strcmp(ex->arg[0], "echo") == 0)
 			ft_echo(ex, 0);
-		//else if (ft_strcmp(ex->arg[0], "cd") == 0)
-		//	ft_cd(tmp);
+		else if (ft_strcmp(ex->arg[0], "cd") == 0)
+			ft_cd(ex);
 		else if (ft_strcmp(ex->arg[0], "pwd") == 0)
-			ft_pwd(0);
-		//else if (ft_strcmp(ex->arg[0], "export") == 0)
-		//	ft_export(tmp);
+			ft_pwd(STDOUT_FILENO);
+		// else if (ft_strcmp(ex->arg[0], "export") == 0)
+		// 	ft_export(tmp);
 		else if (ft_strcmp(ex->arg[0], "unset") == 0)
 			ft_unset(env, ex);
 		else if (ft_strcmp(ex->arg[0], "env") == 0)
-			ft_env(env);
-		//else if (ft_strcmp(ex->arg[0], "cd") == 0)
-		//	ft_exit(tmp);
+			ft_env(*env);
 		ex = ex->next;
 	}
 	return (-1);

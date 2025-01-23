@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:46 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/21 18:08:30 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/23 15:16:22 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,10 @@ int	count_command(t_exec *ex)
 	i = 0;
 	while (ex)
 	{
-		if (ex->type && ex->type == TOKEN_WORD)
+		if (ex->type == TOKEN_WORD)
 			i++;
 		ex = ex->next;
 	}
-	printf("\nCOMMAND COUNT: %i\n\n", i);
 	return (i);
 }
 

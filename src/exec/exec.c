@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/22 19:15:23 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/23 19:20:22 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,8 +142,20 @@
         	// 	dup2(pipefd[1], STDOUT_FILENO);
 
 
+void print_exec_args(t_exec *ex)
+{
+    while (ex)
+    {
+        printf("Arguments for command:\n");
+        for (int i = 0; ex->arg && ex->arg[i]; i++)
+            printf("  [%d]: %s\n", i, ex->arg[i]);
+        ex = ex->next;
+    }
+}
 
-void	ft_fork(t_exec *cmd, t_env *env, int *pipefd)
+
+
+void	ft_fork(t_exec *cmd, t_env **env, int *pipefd)
 {
 	int	in_fd = 0;
 	pid_t	pid;
@@ -163,19 +175,18 @@ void	ft_fork(t_exec *cmd, t_env *env, int *pipefd)
         	ft_close_fd(pipefd);
 			return ;
 		}
-		printf ("LE FD INNNNNNN %i\n", cmd->fd_in);
-		printf ("LE FD OUTTTTTTTTTT %i\n", cmd->fd_out);
     	if (pid == 0)
     	{
 			ft_close_fd(pipefd);
-			path_cmd = get_path(env, cmd->arg[0]);
+			path_cmd = get_path(*env, cmd->arg[0]);
 			if (!path_cmd)
 			{
 				printf("command not found: %s\n", cmd->arg[0]); //stderr
 				return ;
 			}
-			printf("PATH: %s\n", cmd->arg[0]); //remove later
-        	execve(get_path(env, cmd->arg[0]), cmd->arg, put_env_in_ar(env));
+			printf("ABSOLUTE PATH: %s\n", path_cmd); //remove later
+			printf("RELATIVE PATH: %s\n", cmd->arg[0]); //remove later
+        	execve(path_cmd, cmd->arg, put_env_in_ar(*env));
         	perror("execve");
         	exit(EXIT_FAILURE);
     	}
@@ -198,55 +209,58 @@ void ft_error(t_token_node *token, int *pipefd)
 {
     ft_putstr_fd(strerror(errno), STDERR_FILENO);
     ft_putstr_fd(": ", STDERR_FILENO);
-    if (token && (token->type == TOKEN_REDIR_IN || token->type == TOKEN_REDIR_OUT || token->type == TOKEN_REDIR_APPEND || token->type == TOKEN_REDIR_HEREDOC))
-    {
+    if (token && (token->type == TOKEN_REDIR_IN || token->type == TOKEN_REDIR_OUT 
+	|| token->type == TOKEN_REDIR_APPEND || token->type == TOKEN_REDIR_HEREDOC))
         ft_putendl_fd(token->value, STDERR_FILENO);
-    }
     else
         ft_putendl_fd("Invalid redirection or command.", STDERR_FILENO);
     ft_close_fd(pipefd);
     //exit(1);
 }
 
-
-void ft_redir(t_exec *ex, int *fd) //error msg, pipefd removed
+int	count_redir(t_exec *ex)
 {
-    int redir_found = 0;
+	int	i;
 
-    if (ex->type == TOKEN_REDIR_IN)
-    {
-		printf("entering token redir in\n");
-        *fd = open(ex->arg[0], O_RDONLY);
-        if (*fd >= 0)
-        {
-			printf("2entering token redir in\n");
-            ex->fd_in = *fd;
-            redir_found = 1;
-        }
-    	if (*fd < 0)
-			printf("					ERROR, FD <0\n\n");
-    }
-    if (ex->type == TOKEN_REDIR_OUT || ex->type == TOKEN_REDIR_APPEND)
-    {
-		printf("entering token redir out/append\n");
-        *fd = open(ex->arg[0], O_CREAT | O_RDWR | O_TRUNC, 0644);
-        if (*fd >= 0)
-        {
-			printf("2entering token redir out/append\n");
-            ex->fd_out = *fd;
-            redir_found = 1;
-        }
-        if (*fd < 0)
-			printf("					ERROR, FD <0\n\n");
-    }
-        // else if (ex->type == TOKEN_REDIR_HEREDOC)
-        // {
-        //     fd = handle_heredoc_redirection(token->value);
-        //     ex->fd_in = fd;
-        // }
-    if (!redir_found)
-        ex->fd_out = STDOUT_FILENO;
+	if (!ex)
+		return (0);
+	i = 0;
+	while (ex)
+	{
+		if (ex->type == TOKEN_REDIR_IN || ex->type == TOKEN_REDIR_OUT)
+			return (1);
+		ex = ex->next;
+	}
+	return (-1);
 }
+
+void ft_redir(t_exec *ex) //need dup2 to make it work
+{
+    if (ex->type == TOKEN_REDIR_IN) 
+    {
+        ex->fd_in = open(ex->arg[0], O_RDONLY);
+        if (ex->fd_in < 0) 
+        {
+            perror("Error opening input file");
+            exit(EXIT_FAILURE);
+        }
+    } 
+    else if (ex->type == TOKEN_REDIR_OUT || ex->type == TOKEN_REDIR_APPEND) 
+    {
+        ex->fd_out = open(ex->arg[0], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+        if (ex->fd_out < 0)
+        {
+            perror("Error opening output file");
+            exit(EXIT_FAILURE);
+        }
+    } 
+    else 
+    {
+        ex->fd_in = STDIN_FILENO;
+        ex->fd_out = STDOUT_FILENO;
+    }
+}
+
 
 void	ft_init(t_exec *ex)
 {
@@ -254,18 +268,7 @@ void	ft_init(t_exec *ex)
     ex->fd_out = STDOUT_FILENO;
 }
 
-void print_exec_args(t_exec *ex)
-{
-    while (ex)
-    {
-        printf("Arguments for command:\n");
-        for (int i = 0; ex->arg && ex->arg[i]; i++)
-            printf("  [%d]: %s\n", i, ex->arg[i]);
-        ex = ex->next;
-    }
-}
-
-void    ft_process(t_env *env, t_exec *ex)
+void    ft_process(t_env **env, t_exec *ex)
 {
 	int 	command_nb;
 	int		fd;
@@ -282,16 +285,16 @@ void    ft_process(t_env *env, t_exec *ex)
 	//print_exec_args(ex);
 	while (ex)
 	{
+		printf("COMMAND COUNT: %i\n", command_nb);
     	if ((command_nb == 1) && (is_builtin(ex) == 1))
     	{
+			printf("found a builtin + 1 cmd\n");
 			exec_builtin(ex, env);
             return ;
         }
 		else
 		{
-			ft_redir(ex, &fd);
-			printf("FD IN PROCESS %i\n", fd);
-			printf("FD OUT IN PROCESS %i\n", ex->fd_out);
+			ft_redir(ex);
 			ex->fd_in = fd;
 			ft_fork(ex, env, pipefd);
 		 	return ;

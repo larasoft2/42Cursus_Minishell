@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/01/22 15:37:19 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/23 15:34:57 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ typedef struct s_env
 // BUILTINS//
 int					ft_echo(t_exec *ex, int fd_out);
 int					ft_pwd(int fd_out);
-int					ft_unset(t_env *env, t_exec *ex);
-
+int					ft_unset(t_env **env, t_exec *ex);
+void				ft_cd(t_exec *ex);
 void				ft_env(t_env *env);
 
 // EXEC UTILS//
@@ -63,11 +63,11 @@ char				*ft_strndup(const char *s, size_t n);
 
 
 // EXEC//
-int					exec_builtin(t_exec *ex, t_env *env);
+int					exec_builtin(t_exec *ex, t_env **env);
 int					is_builtin(t_exec *ex);
-void				ft_fork(t_exec *cmd, t_env *env, int *pipefd);
+void				ft_fork(t_exec *cmd, t_env **env, int *pipefd);
 char				**put_env_in_ar(t_env *envp);
-void    			ft_process(t_env *env, t_exec *ex);
+void    			ft_process(t_env **env, t_exec *ex);
 
 // FREE//
 void				*ft_free_array(char **ar);

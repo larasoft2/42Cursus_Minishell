@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_error_not_handled.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:08:36 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/13 15:28:29 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/22 20:00:49 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,7 @@ int	not_handled_other_character(char *input, char *open_quote)
 				*open_quote = '\0';
 		}
 		else if (!(*open_quote) && (input[i] == ';' || input[i] == '&'
-			|| input[i] == '/' || input[i] == '*'
-			|| input[i] == '(' || input[i] == ')'
+			|| input[i] == '*' || input[i] == '(' || input[i] == ')'
 			|| input[i] == '\\'))
 		{
 			print_error_not_handled(input[i]);
