@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_exec.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/01/21 18:03:06 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/21 18:29:11 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include "minishell.h"
-# include "minishell_parsing.h" 
+# include "minishell_parsing.h"
 # include <stdbool.h>
 
 # define CD 0
@@ -32,7 +32,7 @@
 typedef struct s_exec
 {
 	char **arg;          // contains args for one cmd {ls "-l", ...}
-	t_token_node *type;  // list of redirs
+	t_token_type 	type;  // list of redirs
 	int fd_in;           // fd for stdin
 	int fd_out;          // fd for stdout
 	struct s_exec *next; // next cmd

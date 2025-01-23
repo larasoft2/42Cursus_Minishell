@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:57:10 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/21 18:07:01 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/21 18:25:50 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,28 +19,28 @@
 // environment variable name,
 // and returns a pointer to the corresponding value string.
 
-int is_builtin(t_exec *ex)
-{
-	if (!ex || !ex->arg || !ex->arg[0])
-		return (-1);
-	while (ex)
-	{
-		if (ft_strcmp(ex->arg[0], "echo") == 0)
-			return (1);
-		//else if (ft_strcmp(ex->arg[0], "cd") == 0)
-			// return (1);
-		else if (ft_strcmp(ex->arg[0], "pwd") == 0)
-			return (1);
-		//else if (ft_strcmp(ex->arg[0], "export") == 0)
-		//	return (1);
-		else if (ft_strcmp(ex->arg[0], "unset") == 0)
-			return (1);
-		else if (ft_strcmp(ex->arg[0], "env") == 0)
-			return (1);
-		ex = ex->next;
-	}
-	return (-1);
-}
+// int is_builtin(t_exec *ex)
+// {
+// 	if (!ex || !ex->arg || !ex->arg[0])
+// 		return (-1);
+// 	while (ex)
+// 	{
+// 		if (ft_strcmp(ex->arg[0], "echo") == 0)
+// 			return (1);
+// 		//else if (ft_strcmp(ex->arg[0], "cd") == 0)
+// 			// return (1);
+// 		else if (ft_strcmp(ex->arg[0], "pwd") == 0)
+// 			return (1);
+// 		//else if (ft_strcmp(ex->arg[0], "export") == 0)
+// 		//	return (1);
+// 		else if (ft_strcmp(ex->arg[0], "unset") == 0)
+// 			return (1);
+// 		else if (ft_strcmp(ex->arg[0], "env") == 0)
+// 			return (1);
+// 		ex = ex->next;
+// 	}
+// 	return (-1);
+// }
 
 int	exec_builtin(t_exec *ex, t_env *env)
 {

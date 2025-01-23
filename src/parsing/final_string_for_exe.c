@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 11:30:59 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/21 16:00:55 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/23 15:56:52 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int	init_struct_exec(t_exec **exec_list)
 		return (EXIT_FAILURE);
 	}
 	ft_memset(*exec_list, 0, sizeof(t_exec));
-	(*exec_list)->fd_in = STDIN_FILENO;
-	(*exec_list)->fd_out = STDOUT_FILENO;
+	(*exec_list)->fd_in = 0;
+	(*exec_list)->fd_out = 0;
 	return (EXIT_SUCCESS);
 }
 
@@ -44,8 +44,8 @@ void	init_exec_node(t_exec *new_node, t_token_type type, char *value)
 		free(new_node);
 		return;
 	}
-	new_node->fd_in = STDIN_FILENO; //ATTENTION INIT FD A REVOIR ???
-	new_node->fd_out = STDOUT_FILENO; //ATTENTION INIT FD A REVOIR ???
+	new_node->fd_in = 0; //ATTENTION INIT FD A REVOIR ???
+	new_node->fd_out = 0; //ATTENTION INIT FD A REVOIR ???
 	new_node->next = NULL;
 }
 

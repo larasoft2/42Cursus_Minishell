@@ -3,61 +3,61 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:07:44 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/15 18:09:38 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/21 18:29:54 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*is_path_exec(char *cmd, char **full_paths)
-{
-	int		i;
-	char	*tmp;
-	char	*path;
+// char	*is_path_exec(char *cmd, char **full_paths)
+// {
+// 	int		i;
+// 	char	*tmp;
+// 	char	*path;
 
-	i = -1;
-	tmp = NULL;
-	path = NULL;
-	while (full_paths[++i])
-	{
-		tmp = ft_strjoin(full_paths[i], "/");
-		path = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (access(path, F_OK | X_OK) == 0)
-		{
-			full_paths = ft_free_array(full_paths);
-			return (path);
-		}
-		free(path);
-	}
-	if (full_paths)
-		full_paths = ft_free_array(full_paths);
-	return (NULL);
-}
+// 	i = -1;
+// 	tmp = NULL;
+// 	path = NULL;
+// 	while (full_paths[++i])
+// 	{
+// 		tmp = ft_strjoin(full_paths[i], "/");
+// 		path = ft_strjoin(tmp, cmd);
+// 		free(tmp);
+// 		if (access(path, F_OK | X_OK) == 0)
+// 		{
+// 			full_paths = ft_free_array(full_paths);
+// 			return (path);
+// 		}
+// 		free(path);
+// 	}
+// 	if (full_paths)
+// 		full_paths = ft_free_array(full_paths);
+// 	return (NULL);
+// }
 
-char	*get_path(t_env *env, char *cmd)
-{
-	char	**full_paths;
-	char	*path;
-	int		i;
+// char	*get_path(t_env *env, char *cmd)
+// {
+// 	char	**full_paths;
+// 	char	*path;
+// 	int		i;
 
-	full_paths = NULL;
-	path = NULL;
-	i = 0;
-	while (env)
-	{
-    	if (ft_strncmp(env->key, "PATH", 4) == 0 && env->key[4] == '\0')
-   		{
-        	full_paths = ft_split(env->value, ':');
-        	break;
-    	}
-    	env = env->next;
-	}
-	if (!full_paths)
-		return (NULL);
-	path = is_path_exec(cmd, full_paths);
-	return (path);
-}
+// 	full_paths = NULL;
+// 	path = NULL;
+// 	i = 0;
+// 	while (env)
+// 	{
+//     	if (ft_strncmp(env->key, "PATH", 4) == 0 && env->key[4] == '\0')
+//    		{
+//         	full_paths = ft_split(env->value, ':');
+//         	break;
+//     	}
+//     	env = env->next;
+// 	}
+// 	if (!full_paths)
+// 		return (NULL);
+// 	path = is_path_exec(cmd, full_paths);
+// 	return (path);
+// }

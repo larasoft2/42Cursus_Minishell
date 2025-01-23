@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_parsing.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/21 16:18:43 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/23 14:48:03 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ void					print_error_token(t_token_node *token_list);
 
 // EXPANDER
 char					*expand_env_var(char *name, t_env **env);
-char					*remove_quotes(char *str);
 void					update_index(int *i, char *word);
 char					*extract_name_after_dollar(char *input, int *i);
 char					*str_append(char *str, char c);

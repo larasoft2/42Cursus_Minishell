@@ -6,13 +6,11 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 12:26:09 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/21 14:36:34 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/23 17:49:33 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-//ATTENTION NE PAS OUBLIER DE TRAITER LE CAS $? pour exit !!
 
 //ATTENTION PROTECTION MALLOC
 
@@ -115,8 +113,6 @@ char	*handle_exit_error(char *final_string, int *i)
 	final_string = ft_strjoin(final_string, "0123456789"); //attention: free noeuds ??
 	*i += 2;
 	return (final_string);
-	// A CHANGER PAR RAPPORT A L'EXIT
-	// ATTENTION : MAUVAIS INDEX QUAND J'AI $?
 }
 
 char	*expand(char *final_string, char *input, int *i, t_env **env)
@@ -136,34 +132,36 @@ char	*expand(char *final_string, char *input, int *i, t_env **env)
 	return (temp);
 }
 
-char	*remove_char(char *str, char to_remove)
-{
-	char	*dest;
-	int		i = 0;
-	int		j = 0;
+// char	*remove_quotes(char *str, int *index_open_quote, int *index_close_quote)
+// {
+// 	char	*dest;
+// 	int		i;
+// 	int		j;
 
-	dest = (char *)malloc(sizeof(char) * (ft_strlen(str) + 1));
-	if (!dest)
-		return (NULL);
-
-	while (str[i])
-	{
-		if (str[i] != to_remove)
-			dest[j++] = str[i];
-		i++;
-	}
-	dest[j] = '\0';
-	return (dest);
-}
+// 	i = 0;
+// 	j = 0;
+// 	dest = (char *)malloc(sizeof(char) * ft_strlen(str));
+// 	while (i < index_open_quote)
+// 		dest[j++] = str[i++];
+// 	i++;
+// 	while (i < index_close_quote)
+// 		dest[j++] = str[i++];
+// 	dest[j] = '\0';
+// 	return (dest);
+// }
 
 char	*search_and_replace(char *input, t_env **env)
 {
 	char	*final_string;
-	char	*cleaned_string;
+	//char	*cleaned_string;
 	char	open_quote;
 	int		i;
+	//int		index_open_quote;
+	//int		index_close_quote;
 
 	i = 0;
+	//index_open_quote = 0;
+	//index_close_quote = 0;
 	open_quote = '\0';
 	final_string = ft_strdup("");
 	while (input[i])
@@ -171,10 +169,49 @@ char	*search_and_replace(char *input, t_env **env)
 		if (is_quote(input[i]))
 		{
 			handle_quote(input, &i, &open_quote);
-			final_string = str_append(final_string, input[i]);
+			// index_open_quote = i;
+			// final_string = str_append(final_string, input[i]);
 			i++;
+			if (input[i] == open_quote)
+			{
+				i++;
+				open_quote = '\0';
+			}
+				//final_string = remove_quotes(final_string, index_open_quote, index_close_quote);
+				// A REVOIR !! c'est le cas '' ou " "
+
+			if (open_quote == '"')
+			{
+				while (input[i] && input[i] != '"')
+				{
+					if (input[i] == '$')
+					{
+						if (input[i + 1] == '?')
+							final_string = handle_exit_error(final_string, &i);
+						final_string = expand(final_string, input, &i, env);
+					}
+					final_string = str_append(final_string, input[i]);
+				}
+				if (input[i] == '"' && input[i + 1] != '\0')
+					i++;
+				//index_close_quote = i;
+				//final_string = remove_quotes(final_string, index_open_quote, index_close_quote);
+			}
+			else if (open_quote == '\'')
+			{
+				while (input[i] && input[i] != '\'')
+				{
+					final_string = str_append(final_string, input[i]);
+					i++;
+				}
+				if (input[i] == '\'' && input[i + 1] != '\0') // A REVOIR VIS A VIS INDEX, est-ce que je dois pas plus mettre une condition avant dans le while ??
+					i++;
+				//index_close_quote = i;
+				//final_string = remove_quotes(final_string, index_open_quote, index_close_quote);
+			}
+			open_quote = '\0';
 		}
-		else if (input[i] == '$' && open_quote != '\'')
+		if (input[i] == '$')
 		{
 			if (input[i + 1] == '?')
 				final_string = handle_exit_error(final_string, &i);
@@ -186,19 +223,7 @@ char	*search_and_replace(char *input, t_env **env)
 			i++;
 		}
 	}
-	//cleaned_string = remove_char(final_string, '"');
-	//cleaned_string = remove_char(final_string, '\'');
-	cleaned_string= malloc(sizeof(char) * ft_strlen(final_string) + 1);
-	if (!cleaned_string)
-		return (NULL);
-	if (final_string[0] == '"')
-		cleaned_string = ft_strtrim(final_string, "\"");
-	else if (final_string[0] == '\'')
-		cleaned_string = ft_strtrim(final_string, "\'");
-	else
-		cleaned_string = ft_strcpy(cleaned_string, final_string);
-	free(final_string);
-	return (cleaned_string);
+	return (final_string);
 }
 
 t_token_node	*clean_tokens(t_token_node **token_list, t_env **env_final)
@@ -222,7 +247,6 @@ t_token_node	*clean_tokens(t_token_node **token_list, t_env **env_final)
 		}
 		temp = temp->next;
 	}
-	//remove quotes??
 	return (*token_list);
 }
 
