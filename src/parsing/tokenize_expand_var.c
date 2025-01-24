@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 12:26:09 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/24 14:13:17 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/24 16:25:45 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,8 +122,8 @@ char	*handle_dollar_sign(char *input, int *i, t_env **env, char *expanded_var)
 
 char	*handle_exit_error(char *final_string, int *i)
 {
-	final_string = ft_strjoin(final_string, "0123456789"); //attention: free noeuds ??
-	*i += 2;
+	final_string = ft_strjoin(final_string, "0"); //attention: free noeuds ??
+	(*i)++;
 	return (final_string);
 }
 
@@ -144,6 +144,16 @@ char	*expand(char *final_string, char *input, int *i, t_env **env)
 	return (temp);
 }
 
+int	is_metacharacter(char c)
+{
+	if (c == 35 || (c >= 37 && c <= 41) || c == 47 || c == 59
+		|| c == 60 || c == 61 || c == 62 || (c >= 91 && c <= 94) || c == 96
+		|| (c >= 123 && c <= 125))
+		return (1);
+	else
+		return (0);
+}
+
 char	*search_and_replace(char *input, t_env **env)
 {
 	char	*final_string;
@@ -160,8 +170,17 @@ char	*search_and_replace(char *input, t_env **env)
 		else if (input[i] == '$' && open_quote != '\'')
 		{
 			if (input[i + 1] == '?')
+			{
 				final_string = handle_exit_error(final_string, &i);
-			final_string = expand(final_string, input, &i, env);
+				i++;
+			}
+			else if (open_quote == '"' && (is_metacharacter(input[i + 1]) || ft_isspace (input[i + 1])))
+			{
+				final_string = str_append(final_string, input[i]);
+				i++;
+			}
+			else
+				final_string = expand(final_string, input, &i, env);
 		}
 		else
 		{
