@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 12:26:09 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/24 16:25:45 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/24 17:01:07 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,17 @@ void	update_index(int *i, char *word)
 	*i += ft_strlen(word);
 }
 
+int	is_var_stop_char(char c)
+{
+	if (c == '<' || c == '>' || c == '|' || c == '&' || c == ';' || c == '('
+		|| c == ')' || c == '`' || c == '$' || c == '#' || c == '=' || c == ':'
+		|| c == '/' || c == '[' || c == ']' || c == '{' || c == '}'
+		|| c == '%' || c == '^' || c == '\\')
+		return (1);
+	else
+		return (0);
+}
+
 char	*extract_name_after_dollar(char *input, int *i)
 {
 	char	*extracted_name;
@@ -48,7 +59,7 @@ char	*extract_name_after_dollar(char *input, int *i)
 	start_index = *i;
 	while (input[*i])
 	{
-		if (input[*i] == '$' || ft_isspace(input[*i]) || is_quote(input[*i])) //on stop des qu'on trouve un autre $, un espace ou une quote
+		if (is_var_stop_char(input[*i]) || ft_isspace(input[*i]) || is_quote(input[*i])) //on stop des qu'on trouve un autre $, un espace ou une quote
 			break;
 		(*i)++;
 	}
