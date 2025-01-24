@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/23 14:48:03 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:50:05 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ char					*expand_env_var(char *name, t_env **env);
 void					update_index(int *i, char *word);
 char					*extract_name_after_dollar(char *input, int *i);
 char					*str_append(char *str, char c);
-void					handle_quote(char *input, int *i, char *open_quote);
+char					*handle_quote(char *input, int *i, char *open_quote, char *final_string);
 char					*handle_dollar_sign(char *input, int *i, t_env **env, char *expanded_var);
 char					*handle_exit_error(char *final_string, int *i);
 char					*expand(char *final_string, char *input, int *i, t_env **env);

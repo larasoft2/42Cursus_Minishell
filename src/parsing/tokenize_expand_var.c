@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 12:26:09 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/23 17:49:33 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/24 13:57:40 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,24 @@ char	*str_append(char *str, char c)
 	return (new_str);
 }
 
-void	handle_quote(char *input, int *i, char *open_quote)
+char	*handle_quote(char *input, int *i, char *open_quote, char *final_string)
 {
-	if (*open_quote == '\0')
+	if (*open_quote == '\0') //si je n'ai encore aucune quote, je l'ouvre et je ne l'ecris pas (quote structurelle)
+	{
 		*open_quote = input[*i];
-	else if (input[*i] == *open_quote)
+		(*i)++;
+	}
+	else if (input[*i] == *open_quote) //si j'ai la meme, ca veut dire que je dois la fermer (je ne l'ecris pas, quote structurelle)
+	{
 		*open_quote = '\0';
+		(*i)++;
+	}
+	else //sinon, c'est une quote litterale (a garder et ecrire), une quote qui n'est pas egale a la valeur stockee dans open_quote
+	{
+		final_string = str_append(final_string, input[*i]);
+		(*i)++;
+	}
+	return (final_string);
 }
 
 char	*handle_dollar_sign(char *input, int *i, t_env **env, char *expanded_var)
@@ -132,86 +144,20 @@ char	*expand(char *final_string, char *input, int *i, t_env **env)
 	return (temp);
 }
 
-// char	*remove_quotes(char *str, int *index_open_quote, int *index_close_quote)
-// {
-// 	char	*dest;
-// 	int		i;
-// 	int		j;
-
-// 	i = 0;
-// 	j = 0;
-// 	dest = (char *)malloc(sizeof(char) * ft_strlen(str));
-// 	while (i < index_open_quote)
-// 		dest[j++] = str[i++];
-// 	i++;
-// 	while (i < index_close_quote)
-// 		dest[j++] = str[i++];
-// 	dest[j] = '\0';
-// 	return (dest);
-// }
-
 char	*search_and_replace(char *input, t_env **env)
 {
 	char	*final_string;
-	//char	*cleaned_string;
 	char	open_quote;
 	int		i;
-	//int		index_open_quote;
-	//int		index_close_quote;
 
 	i = 0;
-	//index_open_quote = 0;
-	//index_close_quote = 0;
 	open_quote = '\0';
 	final_string = ft_strdup("");
 	while (input[i])
 	{
 		if (is_quote(input[i]))
-		{
-			handle_quote(input, &i, &open_quote);
-			// index_open_quote = i;
-			// final_string = str_append(final_string, input[i]);
-			i++;
-			if (input[i] == open_quote)
-			{
-				i++;
-				open_quote = '\0';
-			}
-				//final_string = remove_quotes(final_string, index_open_quote, index_close_quote);
-				// A REVOIR !! c'est le cas '' ou " "
-
-			if (open_quote == '"')
-			{
-				while (input[i] && input[i] != '"')
-				{
-					if (input[i] == '$')
-					{
-						if (input[i + 1] == '?')
-							final_string = handle_exit_error(final_string, &i);
-						final_string = expand(final_string, input, &i, env);
-					}
-					final_string = str_append(final_string, input[i]);
-				}
-				if (input[i] == '"' && input[i + 1] != '\0')
-					i++;
-				//index_close_quote = i;
-				//final_string = remove_quotes(final_string, index_open_quote, index_close_quote);
-			}
-			else if (open_quote == '\'')
-			{
-				while (input[i] && input[i] != '\'')
-				{
-					final_string = str_append(final_string, input[i]);
-					i++;
-				}
-				if (input[i] == '\'' && input[i + 1] != '\0') // A REVOIR VIS A VIS INDEX, est-ce que je dois pas plus mettre une condition avant dans le while ??
-					i++;
-				//index_close_quote = i;
-				//final_string = remove_quotes(final_string, index_open_quote, index_close_quote);
-			}
-			open_quote = '\0';
-		}
-		if (input[i] == '$')
+			final_string = handle_quote(input, &i, &open_quote, final_string);
+		else if (input[i] == '$' && open_quote != '\'')
 		{
 			if (input[i + 1] == '?')
 				final_string = handle_exit_error(final_string, &i);
