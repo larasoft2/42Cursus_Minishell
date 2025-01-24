@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 12:26:09 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/24 13:57:40 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/24 14:13:17 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,28 @@ char	*search_and_replace(char *input, t_env **env)
 	return (final_string);
 }
 
+char	*search_and_replace_heredoc(char *input)
+{
+	char	*final_string;
+	char	open_quote;
+	int		i;
+
+	i = 0;
+	open_quote = '\0';
+	final_string = ft_strdup("");
+	while (input[i])
+	{
+		if (is_quote(input[i]))
+			final_string = handle_quote(input, &i, &open_quote, final_string);
+		else
+		{
+			final_string = str_append(final_string, input[i]);
+			i++;
+		}
+	}
+	return (final_string);
+}
+
 t_token_node	*clean_tokens(t_token_node **token_list, t_env **env_final)
 {
 	t_token_node	*temp;
@@ -186,6 +208,17 @@ t_token_node	*clean_tokens(t_token_node **token_list, t_env **env_final)
 			if (!new_string)
 			{
 				printf("Erreur: search_and_replace a retourné NULL pour la valeur : %s\n", temp->value);
+				return (NULL); //free tous les autres noeuds qui ont ete modif ?
+			}
+			free(temp->value);
+			temp->value = new_string;
+		}
+		else if (temp->type == TOKEN_REDIR_HEREDOC)
+		{
+			new_string = search_and_replace_heredoc(temp->value);
+			if (!new_string)
+			{
+				printf("Erreur: search_and_replace_heredoc a retourné NULL pour la valeur : %s\n", temp->value);
 				return (NULL); //free tous les autres noeuds qui ont ete modif ?
 			}
 			free(temp->value);
