@@ -6,46 +6,11 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 11:43:40 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/17 15:54:54 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/27 17:54:23 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	error_message_redir_right(int count)
-{
-	if (count == 3)
-	{
-		print_error_syntax_message(SYNTAX_ERROR_REDIR_SINGLE_RIGHT);
-		return (WRONG_NUMBER_REDIR);
-	}
-	else if (count > 3)
-	{
-		print_error_syntax_message(SYNTAX_ERROR_REDIR_DOUBLE_RIGHT);
-		return (WRONG_NUMBER_REDIR);
-	}
-	return (EXIT_SUCCESS);
-}
-
-int	error_message_redir_left(int count)
-{
-	if (count == 3)
-	{
-		print_error_syntax_message(SYNTAX_ERROR_NEWLINE);
-		return (WRONG_NUMBER_REDIR);
-	}
-	else if (count == 4)
-	{
-		print_error_syntax_message(SYNTAX_ERROR_REDIR_SINGLE_LEFT);
-		return (WRONG_NUMBER_REDIR);
-	}
-	else if (count > 4)
-	{
-		print_error_syntax_message(SYNTAX_ERROR_REDIR_DOUBLE_LEFT);
-		return (WRONG_NUMBER_REDIR);
-	}
-	return (EXIT_SUCCESS);
-}
 
 int	input_ends_with_redir(char *input)
 {
@@ -56,6 +21,23 @@ int	input_ends_with_redir(char *input)
 	{
 		print_error_syntax_message(SYNTAX_ERROR_NEWLINE);
 		return (STARTS_OR_ENDS_WITH_PIPE_REDIR);
+	}
+	return (EXIT_SUCCESS);
+}
+
+int	handle_redir_symbol(char *input, size_t *i, int *count, char symbol)
+{
+	*count = 0;
+	while (input[*i] == symbol)
+	{
+		(*count)++;
+		if (input[*i + 1] != symbol
+			&& ((symbol == '>'
+					&& error_message_redir_right(*count) == WRONG_NUMBER_REDIR)
+				|| (symbol == '<'
+					&& error_message_redir_left(*count) == WRONG_NUMBER_REDIR)))
+			return (WRONG_NUMBER_REDIR);
+		(*i)++;
 	}
 	return (EXIT_SUCCESS);
 }
@@ -78,13 +60,11 @@ int	number_redir_right(char *input, char *open_quote)
 		}
 		else if (!(*open_quote) && input[i] == '>')
 		{
-			while (input[i] == '>')
-			{
-				count++;
-				if (input[i + 1] != '>' && error_message_redir_right(count) == WRONG_NUMBER_REDIR)
-					return (WRONG_NUMBER_REDIR);
-				i++;
-			}
+			if (check_next_char_for_redir(input, i) == WRONG_NUMBER_REDIR)
+				return (WRONG_NUMBER_REDIR);
+			if (handle_redir_symbol(input, &i, &count, '>')
+				== WRONG_NUMBER_REDIR)
+				return (WRONG_NUMBER_REDIR);
 		}
 		i++;
 	}
@@ -109,13 +89,11 @@ int	number_redir_left(char *input, char *open_quote)
 		}
 		else if (!(*open_quote) && input[i] == '<')
 		{
-			while (input[i] == '<')
-			{
-				count++;
-				if (input[i + 1] != '<' && error_message_redir_left(count) == WRONG_NUMBER_REDIR)
-					return (WRONG_NUMBER_REDIR);
-				i++;
-			}
+			if (check_next_char_for_redir(input, i) == WRONG_NUMBER_REDIR)
+				return (WRONG_NUMBER_REDIR);
+			if (handle_redir_symbol(input, &i, &count, '<')
+				== WRONG_NUMBER_REDIR)
+				return (WRONG_NUMBER_REDIR);
 		}
 		i++;
 	}
