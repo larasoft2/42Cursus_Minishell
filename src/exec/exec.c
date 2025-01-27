@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/27 21:34:24 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/28 00:31:50 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,7 +248,8 @@ void ft_fork(t_exec *cmd, t_env **env, int *pipefd)
 
     while (cmd)
     {
-        while (cmd && (cmd->type == TOKEN_REDIR_IN || cmd->type == TOKEN_REDIR_OUT || cmd->type == TOKEN_REDIR_APPEND))
+        while (cmd && (cmd->type == TOKEN_REDIR_IN || cmd->type == TOKEN_REDIR_OUT 
+		|| cmd->type == TOKEN_REDIR_APPEND))
         {
             ft_open(cmd, pipefd);
             cmd = cmd->next;
@@ -269,20 +270,20 @@ void ft_fork(t_exec *cmd, t_env **env, int *pipefd)
         }
         if (pid == 0)
         {
-            if (in_fd != STDIN_FILENO)
-            {
-                if (dup2(in_fd, STDIN_FILENO) == -1)
-                {
-                    perror("dup2 stdin");
-                    exit(EXIT_FAILURE);
-                }
-                close(in_fd);
-            }
-            if (cmd->next && dup2(pipefd[1], STDOUT_FILENO) == -1)
-            {
-                perror("dup2 stdout");
-                exit(EXIT_FAILURE);
-            }
+            // if (in_fd != STDIN_FILENO)
+            // {
+            //     if (dup2(in_fd, STDIN_FILENO) == -1)
+            //     {
+            //         perror("dup2 stdin");
+            //         exit(EXIT_FAILURE);
+            //     }
+            //     close(in_fd);
+            // }
+            // if (cmd->next && dup2(pipefd[1], STDOUT_FILENO) == -1)
+            // {
+            //     perror("dup2 stdout");
+            //     exit(EXIT_FAILURE);
+            // }
             ft_close_fd(pipefd);
             path_cmd = get_path(*env, cmd->arg[0]);
             if (!path_cmd)
@@ -303,7 +304,6 @@ void ft_fork(t_exec *cmd, t_env **env, int *pipefd)
         cmd = cmd->next;
     }
 }
-
 
 void ft_error(t_token_node *token, int *pipefd)
 {
