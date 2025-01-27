@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/23 19:20:22 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/27 21:34:24 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,72 +153,7 @@ void print_exec_args(t_exec *ex)
     }
 }
 
-
-
-void	ft_fork(t_exec *cmd, t_env **env, int *pipefd)
-{
-	int	in_fd = 0;
-	pid_t	pid;
-	char *path_cmd;
-
-	while (cmd)
-	{
-		if (cmd->next && pipe(pipefd) == -1)
-		{
-			perror("pipe");
-			return ;
-		}
-		pid = fork();
-		if (pid == -1)
-		{	
-       		perror(strerror(errno));
-        	ft_close_fd(pipefd);
-			return ;
-		}
-    	if (pid == 0)
-    	{
-			ft_close_fd(pipefd);
-			path_cmd = get_path(*env, cmd->arg[0]);
-			if (!path_cmd)
-			{
-				printf("command not found: %s\n", cmd->arg[0]); //stderr
-				return ;
-			}
-			printf("ABSOLUTE PATH: %s\n", path_cmd); //remove later
-			printf("RELATIVE PATH: %s\n", cmd->arg[0]); //remove later
-        	execve(path_cmd, cmd->arg, put_env_in_ar(*env));
-        	perror("execve");
-        	exit(EXIT_FAILURE);
-    	}
-		else if (pid > 0) 
-		{
-        	waitpid(pid, NULL, 0);
-        	close(pipefd[1]);
-        	in_fd = pipefd[0];
-    	}
-		else
-		{
-    	    perror("fork");
-        	return;
-    	}
-		cmd = cmd->next;
-	}
-}
-
-void ft_error(t_token_node *token, int *pipefd)
-{
-    ft_putstr_fd(strerror(errno), STDERR_FILENO);
-    ft_putstr_fd(": ", STDERR_FILENO);
-    if (token && (token->type == TOKEN_REDIR_IN || token->type == TOKEN_REDIR_OUT 
-	|| token->type == TOKEN_REDIR_APPEND || token->type == TOKEN_REDIR_HEREDOC))
-        ft_putendl_fd(token->value, STDERR_FILENO);
-    else
-        ft_putendl_fd("Invalid redirection or command.", STDERR_FILENO);
-    ft_close_fd(pipefd);
-    //exit(1);
-}
-
-int	count_redir(t_exec *ex)
+int	is_redir(t_exec *ex)
 {
 	int	i;
 
@@ -234,16 +169,57 @@ int	count_redir(t_exec *ex)
 	return (-1);
 }
 
-void ft_redir(t_exec *ex) //need dup2 to make it work
+// void ft_redir(t_exec *ex, int *pipefd) //if parent dup2 fail > exit
+// {
+// 	ft_open(ex, pipefd);
+// 	if (ex->fd_in != STDIN_FILENO)
+// 	{
+// 		if (dup2(ex->fd_in, STDIN_FILENO) == -1)
+// 		{
+// 			perror ("fd_in dup2 error");
+// 			ft_close_fd(pipefd);
+// 			exit(EXIT_FAILURE);
+// 		}
+// 		close(ex->fd_in);
+// 	}
+// 	if (ex->fd_out != STDOUT_FILENO)
+// 	{
+// 		if (dup2(ex->fd_out, STDOUT_FILENO) == -1)
+// 		{
+// 			perror ("fd_in dup2 error");
+// 			ft_close_fd(pipefd);
+// 			exit(EXIT_FAILURE);
+// 		}
+// 		close(ex->fd_out);
+// 	}
+// 	if (pipefd)
+//     {
+//         if (pipefd[0] != -1) 
+// 			close(pipefd[0]); // Parent's read end
+//         if (pipefd[1] != -1 && dup2(pipefd[1], STDOUT_FILENO) == -1)
+//         {
+//             perror("dup2 pipe output");
+//             ft_close_fd(pipefd);
+//             exit(EXIT_FAILURE);
+//         }
+//         close(pipefd[1]); // Close after duplicating
+//     }
+// }
+
+
+void	ft_open(t_exec *ex, int *pipefd)
 {
-    if (ex->type == TOKEN_REDIR_IN) 
+	if (ex->type == TOKEN_REDIR_IN) 
     {
         ex->fd_in = open(ex->arg[0], O_RDONLY);
         if (ex->fd_in < 0) 
         {
             perror("Error opening input file");
-            exit(EXIT_FAILURE);
+			ft_close_fd(pipefd);
+            exit(EXIT_FAILURE); //leaks
         }
+		dup2(ex->fd_in, STDIN_FILENO);
+		close(ex->fd_in);
     } 
     else if (ex->type == TOKEN_REDIR_OUT || ex->type == TOKEN_REDIR_APPEND) 
     {
@@ -251,8 +227,11 @@ void ft_redir(t_exec *ex) //need dup2 to make it work
         if (ex->fd_out < 0)
         {
             perror("Error opening output file");
-            exit(EXIT_FAILURE);
+			ft_close_fd(pipefd);
+            exit(EXIT_FAILURE); ///leaks
         }
+		dup2(ex->fd_out, STDOUT_FILENO);
+		close(ex->fd_out);
     } 
     else 
     {
@@ -261,6 +240,83 @@ void ft_redir(t_exec *ex) //need dup2 to make it work
     }
 }
 
+void ft_fork(t_exec *cmd, t_env **env, int *pipefd)
+{
+    int in_fd = 0;
+    pid_t pid;
+    char *path_cmd;
+
+    while (cmd)
+    {
+        while (cmd && (cmd->type == TOKEN_REDIR_IN || cmd->type == TOKEN_REDIR_OUT || cmd->type == TOKEN_REDIR_APPEND))
+        {
+            ft_open(cmd, pipefd);
+            cmd = cmd->next;
+        }
+        if (!cmd || cmd->type != TOKEN_WORD)
+            break;
+        if (cmd->next && pipe(pipefd) == -1)
+        {
+            perror("pipe");
+            return;
+        }
+        pid = fork();
+        if (pid == -1)
+        {
+            perror(strerror(errno));
+            ft_close_fd(pipefd);
+            return;
+        }
+        if (pid == 0)
+        {
+            if (in_fd != STDIN_FILENO)
+            {
+                if (dup2(in_fd, STDIN_FILENO) == -1)
+                {
+                    perror("dup2 stdin");
+                    exit(EXIT_FAILURE);
+                }
+                close(in_fd);
+            }
+            if (cmd->next && dup2(pipefd[1], STDOUT_FILENO) == -1)
+            {
+                perror("dup2 stdout");
+                exit(EXIT_FAILURE);
+            }
+            ft_close_fd(pipefd);
+            path_cmd = get_path(*env, cmd->arg[0]);
+            if (!path_cmd)
+            {
+                fprintf(stderr, "command not found: %s\n", cmd->arg[0]);
+                exit(EXIT_FAILURE);
+            }
+            execve(path_cmd, cmd->arg, put_env_in_ar(*env));
+            perror("execve");
+            exit(EXIT_FAILURE);
+        }
+        else
+        {
+            waitpid(pid, NULL, 0);
+            close(pipefd[1]);
+            in_fd = pipefd[0];
+        }
+        cmd = cmd->next;
+    }
+}
+
+
+void ft_error(t_token_node *token, int *pipefd)
+{
+    ft_putstr_fd(strerror(errno), STDERR_FILENO);
+    ft_putstr_fd(": ", STDERR_FILENO);
+    if (token && (token->type == TOKEN_REDIR_IN || token->type == TOKEN_REDIR_OUT 
+	|| token->type == TOKEN_REDIR_APPEND || token->type == TOKEN_REDIR_HEREDOC))
+        ft_putendl_fd(token->value, STDERR_FILENO);
+    else
+        ft_putendl_fd("Invalid redirection or command.", STDERR_FILENO);
+    ft_close_fd(pipefd);
+    //exit(1);
+}
 
 void	ft_init(t_exec *ex)
 {
@@ -273,8 +329,11 @@ void    ft_process(t_env **env, t_exec *ex)
 	int 	command_nb;
 	int		fd;
 	int		pipefd[2];
+	int		std_dup[2];
 
 	fd = 0;
+	std_dup[0] = dup(STDIN_FILENO);
+	std_dup[1] = dup(STDOUT_FILENO);
     if (pipe(pipefd) == -1)
 	{
     	perror("pipe failed");
@@ -285,18 +344,21 @@ void    ft_process(t_env **env, t_exec *ex)
 	//print_exec_args(ex);
 	while (ex)
 	{
-		printf("COMMAND COUNT: %i\n", command_nb);
+		//printf("COMMAND COUNT: %i\n", command_nb);
     	if ((command_nb == 1) && (is_builtin(ex) == 1))
     	{
-			printf("found a builtin + 1 cmd\n");
 			exec_builtin(ex, env);
             return ;
         }
 		else
 		{
-			ft_redir(ex);
+			//ft_redir(ex);
 			ex->fd_in = fd;
 			ft_fork(ex, env, pipefd);
+			dup2(std_dup[1], STDOUT_FILENO);
+			dup2(std_dup[0], STDIN_FILENO);
+			close(std_dup[0]);
+			close(std_dup[1]);
 		 	return ;
 		}
 		ex = ex->next;
