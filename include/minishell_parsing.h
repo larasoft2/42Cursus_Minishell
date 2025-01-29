@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/27 17:55:08 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/29 14:07:28 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,13 @@
 
 typedef enum e_token_type
 {
-	TOKEN_WORD,          // For commands and arguments
-	TOKEN_PIPE,          // For '|'
-	TOKEN_REDIR_IN,      // For '<'
-	TOKEN_REDIR_OUT,     // For '>'
-	TOKEN_REDIR_APPEND,  // For '>>'
-	TOKEN_REDIR_HEREDOC, // For '<<'
+	TOKEN_WORD,          	// For single word
+	TOKEN_PIPE,          	// For '|'
+	TOKEN_REDIR_IN,      	// For '<'
+	TOKEN_REDIR_OUT,     	// For '>'
+	TOKEN_REDIR_APPEND,  	// For '>>'
+	TOKEN_REDIR_HEREDOC, 	// For '<<'
+	TOKEN_CMD_WITH_OPTIONS, // For commands and arguments
 }						t_token_type;
 
 typedef struct s_token_node
@@ -78,7 +79,7 @@ int						number_redir_right(char *input, char *open_quote);
 int						number_redir_left(char *input, char *open_quote);
 int						error_message_redir_right(int count);
 int						error_message_redir_left(int count);
-int						check_next_char_for_redir(char *input, size_t i);
+int						count_redir(char symbol, int *count);
 int						is_quote(char c);
 int						check_if_unclosed_quotes(char *input);
 int						check_if_not_handled_char_outside_quotes(char *input);
