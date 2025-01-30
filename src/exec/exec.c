@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/29 19:45:41 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/30 18:33:37 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ void	ft_open(t_exec *ex, int *pipefd)
         {
             perror("Error opening output file");
             ex->error = 1;
-            ft_close_fd(pipefd);
+            // ft_close_fd(pipefd);
             return;
         }
         dup2(ex->fd_out, STDOUT_FILENO);
@@ -150,18 +150,13 @@ void ft_fork(t_exec *cmd, t_env **env, int *pipefd)
     t_exec *current;
     current = cmd;
 
-    while (current)
-    {
-        if (current->type == TOKEN_REDIR_IN || current->type == TOKEN_REDIR_OUT 
-	    || current->type == TOKEN_REDIR_APPEND)
-            ft_open(current, pipefd);
-        current = current->next;
-    }
-    if (cmd->error == 1)
-    {
-        ft_close_fd(pipefd);
-        return;
-    }
+    // while (current)
+    // {
+    //     if (current->type == TOKEN_REDIR_IN || current->type == TOKEN_REDIR_OUT 
+	//     || current->type == TOKEN_REDIR_APPEND)
+    //         ft_open(current, pipefd);
+    //     current = current->next;
+    // }
     while (cmd)
     {
         while (cmd && (cmd->type == TOKEN_REDIR_IN || cmd->type == TOKEN_REDIR_OUT 
@@ -180,7 +175,7 @@ void ft_fork(t_exec *cmd, t_env **env, int *pipefd)
         if (pid == -1)
         {
             perror(strerror(errno)); 
-            ft_close_fd(pipefd);
+            // ft_close_fd(pipefd);
             return;
         }
         if (pid == 0)
@@ -199,7 +194,7 @@ void ft_fork(t_exec *cmd, t_env **env, int *pipefd)
             //     perror("dup2 stdout");
             //     exit(EXIT_FAILURE);
             // }
-            ft_close_fd(pipefd);
+            // ft_close_fd(pipefd);
             path_cmd = get_path(*env, cmd->arg[0]);
             if (!path_cmd)
             {
@@ -247,26 +242,39 @@ void    ft_process(t_env **env, t_exec *ex)
 	int		fd;
 	int		pipefd[2];
 	int		std_dup[2];
+    t_exec  *current;
 
+    ft_init(ex);
+    current = ex;
 	fd = 0;
 	std_dup[0] = dup(STDIN_FILENO);
 	std_dup[1] = dup(STDOUT_FILENO);
-    // if (pipe(pipefd) == -1) //rm if no pipe 
+    // if (pipe(pipefd) == -1) //rm if no pipe, only if token pipe
 	// {
     // 	perror("pipe failed");
     // 	exit(1);
 	// }
+    print_exec_args(ex);
+    while (current)
+    {
+        if (current->type == TOKEN_REDIR_IN || current->type == TOKEN_REDIR_OUT 
+	    || current->type == TOKEN_REDIR_APPEND)
+            ft_open(current, pipefd);
+        current = current->next;
+        printf("HERE\n");
+    }
+    printf("exiting\n");
     if (ex->error == 1)
     {
-        ft_close_fd(pipefd);
+        // ft_close_fd(pipefd);
         return;
     }
-	ft_init(ex);
 	command_nb = count_command(ex);
 	while (ex)
 	{
     	if ((command_nb == 1) && (is_builtin(ex) == 1)) //redir avant, fo ft open parce que des fois y a des redir mdr
     	{
+            printf("entering builtin exec\n");
 			exec_builtin(ex, env);
             return ;
         }
@@ -286,7 +294,7 @@ void    ft_process(t_env **env, t_exec *ex)
 	while (wait(NULL) > 0) //if no child, return (-1), else return id //need to wait last cmd? 
     {
     }
-	ft_close_fd(pipefd);
+	// ft_close_fd(pipefd);
 	return ;
 }
     
