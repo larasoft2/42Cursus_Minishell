@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:46 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/23 15:16:22 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/29 20:01:13 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,15 @@
 
 void	ft_close_fd(int *pipefd)
 {
-	if (pipefd)
+	if (pipefd[0] != -1)
 	{
 		close(pipefd[0]);
+		pipefd[0] = -1;
+	}
+	if (pipefd[1] != -1)
+	{
 		close(pipefd[1]);
+		pipefd[1] = -1;
 	}
 }
 
