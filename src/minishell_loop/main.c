@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:58:59 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/30 18:10:25 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/31 19:50:04 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	parsing(char *input, t_token_node **token_list, t_env **env_final)
 		return (EXIT_FAILURE);
 	// print_tokens_exec_list(exec_list);
 	ft_process(env_final, exec_list);
-	printf("\n");
+	//printf("\n");
 	return (EXIT_SUCCESS);
 }
 
