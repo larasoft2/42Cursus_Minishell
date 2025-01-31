@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:16 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/30 18:25:59 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/31 19:35:57 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 ** Array : tableau d'arguments contenant commane et args
 */
 
-int	ft_echo(t_exec *ex, int fd_out)
+int	ft_echo(t_exec *ex)
 {
 	int	i;
 	int	has_n_option;
@@ -30,7 +30,7 @@ int	ft_echo(t_exec *ex, int fd_out)
 	has_n_option = 0;
 	if (nbr_of_args(ex) < 2)
 	{
-		ft_putchar_fd('\n', fd_out);
+		printf("\n");
 		return (0);
 	}
 	has_n_option = ft_strncmp(ex->arg[1], "-n", 2) == 0; 
@@ -40,13 +40,13 @@ int	ft_echo(t_exec *ex, int fd_out)
 		i = 1;
 	while (ex->arg[i])
 	{
-		ft_putstr_fd(ex->arg[i], fd_out);
+		printf("%s", ex->arg[i]);
 		if (ex->arg[i + 1])
-			ft_putchar_fd(' ', fd_out);
+			printf(" ");
 		i++;
 	}
 	if (!has_n_option)
-		ft_putchar_fd('\n', fd_out);
+		printf("\n");
 	return (0);
 }
 

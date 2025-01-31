@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:07:44 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/15 18:09:38 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/31 18:55:44 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ char	*get_path(t_env *env, char *cmd)
 	full_paths = NULL;
 	path = NULL;
 	i = 0;
+	if (cmd && (cmd[0] == '/' || cmd[0] == '.'))
+		return (cmd);
 	while (env)
 	{
     	if (ft_strncmp(env->key, "PATH", 4) == 0 && env->key[4] == '\0')

@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/30 18:33:37 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/31 19:36:28 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,9 @@ int	is_redir(t_exec *ex)
 // check if redirs avant exec / builtins / 
 // && no pipe if no token pipes // and move jsp quelle partie du code 
 
-void	ft_open(t_exec *ex, int *pipefd)
+void	ft_open(t_exec *ex, int *pipefd) //error check useless
 {
+    (void)pipefd;
     if (ex->type == TOKEN_REDIR_IN) 
     {
         ex->fd_in = open(ex->arg[0], O_RDONLY);
@@ -115,7 +116,7 @@ void	ft_open(t_exec *ex, int *pipefd)
         {
             perror("Error opening input file");
             ex->error = 1;
-            ft_close_fd(pipefd);
+            //ft_close_fd(pipefd);
             return;
         }
         dup2(ex->fd_in, STDIN_FILENO);
@@ -254,16 +255,13 @@ void    ft_process(t_env **env, t_exec *ex)
     // 	perror("pipe failed");
     // 	exit(1);
 	// }
-    print_exec_args(ex);
     while (current)
     {
         if (current->type == TOKEN_REDIR_IN || current->type == TOKEN_REDIR_OUT 
 	    || current->type == TOKEN_REDIR_APPEND)
             ft_open(current, pipefd);
         current = current->next;
-        printf("HERE\n");
     }
-    printf("exiting\n");
     if (ex->error == 1)
     {
         // ft_close_fd(pipefd);
@@ -272,10 +270,13 @@ void    ft_process(t_env **env, t_exec *ex)
 	command_nb = count_command(ex);
 	while (ex)
 	{
-    	if ((command_nb == 1) && (is_builtin(ex) == 1)) //redir avant, fo ft open parce que des fois y a des redir mdr
+    	if ((command_nb == 1) && (is_builtin(ex) == 1))
     	{
-            printf("entering builtin exec\n");
 			exec_builtin(ex, env);
+			dup2(std_dup[1], STDOUT_FILENO);
+			dup2(std_dup[0], STDIN_FILENO);
+			close(std_dup[0]);
+			close(std_dup[1]);
             return ;
         }
 		else

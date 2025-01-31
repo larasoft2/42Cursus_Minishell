@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:57:10 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/23 15:34:45 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/31 19:25:31 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	exec_builtin(t_exec *ex, t_env **env)
 	while (ex)
 	{
 		if (ft_strcmp(ex->arg[0], "echo") == 0)
-			ft_echo(ex, 0);
+			ft_echo(ex);
 		else if (ft_strcmp(ex->arg[0], "cd") == 0)
 			ft_cd(ex);
 		else if (ft_strcmp(ex->arg[0], "pwd") == 0)

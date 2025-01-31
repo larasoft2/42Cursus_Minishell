@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/01/29 15:35:33 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/31 19:25:45 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_env
 }					t_env;
 
 // BUILTINS//
-int					ft_echo(t_exec *ex, int fd_out);
+int					ft_echo(t_exec *ex);
 int					ft_pwd(int fd_out);
 int					ft_unset(t_env **env, t_exec *ex);
 void				ft_cd(t_exec *ex);
