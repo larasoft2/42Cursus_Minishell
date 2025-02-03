@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:48:29 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/03 19:23:47 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/03 20:12:12 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,20 @@ void    restore_fds(int *std_dup)
 	dup2(std_dup[0], STDIN_FILENO);
 	close(std_dup[0]);
 	close(std_dup[1]);
+}
+
+int	is_pipe(t_exec *ex)
+{
+	int	i;
+
+	if (!ex)
+		return (0);
+	i = 0;
+	while (ex)
+	{
+		if (ex->type == TOKEN_PIPE)
+			return (1);
+		ex = ex->next;
+	}
+	return (-1);
 }

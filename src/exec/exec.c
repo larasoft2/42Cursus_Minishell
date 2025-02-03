@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/03 19:29:46 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/03 21:54:05 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,8 @@ void    ft_exec(t_exec *ex, t_env **env)
     exit(EXIT_FAILURE); //pq exit failure
 
 }
- 
+int child_count = 0;
+
 void ft_fork(t_exec *cmd, t_env **env)
 {
     pid_t pid;
@@ -112,21 +113,23 @@ void ft_fork(t_exec *cmd, t_env **env)
     while (cmd)
     {
         while (cmd && (cmd->type == TOKEN_REDIR_IN || cmd->type == TOKEN_REDIR_OUT 
-		|| cmd->type == TOKEN_REDIR_APPEND))
+                        || cmd->type == TOKEN_REDIR_APPEND || cmd->type == TOKEN_PIPE))
             cmd = cmd->next;
+
         if (!cmd || cmd->type != TOKEN_WORD)
             break;
+
         pid = fork();
         if (pid == -1)
         {
             perror(strerror(errno)); 
-            // ft_close_fd(pipefd);
             return;
         }
         if (pid == 0)
             ft_exec(cmd, env);
         else
-            waitpid(pid, NULL, 0);
+            child_count++;
+
         cmd = cmd->next;
     }
 }
@@ -150,7 +153,7 @@ void    exec_commands(t_exec *ex, t_env **env, int *std_dup)
     int     fd;
     int 	command_nb;
 
-    fd = 0;
+    fd = 0; //useless
     command_nb = count_command(ex);
     while (ex)
 	{
@@ -162,14 +165,53 @@ void    exec_commands(t_exec *ex, t_env **env, int *std_dup)
         }
 		else
 		{
-			ex->fd_in = fd;
+			ex->fd_in = fd; // = stdin_fileno
 			ft_fork(ex, env);
             restore_fds(std_dup);
+            for (int i = 0; i < child_count; i++)
+                wait(NULL); // LES FDS SONT NIQUES SA MERE!!!!!!!!!! 
 		 	return ;
 		}
 		ex = ex->next;
 	}
+}
 
+void    handle_pipes(t_exec *ex, t_env **env, int *pipefd)
+{
+    pid_t pid;
+
+    while (ex && ex->next)
+    {
+        if (pipe(pipefd) == -1)
+        {
+            perror("pipe failed");
+            return;
+        }
+
+        pid = fork();
+        if (pid == -1)
+        {
+            perror("fork failed");
+            return;
+        }
+        if (pid == 0)
+        {
+            if (ex->type != TOKEN_REDIR_IN && ex->type != TOKEN_PIPE)
+                dup2(pipefd[1], STDOUT_FILENO);
+            if (ex->fd_in != STDIN_FILENO)
+                dup2(ex->fd_in, STDIN_FILENO);
+
+            close(pipefd[0]);  // unused read end of pipe
+            ft_exec(ex, env); 
+        }
+        else
+        {
+            close(pipefd[1]);
+            ex->fd_in = pipefd[0];  // input for next command to read from pipe
+            waitpid(pid, NULL, 0);
+        }
+        ex = ex->next;
+    }
 }
 
 void    ft_process(t_env **env, t_exec *ex)
@@ -177,13 +219,14 @@ void    ft_process(t_env **env, t_exec *ex)
 	int		pipefd[2];
 	int		std_dup[2];
 
-    ft_init(ex, std_dup);    
+    ft_init(ex, std_dup);
+    if (is_pipe(ex) == 1)
+        handle_pipes(ex, env, pipefd);
     handle_redir(ex, pipefd);
     exec_commands(ex, env, std_dup);
-	while (wait(NULL) > 0) //if no child, return (-1), else return id //need to wait last cmd? it might not work
-    {
-    }
+	// while (wait(NULL) > 0) //if no child, return (-1), else return id //need to wait last cmd? it might not work
+    // {
+    // }
 	// clean free
 	return ;
 }
-    
