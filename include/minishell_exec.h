@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/01/31 19:25:45 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/03 18:16:48 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ typedef struct s_exec
 	t_token_type type;  // list of redirs
 	int fd_in;           // fd for stdin
 	int fd_out;          // fd for stdout
-	int	error;
 	struct s_exec *next; // next cmd
 }					t_exec;
 
