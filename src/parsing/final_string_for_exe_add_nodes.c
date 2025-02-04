@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 13:40:04 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/29 14:12:17 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/03 19:50:27 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,14 @@ t_exec	*add_word_to_exec_word_node(t_exec **exec_list, char *value,
 	temp = *exec_list;
 	if (*exec_list == NULL || *word_count == 0)
 	{
-		add_exec_node_with_type(exec_list, TOKEN_CMD_WITH_OPTIONS, value);
+		add_exec_node_with_type(exec_list, TOKEN_WORD, value);
 		*last_exec_node = *exec_list;
 		while ((*last_exec_node)->next)
 			*last_exec_node = (*last_exec_node)->next;
 		*word_count = 1;
 		return (*exec_list);
 	}
-	if (*last_exec_node && (*last_exec_node)->type == TOKEN_CMD_WITH_OPTIONS
+	if (*last_exec_node && (*last_exec_node)->type == TOKEN_WORD
 		&& *word_count > 0)
 	{
 		add_word((*last_exec_node)->arg, value, *word_count);

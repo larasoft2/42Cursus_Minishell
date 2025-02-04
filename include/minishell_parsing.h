@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/29 14:07:28 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/03 19:10:05 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_token_node
 {
 	t_token_type		type;
 	char				*value;
+	//int					to_delete;
 	struct s_token_node	*next;
 }						t_token_node;
 

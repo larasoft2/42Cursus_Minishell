@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:15:09 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/27 12:13:14 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/03 19:24:27 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ t_token_node	*tokenize_input(char *input)
 	while (input[i])
 	{
 		skip_spaces(input, &i);
+		if (input[i] == '\0')
+			break;
 		if (is_pipe_redirin_redirout_character(input[i]))
 			create_special_node(input, &i, &token_list);
 		else if (!is_pipe_redirin_redirout_character(input[i]))
