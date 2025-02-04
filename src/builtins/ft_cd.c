@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:09 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/23 15:03:49 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/04 14:47:34 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	ft_cd(t_exec *ex)
 	printf("I'm in cd\n");
 	chdir(ex->arg[1]);
 	buff = malloc(1024);
+	if (!buff)
+		exit(EXIT_FAILURE); //free
 	printf("%s\n", getcwd(buff, 1024));
 }
 

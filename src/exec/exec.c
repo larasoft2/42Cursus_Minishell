@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/03 21:54:05 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/04 15:49:49 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,6 @@ void    handle_pipes(t_exec *ex, t_env **env, int *pipefd)
             perror("pipe failed");
             return;
         }
-
         pid = fork();
         if (pid == -1)
         {
@@ -200,9 +199,8 @@ void    handle_pipes(t_exec *ex, t_env **env, int *pipefd)
                 dup2(pipefd[1], STDOUT_FILENO);
             if (ex->fd_in != STDIN_FILENO)
                 dup2(ex->fd_in, STDIN_FILENO);
-
             close(pipefd[0]);  // unused read end of pipe
-            ft_exec(ex, env); 
+            ft_exec(ex, env);
         }
         else
         {
@@ -220,8 +218,8 @@ void    ft_process(t_env **env, t_exec *ex)
 	int		std_dup[2];
 
     ft_init(ex, std_dup);
-    if (is_pipe(ex) == 1)
-        handle_pipes(ex, env, pipefd);
+    // if (is_pipe(ex) == 1)
+    //     handle_pipes(ex, env, pipefd);
     handle_redir(ex, pipefd);
     exec_commands(ex, env, std_dup);
 	// while (wait(NULL) > 0) //if no child, return (-1), else return id //need to wait last cmd? it might not work
