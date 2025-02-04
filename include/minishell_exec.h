@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/01/21 18:03:06 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/03 20:12:32 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,10 @@
 typedef struct s_exec
 {
 	char **arg;          // contains args for one cmd {ls "-l", ...}
-	t_token_node *type;  // list of redirs
+	t_token_type type;  // list of redirs
 	int fd_in;           // fd for stdin
 	int fd_out;          // fd for stdout
+	// int std_dup[2];
 	struct s_exec *next; // next cmd
 }					t_exec;
 
@@ -48,31 +49,30 @@ typedef struct s_env
 }					t_env;
 
 // BUILTINS//
-int					ft_echo(t_exec *ex, int fd_out);
+int					ft_echo(t_exec *ex);
 int					ft_pwd(int fd_out);
-int					ft_unset(t_env *env, t_exec *ex);
-
+int					ft_unset(t_env **env, t_exec *ex);
+void				ft_cd(t_exec *ex);
 void				ft_env(t_env *env);
 
 // EXEC UTILS//
-void				ft_close_fd(int *pipefd);
 int					ft_strcmp(char *s1, char *s2);
 int					nbr_of_args(t_exec *ex);
 int					count_command(t_exec *ex);
+int					is_pipe(t_exec *ex);
 char				*ft_strndup(const char *s, size_t n);
-
+void				ft_init(t_exec *ex, int *std_dup);
+void    			restore_fds(int *std_dup);
+void				ft_close_fd(int *pipefd);
 
 // EXEC//
-int					exec_builtin(t_exec *ex, t_env *env);
-int					is_builtin(t_exec *ex, t_env *env);
-void    			ft_fork(t_env *env, t_exec *ex);
-char				**put_env_in_ar(t_env *envp);
-
-// FREE//
-void				*ft_free_array(char **ar);
 char				**put_env_in_ar(t_env *envp);
 char				*is_path_exec(char *cmd, char **full_paths);
 char				*get_path(t_env *env, char *cmd);
+int					exec_builtin(t_exec *ex, t_env **env);
+int					is_builtin(t_exec *ex);
+void				ft_fork(t_exec *cmd, t_env **env);
+void    			ft_process(t_env **env, t_exec *ex);
 
 // FREE//
 void				*ft_free_array(char **ar);

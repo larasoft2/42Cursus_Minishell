@@ -6,20 +6,33 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:55:03 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/21 18:05:38 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/01/23 15:25:13 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_unset(t_env *env, t_exec *ex) //unset sans arg ?
+
+void	print_env(t_env *env)
+{
+	while (env)
+	{
+		if (env->key && env->value)
+			printf("%s=%s\n", env->key, env->value);
+		else
+			printf("(unset variable)\n");
+		env = env->next;
+	}
+}
+
+int	ft_unset(t_env **env, t_exec *ex) //unset sans arg ?
 {
 	t_env	*current;
 	t_env	*prev;
 
-	if (!env || !ex || !ex->arg || !ex->arg[0])
+	if (!env || !ex || !ex->arg)
 		return (1);
-	current = env;
+	current = *env;
 	prev = NULL;
 	while (current)
 	{
@@ -28,9 +41,11 @@ int	ft_unset(t_env *env, t_exec *ex) //unset sans arg ?
 			if (prev)
 				prev->next = current->next;
 			else
-				env->next = current->next;
+				(*env)->next = current->next;
+			printf("current = %s\n", current->key);
 			free(current);
 			current = NULL;
+			print_env(*env);
 			return (0);
 		}
 		prev = current;
@@ -39,17 +54,7 @@ int	ft_unset(t_env *env, t_exec *ex) //unset sans arg ?
 	return (1);
 }
 
-// void	print_env(t_env *env)
-// {
-// 	while (env)
-// 	{
-// 		if (env->key && env->value)
-// 			printf("%s=%s\n", env->key, env->value);
-// 		else
-// 			printf("(unset variable)\n");
-// 		env = env->next;
-// 	}
-// }
+
 
 // int	main(int ac, char **av, char **envp)
 // {
