@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/04 17:47:11 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/05 00:26:18 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,6 @@ void ft_error(t_token_node *token, int *pipefd)
 }
 
 // access F OK check infiles chez Jean pour que ca ne cree pas outfile si infile invalide
-// redir avant, fo ft open parce que des fois y a des redir mdr
-// check if redirs avant exec / builtins / 
-// && no pipe if no token pipes // and move jsp quelle partie du code 
-
 //error check useless
 
 void	ft_open(t_exec *ex, int *pipefd)
@@ -113,12 +109,10 @@ void ft_fork(t_exec *cmd, t_env **env)
     while (cmd)
     {
         while (cmd && (cmd->type == TOKEN_REDIR_IN || cmd->type == TOKEN_REDIR_OUT 
-                        || cmd->type == TOKEN_REDIR_APPEND || cmd->type == TOKEN_PIPE))
+            || cmd->type == TOKEN_REDIR_APPEND || cmd->type == TOKEN_PIPE))
             cmd = cmd->next;
-
         if (!cmd || cmd->type != TOKEN_WORD)
             break;
-
         pid = fork();
         if (pid == -1)
         {
@@ -129,7 +123,6 @@ void ft_fork(t_exec *cmd, t_env **env)
             ft_exec(cmd, env);
         else
             child_count++;
-
         cmd = cmd->next;
     }
 }
@@ -176,40 +169,62 @@ void    exec_commands(t_exec *ex, t_env **env, int *std_dup)
 	}
 }
 
-void    handle_pipes(t_exec *ex, t_env **env, int *pipefd)
+void handle_pipes(t_exec *ex, t_env **env)
 {
-    pid_t pid;
+    int pipefd[2];
+    int fd_in = STDIN_FILENO; // Start with standard input
 
-    while (ex && ex->next)
+    while (ex)
     {
-        if (pipe(pipefd) == -1)
+        if (ex->next && ex->next->type == TOKEN_PIPE) // Create a pipe if another command follows
         {
-            perror("pipe failed");
-            return;
-        }
-        pid = fork();
-        if (pid == -1)
-        {
-            perror("fork failed");
-            return;
-        }
-        if (pid == 0)
-        {
-            if (ex->type != TOKEN_REDIR_IN && ex->type != TOKEN_PIPE)
-                dup2(pipefd[1], STDOUT_FILENO);
-            if (ex->fd_in != STDIN_FILENO)
-                dup2(ex->fd_in, STDIN_FILENO);
-            close(pipefd[0]);  // unused read end of pipe
-            ft_exec(ex, env);
+            if (pipe(pipefd) == -1)
+            {
+                perror("pipe failed");
+                exit(EXIT_FAILURE);
+            }
         }
         else
         {
-            close(pipefd[1]);
-            ex->fd_in = pipefd[0];  // input for next command to read from pipe
-            waitpid(pid, NULL, 0);
+            pipefd[0] = -1;
+            pipefd[1] = -1;
         }
-        ex = ex->next;
+        pid_t pid = fork();
+        if (pid == -1)
+        {
+            perror("fork failed");
+            exit(EXIT_FAILURE);
+        }
+        if (pid == 0) // Child process
+        {
+            if (fd_in != STDIN_FILENO) // Redirect input if needed
+            {
+                dup2(fd_in, STDIN_FILENO);
+                close(fd_in);
+            }
+            if (pipefd[1] != -1) // Redirect output if needed
+            {
+                dup2(pipefd[1], STDOUT_FILENO);
+                close(pipefd[1]);
+            }
+            close(pipefd[0]); // Close unused read end
+            ft_exec(ex, env);
+            exit(EXIT_FAILURE);
+        }
+        // Parent process: close used pipes and update fd_in
+        if (fd_in != STDIN_FILENO)
+            close(fd_in);
+        if (pipefd[1] != -1)
+            close(pipefd[1]);
+
+        fd_in = pipefd[0]; // Update fd_in for the next command
+        ex = ex->next; // Move to the next command
+
+        // *** FIX: Skip the TOKEN_PIPE node ***
+        if (ex && ex->type == TOKEN_PIPE)
+            ex = ex->next;
     }
+    while (wait(NULL) > 0); // Wait for all children
 }
 
 void    ft_process(t_env **env, t_exec *ex)
@@ -218,8 +233,8 @@ void    ft_process(t_env **env, t_exec *ex)
 	int		std_dup[2];
 
     ft_init(ex, std_dup);
-    // if (is_pipe(ex) == 1)
-    //     handle_pipes(ex, env, pipefd);
+    if (is_pipe(ex) == 1)
+        handle_pipes(ex, env);
     handle_redir(ex, pipefd);
     exec_commands(ex, env, std_dup);
 	// while (wait(NULL) > 0) //if no child, return (-1), else return id //need to wait last cmd? it might not work
