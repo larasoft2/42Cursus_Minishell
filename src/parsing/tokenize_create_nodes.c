@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 14:56:02 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/18 17:06:45 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/29 21:10:50 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	create_pipe_node(int *i, t_token_node **token_list)
 	value = ft_strdup("|");
 	pipe_node = create_token_node(type, value);
 	add_token(token_list, pipe_node);
-	(*i)++; // avance l'index apres le pipe
+	(*i)++;
 	free(value);
 }
 
@@ -32,9 +32,9 @@ void	create_redir_in_node(char *input, int *i, t_token_node **token_list)
 	char			*value;
 
 	type = TOKEN_REDIR_IN;
-	(*i)++; // avance apres le symbole '>'
+	(*i)++;
 	skip_spaces(input, i);
-	value = read_word(input, i); // la value correspond au word node apres (fichier)
+	value = read_word(input, i);
 	if (!value)
 	{
 		ft_putstr_fd("Error: Memory allocation failed\n", STDERR_FILENO);
@@ -50,9 +50,9 @@ void	create_redir_out_node(char *input, int *i, t_token_node **token_list)
 	char			*value;
 
 	type = TOKEN_REDIR_OUT;
-	(*i)++; // avance apres le symbole '<'
+	(*i)++;
 	skip_spaces(input, i);
-	value = read_word(input, i); // la value correspond au word node apres (fichier)
+	value = read_word(input, i);
 	if (!value)
 	{
 		ft_putstr_fd("Error: Memory allocation failed\n", STDERR_FILENO);
@@ -68,9 +68,9 @@ void	create_redir_append_node(char *input, int *i, t_token_node **token_list)
 	char			*value;
 
 	type = TOKEN_REDIR_APPEND;
-	*i = *i + 2; // avance apres le symbole '>>'
+	*i = *i + 2;
 	skip_spaces(input, i);
-	value = read_word(input, i); // la value correspond au word node apres (fichier)
+	value = read_word(input, i);
 	if (!value)
 	{
 		ft_putstr_fd("Error: Memory allocation failed\n", STDERR_FILENO);
@@ -86,9 +86,9 @@ void	create_heredoc_node(char *input, int *i, t_token_node **token_list)
 	char			*value;
 
 	type = TOKEN_REDIR_HEREDOC;
-	*i = *i + 2; // avance apres le symbole '<<'
+	*i = *i + 2;
 	skip_spaces(input, i);
-	value = read_word(input, i); // la value correspond au word node apres (fichier)
+	value = read_word(input, i);
 	if (!value)
 	{
 		ft_putstr_fd("Error: Memory allocation failed\n", STDERR_FILENO);

@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:07:51 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/06 15:42:20 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/27 11:51:40 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,3 @@ int	input_starts_or_ends_with_pipe(char *input)
 	}
 	return (EXIT_SUCCESS);
 }
-
-
-

@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/01/21 18:32:21 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:29:21 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "minishell.h"
 
-int		env_list_size(t_env *env) 
+int		env_list_size(t_env *env)
 {
     int size;
-	
+
 	size = 0;
-    while (env) 
+    while (env)
 	{
         size++;
         env = env->next;
@@ -56,6 +56,19 @@ void	ft_free_list(t_env *head)
 		free(head);
 		head = cleaner;
 	}
+}
+
+int		env_list_size(t_env *env)
+{
+    int size;
+
+	size = 0;
+    while (env)
+	{
+        size++;
+        env = env->next;
+    }
+    return (size);
 }
 
 char	**put_env_in_ar(t_env *envp)

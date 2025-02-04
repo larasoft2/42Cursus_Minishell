@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_error_not_handled.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:08:36 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/22 20:00:49 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:32:32 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ int	not_handled_other_character(char *input, char *open_quote)
 				*open_quote = '\0';
 		}
 		else if (!(*open_quote) && (input[i] == ';' || input[i] == '&'
-			|| input[i] == '*' || input[i] == '(' || input[i] == ')'
-			|| input[i] == '\\'))
+				|| input[i] == '\\' || input[i] == '*'
+				|| input[i] == '(' || input[i] == ')'))
 		{
 			print_error_not_handled(input[i]);
 			return (NOT_HANDLED_CHARACTER);
@@ -89,11 +89,12 @@ int	not_handled_other_character(char *input, char *open_quote)
 int	not_handled_char_input(char *input, char *open_quote)
 {
 	if (not_handled_double_pipe(input, open_quote) == NOT_HANDLED_CHARACTER
-		|| not_handled_double_special_character_and(input, open_quote) == NOT_HANDLED_CHARACTER
-		|| not_handled_other_character(input, open_quote) == NOT_HANDLED_CHARACTER)
+		|| not_handled_double_special_character_and(input, open_quote)
+		== NOT_HANDLED_CHARACTER
+		|| not_handled_other_character(input, open_quote)
+		== NOT_HANDLED_CHARACTER)
+	{
 		return (NOT_HANDLED_CHARACTER);
-	if (number_redir_right(input, open_quote) == WRONG_NUMBER_REDIR
-		|| number_redir_left(input, open_quote) == WRONG_NUMBER_REDIR)
-		return (NOT_HANDLED_CHARACTER);
+	}
 	return (EXIT_SUCCESS);
 }

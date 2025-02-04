@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 14:57:13 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/18 17:20:49 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/03 19:01:00 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,20 +33,19 @@ char	*read_word(char *input, int *i)
 	start_index = *i;
 	while (input[*i])
 	{
-		if (is_quote(input[*i]) && !open_quote) // si le caractere est une quote, on le stocke
+		if (is_quote(input[*i]) && !open_quote)
 			open_quote = input[*i];
-		else if (input[*i] == open_quote) // si on rencontre la meme quote pour la 2eme fois, on remet open_quote a 0
+		else if (input[*i] == open_quote)
 			open_quote = '\0';
-		if ((open_quote != '\0') || (!is_pipe_redirin_redirout_character(input[*i]) && !ft_isspace(input[*i]))) // si on est plus dans une quote et qu'on tombe sur un espace/pipe/redir_in/redir_out, on quitte la boucle
+		if ((open_quote != '\0')
+			|| (!is_pipe_redirin_redirout_character(input[*i])
+				&& !ft_isspace(input[*i])))
 			(*i)++;
 		else
 			break ;
 	}
-	word = ft_substr(input, start_index, *i - start_index); // on stocke le mot depuis le start_index (stocke avant d'avoir avance dans la boucle) jusqu'au current index
+	word = ft_substr(input, start_index, *i - start_index);
 	if (!word)
-	{
-		ft_putstr_fd("Error: Memory allocation failed\n", STDERR_FILENO);
-		return (NULL);
-	}
+		return (ft_putstr_fd("Error: Mem alloc failed\n", STDERR_FILENO), NULL);
 	return (word);
 }

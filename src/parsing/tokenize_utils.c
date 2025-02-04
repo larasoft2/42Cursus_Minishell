@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 14:59:07 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/20 17:03:03 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/01/27 13:51:26 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ void	print_tokens(t_token_node *list)
 
 void	print_tokens_exec_list(t_exec *exec_list)
 {
-	t_exec *current;
-	int	i;
+	t_exec	*current;
+	int		i;
 
 	current = exec_list;
 	while (current)
