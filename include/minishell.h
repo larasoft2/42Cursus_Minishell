@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/04 17:27:23 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:51:49 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,9 @@ void	free_token_list(t_token_node *list);
 // INIT
 void	init_struct(t_token_node *token_list);
 
-int		parsing(char *input, t_token_node **token_list, char **env);
+int	parsing(char *input, t_token_node **token_list, t_env **env_final);
 t_env	*get_env_list(char **realenv);
 void	print_env(t_env *env);
-
-void	ft_fork(t_env *env, t_exec *ex);
 
 
 #endif
