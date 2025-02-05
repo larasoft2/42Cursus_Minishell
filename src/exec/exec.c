@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/05 14:54:47 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:30:47 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ void    ft_exec(t_exec *ex, t_env **env)
     exit(EXIT_FAILURE); //pq exit failure
 
 }
-int child_count = 0;
 
 void ft_fork(t_exec *cmd, t_env **env)
 {
@@ -121,8 +120,6 @@ void ft_fork(t_exec *cmd, t_env **env)
         }
         if (pid == 0)
             ft_exec(cmd, env);
-        else
-            child_count++;
         cmd = cmd->next;
     }
 }
@@ -161,8 +158,7 @@ void    exec_commands(t_exec *ex, t_env **env, int *std_dup)
 			ex->fd_in = fd; // = stdin_fileno
 			ft_fork(ex, env);
             restore_fds(std_dup);
-            for (int i = 0; i < child_count; i++)
-                wait(NULL); // LES FDS SONT NIQUES SA MERE!!!!!!!!!! 
+            while (wait(NULL) > 0); //idk si wait au bon endroit
 		 	return ;
 		}
 		ex = ex->next;
@@ -172,11 +168,13 @@ void    exec_commands(t_exec *ex, t_env **env, int *std_dup)
 void handle_pipes(t_exec *ex, t_env **env)
 {
     int pipefd[2];
-    int fd_in = STDIN_FILENO; // Start with standard input
+    int fd_in;
+    pid_t pid;
 
+    fd_in = STDERR_FILENO;
     while (ex)
     {
-        if (ex->next && ex->next->type == TOKEN_PIPE) // Create a pipe if another command follows
+        if (ex->next && ex->next->type == TOKEN_PIPE) // Si autre cmd suit, on crée un pipe
         {
             if (pipe(pipefd) == -1)
             {
@@ -189,39 +187,40 @@ void handle_pipes(t_exec *ex, t_env **env)
             pipefd[0] = -1;
             pipefd[1] = -1;
         }
-        pid_t pid = fork();
+        pid = fork();
         if (pid == -1)
         {
             perror("fork failed");
             exit(EXIT_FAILURE);
         }
-        if (pid == 0) // Child process
+        if (pid == 0) // child
         {
-            if (fd_in != STDIN_FILENO) // Redirect input if needed
+            if (fd_in != STDIN_FILENO) // redirect stdin si nécessaire
             {
                 dup2(fd_in, STDIN_FILENO);
                 close(fd_in);
             }
-            if (pipefd[1] != -1) // Redirect output if needed
+            if (pipefd[1] != -1) // redirect stdout > pipe
             {
                 dup2(pipefd[1], STDOUT_FILENO);
                 close(pipefd[1]);
             }
-            close(pipefd[0]); // Close unused read end
+            close(pipefd[0]); // close read end of pipe
             ft_exec(ex, env);
-            exit(EXIT_FAILURE);
+            exit(EXIT_FAILURE); 
         }
-        // Parent process: close used pipes and update fd_in
+        // parent
         if (fd_in != STDIN_FILENO)
-            close(fd_in);
+            close(fd_in); // close ancien fd_in
         if (pipefd[1] != -1)
-            close(pipefd[1]);
-        fd_in = pipefd[0]; // Update fd_in for the next command
-        ex = ex->next; // Move to the next command
+            close(pipefd[1]); // close write end of pipe
+        // prep fd_in next cmd
+        fd_in = pipefd[0];
+        ex = ex->next;
         if (ex && ex->type == TOKEN_PIPE)
             ex = ex->next;
     }
-    while (wait(NULL) > 0); // Wait for all children
+    while (wait(NULL) > 0);
 }
 
 void    ft_process(t_env **env, t_exec *ex)
@@ -232,8 +231,11 @@ void    ft_process(t_env **env, t_exec *ex)
     ft_init(ex, std_dup);
     if (is_pipe(ex) == 1)
         handle_pipes(ex, env);
-    handle_redir(ex, pipefd);
-    exec_commands(ex, env, std_dup);
+    else
+    {
+        handle_redir(ex, pipefd);
+        exec_commands(ex, env, std_dup);
+    }
 	// while (wait(NULL) > 0) //if no child, return (-1), else return id //need to wait last cmd? it might not work
     // {
     // }
