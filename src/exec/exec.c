@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/05 22:23:43 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/05 22:53:18 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,11 +168,13 @@ void    exec_commands(t_exec *ex, t_env **env, int *std_dup)
 
 void handle_pipes(t_exec *ex, t_env **env)
 {
-    int     pipefd[2];
-    int     fd_in;
-    pid_t   pid;
-    int     status;
+    int         pipefd[2];
+    int         fd_in;
+    pid_t       pid;
+    int         status;
+    t_exec      *current;
 
+    current = ex;
     fd_in = STDIN_FILENO;
     while (ex)
     {
@@ -214,7 +216,7 @@ void handle_pipes(t_exec *ex, t_env **env)
             }
             if (pipefd[0] != -1)
                 close(pipefd[0]);
-            handle_redir(ex, pipefd); //jsp si au bon endroit
+            handle_redir(current, pipefd); //jsp si au bon endroit
             ft_exec(ex, env);
             exit(EXIT_FAILURE);
         }
@@ -239,9 +241,7 @@ void    ft_process(t_env **env, t_exec *ex)
 
     ft_init(ex, std_dup);
     if (is_pipe(ex) == 1)
-    {
         handle_pipes(ex, env);
-    }
     else
     {
         handle_redir(ex, pipefd);
