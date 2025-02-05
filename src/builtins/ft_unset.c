@@ -3,27 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:55:03 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/23 15:25:13 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/05 18:22:35 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-
-void	print_env(t_env *env)
-{
-	while (env)
-	{
-		if (env->key && env->value)
-			printf("%s=%s\n", env->key, env->value);
-		else
-			printf("(unset variable)\n");
-		env = env->next;
-	}
-}
 
 int	ft_unset(t_env **env, t_exec *ex) //unset sans arg ?
 {
@@ -53,40 +40,3 @@ int	ft_unset(t_env **env, t_exec *ex) //unset sans arg ?
 	}
 	return (1);
 }
-
-
-
-// int	main(int ac, char **av, char **envp)
-// {
-// 	t_env	*env1;
-// 	t_env	*env2;
-// 	t_env	*env3;
-// 	t_env	*env4;
-// 	t_ex	ex;
-// 	char	*args[] = {"HOME", "TEST", NULL};
-
-// 	env1 = malloc(sizeof(t_env));
-// 	env2 = malloc(sizeof(t_env));
-// 	env3 = malloc(sizeof(t_env));
-// 	env4 = malloc(sizeof(t_env));
-// 	env1->key = strdup("USER");
-// 	env1->value = strdup("admin");
-// 	env1->next = env2;
-// 	env2->key = strdup("HOME");
-// 	env2->value = strdup("/home/admin");
-// 	env2->next = env3;
-// 	env3->key = strdup("IDK");
-// 	env3->value = strdup("/bin/bash");
-// 	env3->next = env4;
-// 	env4->key = strdup("TEST NODE");
-// 	env4->value = strdup("/path/path");
-// 	env4->next = NULL;
-// 	printf("Initial environment:\n");
-// 	print_env(env1);
-// 	ex.arg = args;
-// 	printf("\nCalling ft_unset to remove 'HOME':\n");
-// 	ft_unset(env1, &ex);
-// 	printf("\nEnvironment after unset:\n");
-// 	print_env(env1);
-// 	return (0);
-// }

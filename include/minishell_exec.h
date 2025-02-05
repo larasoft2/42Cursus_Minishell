@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_exec.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/04 17:49:05 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/05 15:09:59 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 # define EXPORT 4
 # define PWD 5
 # define UNSET 6
+# define ARGUMENTS 0
+# define NO_ARGUMENTS 1
 
 typedef struct s_exec
 {
@@ -44,7 +46,6 @@ typedef struct s_env
 {
 	char			*key;
 	char			*value;
-	bool			exportable;
 	struct s_env	*next;
 }					t_env;
 
@@ -54,6 +55,7 @@ int					ft_pwd(int fd_out);
 int					ft_unset(t_env **env, t_exec *ex);
 void				ft_cd(t_exec *ex);
 void				ft_env(t_env *env);
+void				ft_export(t_exec *exec, t_env **env);
 
 // EXEC UTILS//
 int					ft_strcmp(char *s1, char *s2);

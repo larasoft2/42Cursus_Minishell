@@ -6,25 +6,152 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:28 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/04 17:27:50 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/05 18:23:25 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// export with no options;
-// sets environment variables
-//
-// export can set a null variable that won't show in env
-// but will show when typing export
-// export alone shows all variables
+int	check_if_var_name_is_valid(char *arg)
+{
+	size_t	i;
 
-// export	a = $b
-// export b = $a must not loop
-//
-// export sans $
+	if (!ft_isalpha(arg[0]) && arg[0] != '_')
+			return (EXIT_FAILURE);
+	i = 1;
+	while (arg[i] && arg[i] != '=')
+	{
+		if (!ft_isalnum(arg[i]) && arg[i] != '_')
+			return (EXIT_FAILURE);
+		i++;
+	}
+	return (EXIT_SUCCESS);
+}
 
+int	check_if_export_has_arg(char **arg)
+{
+	size_t	i;
 
-// void    ft_export(t_exec *exec, t_env *env)
-// {
-// }
+	i = 0;
+	while (arg[i])
+		i++;
+	if (i == 1)
+		return (NO_ARGUMENTS);
+	return (ARGUMENTS);
+}
+
+char	*extract_key_name(char *arg)
+{
+	size_t	key_len;
+	char	*key;
+
+	key_len = 0;
+	while (arg[key_len] && arg[key_len] != '=')
+		key_len++;
+	key = ft_substr(arg, 0, key_len);
+	return (key);
+}
+
+char	*extract_var_value(char *arg)
+{
+	size_t	i;
+	size_t	len;
+	char	*new_value;
+
+	i = 0;
+	len = ft_strlen(arg);
+	new_value = NULL;
+	while (arg[i] && arg[i] != '=')
+		i++;
+	if (!arg[i])
+		return (ft_strdup(""));
+	new_value = ft_substr(arg, i + 1, len - i - 1);
+	return (new_value);
+}
+
+void	modify_value(char *new_value, t_env *env_var)
+{
+	free(env_var->value);
+	env_var->value = ft_strdup(new_value);
+	if (!env_var->value)
+		perror("Failed to allocate memory for new value");
+}
+
+int	check_if_var_name_already_exists(char *arg, t_env *env)
+{
+	t_env	*temp;
+	char	*new_value;
+	char	*key;
+
+	key = extract_key_name(arg);
+	if (!key)
+		return (EXIT_FAILURE);
+	temp = env;
+	while (temp != NULL)
+	{
+		if (ft_strcmp(key, temp->key) == 0)
+		{
+			new_value = extract_var_value(arg);
+			if (!new_value)
+				return (EXIT_FAILURE);
+			modify_value(new_value, temp);
+			free(new_value);
+			return (EXIT_SUCCESS);
+		}
+		temp = temp->next;
+	}
+	return (EXIT_FAILURE);
+}
+
+void	add_var_to_env(char *arg, t_env **env)
+{
+	char	*key;
+	char	*value;
+
+	key = extract_key_name(arg);
+	if (!key)
+		return;
+	value = extract_var_value(arg);
+	if (!value)
+		value = ft_strdup("");
+	if (check_if_var_name_already_exists(key, *env) == EXIT_SUCCESS)
+	{
+		free(key);
+		free(value);
+		return ;
+	}
+	append_list(env, key, value);
+	free(key);
+	if (value)
+		free(value);
+}
+
+void	modify_env(char *arg, t_env **env)
+{
+	if (check_if_var_name_already_exists(arg, *env) == EXIT_SUCCESS)
+		return ;
+	add_var_to_env(arg, env);
+}
+
+void	ft_export(t_exec *exec, t_env **env)
+{
+	size_t	i;
+
+	i = 1;
+	if (check_if_export_has_arg(exec->arg) == NO_ARGUMENTS)
+	{
+		print_env(*env);
+		return ;
+	}
+	while (exec->arg[i])
+	{
+		if (check_if_var_name_is_valid(exec->arg[i]) == EXIT_FAILURE)
+		{
+			print_error_exec_message(NOT_A_VALID_IDENTIFIER, exec->arg[1]);
+			return ;
+		}
+		else
+			modify_env(exec->arg[i], env);
+		i++;
+	}
+}
