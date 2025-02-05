@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/05 00:26:18 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:54:47 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,11 +216,8 @@ void handle_pipes(t_exec *ex, t_env **env)
             close(fd_in);
         if (pipefd[1] != -1)
             close(pipefd[1]);
-
         fd_in = pipefd[0]; // Update fd_in for the next command
         ex = ex->next; // Move to the next command
-
-        // *** FIX: Skip the TOKEN_PIPE node ***
         if (ex && ex->type == TOKEN_PIPE)
             ex = ex->next;
     }
