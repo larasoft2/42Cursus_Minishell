@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/05 17:30:47 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/05 22:23:43 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,8 @@ void    ft_exec(t_exec *ex, t_env **env)
 
 void ft_fork(t_exec *cmd, t_env **env)
 {
-    pid_t pid;
+    pid_t   pid;
+    int     status;
     
     while (cmd)
     {
@@ -122,6 +123,7 @@ void ft_fork(t_exec *cmd, t_env **env)
             ft_exec(cmd, env);
         cmd = cmd->next;
     }
+    while (wait(&status) > 0);
 }
 
 void    handle_redir(t_exec *ex, int *pipefd)
@@ -158,7 +160,6 @@ void    exec_commands(t_exec *ex, t_env **env, int *std_dup)
 			ex->fd_in = fd; // = stdin_fileno
 			ft_fork(ex, env);
             restore_fds(std_dup);
-            while (wait(NULL) > 0); //idk si wait au bon endroit
 		 	return ;
 		}
 		ex = ex->next;
@@ -167,14 +168,20 @@ void    exec_commands(t_exec *ex, t_env **env, int *std_dup)
 
 void handle_pipes(t_exec *ex, t_env **env)
 {
-    int pipefd[2];
-    int fd_in;
-    pid_t pid;
+    int     pipefd[2];
+    int     fd_in;
+    pid_t   pid;
+    int     status;
 
-    fd_in = STDERR_FILENO;
+    fd_in = STDIN_FILENO;
     while (ex)
     {
-        if (ex->next && ex->next->type == TOKEN_PIPE) // Si autre cmd suit, on crée un pipe
+        while (ex && (ex->type == TOKEN_REDIR_IN || ex->type == TOKEN_REDIR_OUT 
+        || ex->type == TOKEN_REDIR_APPEND || ex->type == TOKEN_PIPE))
+                ex = ex->next;
+        if (!ex || ex->type != TOKEN_WORD)
+            break;
+        if (ex->next && ex->next->type == TOKEN_PIPE) // si autre cmd suit, on crée un pipe
         {
             if (pipe(pipefd) == -1)
             {
@@ -205,9 +212,11 @@ void handle_pipes(t_exec *ex, t_env **env)
                 dup2(pipefd[1], STDOUT_FILENO);
                 close(pipefd[1]);
             }
-            close(pipefd[0]); // close read end of pipe
+            if (pipefd[0] != -1)
+                close(pipefd[0]);
+            handle_redir(ex, pipefd); //jsp si au bon endroit
             ft_exec(ex, env);
-            exit(EXIT_FAILURE); 
+            exit(EXIT_FAILURE);
         }
         // parent
         if (fd_in != STDIN_FILENO)
@@ -220,7 +229,7 @@ void handle_pipes(t_exec *ex, t_env **env)
         if (ex && ex->type == TOKEN_PIPE)
             ex = ex->next;
     }
-    while (wait(NULL) > 0);
+    while (wait(&status) > 0);
 }
 
 void    ft_process(t_env **env, t_exec *ex)
@@ -230,7 +239,9 @@ void    ft_process(t_env **env, t_exec *ex)
 
     ft_init(ex, std_dup);
     if (is_pipe(ex) == 1)
+    {
         handle_pipes(ex, env);
+    }
     else
     {
         handle_redir(ex, pipefd);
