@@ -6,37 +6,87 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:55:03 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/05 18:22:35 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:02:57 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_unset(t_env **env, t_exec *ex) //unset sans arg ?
+void	remove_from_env(t_env **env, char *var_name)
 {
 	t_env	*current;
 	t_env	*prev;
 
-	if (!env || !ex || !ex->arg)
-		return (1);
 	current = *env;
 	prev = NULL;
 	while (current)
 	{
-		if (ft_strcmp(current->key, ex->arg[1]) == 0) //[0] might change bc struct?
+		if (ft_strcmp(current->key, var_name) == 0)
 		{
 			if (prev)
 				prev->next = current->next;
 			else
-				(*env)->next = current->next;
-			printf("current = %s\n", current->key);
+				*env = current->next;
+			free(current->key);
+			free(current->value);
 			free(current);
 			current = NULL;
-			print_env(*env);
-			return (0);
+			return ;
 		}
 		prev = current;
 		current = current->next;
 	}
-	return (1);
 }
+
+void	ft_unset(t_exec *ex, t_env **env)
+{
+	size_t	i;
+
+	i = 1;
+	if (!env || !ex || !ex->arg || !ex->arg[1])
+		return ; //renvoi silencieux, retourne 0 car c'est l'exit code qu'on doit renvoyer, pas de message d'erreur
+	while (ex->arg[i])
+	{
+		if (check_if_var_name_is_valid(ex->arg[i]) == EXIT_FAILURE)
+		{
+			printf("invalid var_name: %s\n", ex->arg[i]);
+			return ;
+		}
+		else
+		{
+			remove_from_env(env, ex->arg[i]);
+		}
+		i++;
+	}
+}
+
+// int	ft_unset(t_env **env, t_exec *ex) //unset sans arg ?
+// {
+// 	t_env	*current;
+// 	t_env	*prev;
+
+// 	if (!env || !ex || !ex->arg)
+// 		return (1);
+// 	current = *env;
+// 	prev = NULL;
+// 	while (current)
+// 	{
+// 		if (ft_strcmp(current->key, ex->arg[1]) == 0) //[0] might change bc struct?
+// 		{
+// 			if (prev)
+// 				prev->next = current->next;
+// 			else
+// 				(*env)->next = current->next;
+// 			printf("current = %s\n", current->key);
+// 			free(current);
+// 			current = NULL;
+// 			print_env(*env);
+// 			return (0);
+// 		}
+// 		prev = current;
+// 		current = current->next;
+// 	}
+// 	return (1);
+// }
+
+

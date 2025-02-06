@@ -6,23 +6,23 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 11:50:01 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/03 19:20:41 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/06 18:17:11 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	init_struct_exec(t_exec **exec_list)
+int	init_struct_exec(t_exec *exec_list)
 {
-	*exec_list = (t_exec *)malloc(sizeof(t_exec));
-	if (!(*exec_list))
+	exec_list = malloc(sizeof(t_exec));
+	if (!exec_list)
 	{
 		ft_putstr_fd("Error: malloc failed\n", STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
-	ft_memset(*exec_list, 0, sizeof(t_exec));
-	(*exec_list)->fd_in = 0;
-	(*exec_list)->fd_out = 0;
+	ft_memset(exec_list, 0, sizeof(t_exec));
+	exec_list->fd_in = 0;
+	exec_list->fd_out = 0;
 	return (EXIT_SUCCESS);
 }
 

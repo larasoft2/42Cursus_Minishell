@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/04 17:47:11 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/06 18:31:37 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void ft_error(t_token_node *token, int *pipefd)
 {
     ft_putstr_fd(strerror(errno), STDERR_FILENO);
     ft_putstr_fd(": ", STDERR_FILENO);
-    if (token && (token->type == TOKEN_REDIR_IN || token->type == TOKEN_REDIR_OUT 
+    if (token && (token->type == TOKEN_REDIR_IN || token->type == TOKEN_REDIR_OUT
 	|| token->type == TOKEN_REDIR_APPEND || token->type == TOKEN_REDIR_HEREDOC))
         ft_putendl_fd(token->value, STDERR_FILENO);
     else
@@ -47,18 +47,18 @@ void ft_error(t_token_node *token, int *pipefd)
 
 // access F OK check infiles chez Jean pour que ca ne cree pas outfile si infile invalide
 // redir avant, fo ft open parce que des fois y a des redir mdr
-// check if redirs avant exec / builtins / 
-// && no pipe if no token pipes // and move jsp quelle partie du code 
+// check if redirs avant exec / builtins /
+// && no pipe if no token pipes // and move jsp quelle partie du code
 
 //error check useless
 
 void	ft_open(t_exec *ex, int *pipefd)
 {
     (void)pipefd; //do something with this
-    if (ex->type == TOKEN_REDIR_IN) 
+    if (ex->type == TOKEN_REDIR_IN)
     {
         ex->fd_in = open(ex->arg[0], O_RDONLY);
-        if (ex->fd_in < 0) 
+        if (ex->fd_in < 0)
         {
             perror("Error opening input file");
             //ft_close_fd(pipefd);
@@ -66,8 +66,8 @@ void	ft_open(t_exec *ex, int *pipefd)
         }
         dup2(ex->fd_in, STDIN_FILENO);
         close(ex->fd_in);
-    } 
-    else if (ex->type == TOKEN_REDIR_OUT || ex->type == TOKEN_REDIR_APPEND) 
+    }
+    else if (ex->type == TOKEN_REDIR_OUT || ex->type == TOKEN_REDIR_APPEND)
     {
         if (ex->type == TOKEN_REDIR_OUT)
             ex->fd_out = open(ex->arg[0], O_CREAT | O_WRONLY | O_TRUNC, 0644);
@@ -81,7 +81,7 @@ void	ft_open(t_exec *ex, int *pipefd)
         }
         dup2(ex->fd_out, STDOUT_FILENO);
         close(ex->fd_out);
-    } 
+    }
     else //idk if useful
     {
         ex->fd_in = STDIN_FILENO;
@@ -92,7 +92,7 @@ void	ft_open(t_exec *ex, int *pipefd)
 void    ft_exec(t_exec *ex, t_env **env)
 {
     char *path_cmd;
-    
+
     path_cmd = get_path(*env, ex->arg[0]);
     if (!path_cmd)
     {
@@ -109,10 +109,10 @@ int child_count = 0;
 void ft_fork(t_exec *cmd, t_env **env)
 {
     pid_t pid;
-    
+
     while (cmd)
     {
-        while (cmd && (cmd->type == TOKEN_REDIR_IN || cmd->type == TOKEN_REDIR_OUT 
+        while (cmd && (cmd->type == TOKEN_REDIR_IN || cmd->type == TOKEN_REDIR_OUT
                         || cmd->type == TOKEN_REDIR_APPEND || cmd->type == TOKEN_PIPE))
             cmd = cmd->next;
 
@@ -122,7 +122,7 @@ void ft_fork(t_exec *cmd, t_env **env)
         pid = fork();
         if (pid == -1)
         {
-            perror(strerror(errno)); 
+            perror(strerror(errno));
             return;
         }
         if (pid == 0)
@@ -141,7 +141,7 @@ void    handle_redir(t_exec *ex, int *pipefd)
     current = ex;
     while (current)
     {
-        if (current->type == TOKEN_REDIR_IN || current->type == TOKEN_REDIR_OUT 
+        if (current->type == TOKEN_REDIR_IN || current->type == TOKEN_REDIR_OUT
 	    || current->type == TOKEN_REDIR_APPEND)
             ft_open(current, pipefd);
         current = current->next;
@@ -154,8 +154,8 @@ void    exec_commands(t_exec *ex, t_env **env, int *std_dup)
     int 	command_nb;
 
     fd = 0; //useless
-    command_nb = count_command(ex);
-    while (ex)
+	command_nb = count_command(ex);
+	while (ex)
 	{
     	if ((command_nb == 1) && (is_builtin(ex) == 1))
     	{
@@ -169,7 +169,7 @@ void    exec_commands(t_exec *ex, t_env **env, int *std_dup)
 			ft_fork(ex, env);
             restore_fds(std_dup);
             for (int i = 0; i < child_count; i++)
-                wait(NULL); // LES FDS SONT NIQUES SA MERE!!!!!!!!!! 
+                wait(NULL); // LES FDS SONT NIQUES SA MERE!!!!!!!!!!
 		 	return ;
 		}
 		ex = ex->next;
@@ -218,10 +218,10 @@ void    ft_process(t_env **env, t_exec *ex)
 	int		std_dup[2];
 
     ft_init(ex, std_dup);
-    // if (is_pipe(ex) == 1)
+	// if (is_pipe(ex) == 1)
     //     handle_pipes(ex, env, pipefd);
     handle_redir(ex, pipefd);
-    exec_commands(ex, env, std_dup);
+	exec_commands(ex, env, std_dup);
 	// while (wait(NULL) > 0) //if no child, return (-1), else return id //need to wait last cmd? it might not work
     // {
     // }

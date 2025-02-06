@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/05 15:12:01 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/06 17:52:03 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	free_routine_all_lists(t_token_node **tokens, t_env **env,
 void	init_struct(t_token_node *token_list);
 
 // MINISHELL LOOP
-int		parsing(char *input, t_token_node **token_list, t_env **env_final);
+int		parsing(char *input, t_token_node **token_list, t_env **env_final, t_exec **exec_list);
 
 // ENVIRONMENT
 void	append_list(t_env **head, char *key, char *value);
