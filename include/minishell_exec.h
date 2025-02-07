@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/06 18:07:39 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/07 15:06:06 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ typedef struct s_env
 int					ft_echo(t_exec *ex);
 int					ft_pwd(int fd_out);
 void				ft_unset(t_exec *ex, t_env **env);
-void				ft_cd(t_exec *ex);
+void				ft_cd(t_exec *ex, t_env *env);
 void				ft_env(t_env *env);
 void				ft_export(t_exec *exec, t_env **env);
 int 				ft_exit(t_exec **ex, t_env **env);

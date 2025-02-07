@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:57:10 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/06 18:16:32 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/07 15:06:51 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	exec_builtin(t_exec *ex, t_env **env)
 		if (ft_strcmp(temp->arg[0], "echo") == 0)
 			ft_echo(ex);
 		else if (ft_strcmp(temp->arg[0], "cd") == 0)
-			ft_cd(temp);
+			ft_cd(temp, *env);
 		else if (ft_strcmp(temp->arg[0], "pwd") == 0)
 			ft_pwd(STDOUT_FILENO);
 		else if (ft_strcmp(temp->arg[0], "export") == 0)
