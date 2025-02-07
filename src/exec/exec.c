@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/05 22:53:18 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/07 16:04:37 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,10 +176,11 @@ void handle_pipes(t_exec *ex, t_env **env)
 
     current = ex;
     fd_in = STDIN_FILENO;
+
     while (ex)
     {
         while (ex && (ex->type == TOKEN_REDIR_IN || ex->type == TOKEN_REDIR_OUT 
-        || ex->type == TOKEN_REDIR_APPEND || ex->type == TOKEN_PIPE))
+        || ex->type == TOKEN_REDIR_APPEND))
                 ex = ex->next;
         if (!ex || ex->type != TOKEN_WORD)
             break;
@@ -236,13 +237,17 @@ void handle_pipes(t_exec *ex, t_env **env)
 
 void    ft_process(t_env **env, t_exec *ex)
 {
-	int		pipefd[2];
-	int		std_dup[2];
+	int		    pipefd[2];
+	int		    std_dup[2];
+    t_exec      *current;
 
     ft_init(ex, std_dup);
-    if (is_pipe(ex) == 1)
-        handle_pipes(ex, env);
-    else
+    current = ex;
+    if (is_pipe(current) == 1)
+    {
+        handle_pipes(current, env);
+    }
+    if ((is_pipe(ex) != 1))
     {
         handle_redir(ex, pipefd);
         exec_commands(ex, env, std_dup);
