@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/07 15:06:06 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/10 16:32:43 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_exec
 	int fd_in;           // fd for stdin
 	int fd_out;          // fd for stdout
 	// int std_dup[2];
+	long	exit_status;
 	struct s_exec *next; // next cmd
 }					t_exec;
 
@@ -61,6 +62,7 @@ int					check_if_var_name_is_valid(char *arg);
 char				*extract_key_name(char *arg);
 char				*extract_var_value(char *arg);
 void				modify_value(char *new_value, t_env *env_var);
+int					check_if_cmd_has_arg(char **arg);
 
 // EXEC UTILS//
 int					ft_strcmp(char *s1, char *s2);

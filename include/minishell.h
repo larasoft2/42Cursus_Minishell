@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/06 17:52:03 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/10 16:27:50 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <sys/wait.h>
 # include <stdbool.h>
 # include <unistd.h>
+# include <limits.h>
 
 // STRUCTURES ///////////////////////////////////////////////////////////////
 typedef enum e_error

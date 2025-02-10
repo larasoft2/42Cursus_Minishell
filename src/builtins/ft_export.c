@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:28 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/06 17:07:55 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/10 16:23:51 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 //
 // export sans $
 
-int	check_if_export_has_arg(char **arg)
+int	check_if_cmd_has_arg(char **arg)
 {
 	size_t	i;
 
@@ -97,7 +97,7 @@ void	ft_export(t_exec *exec, t_env **env)
 	size_t	i;
 
 	i = 1;
-	if (check_if_export_has_arg(exec->arg) == NO_ARGUMENTS)
+	if (check_if_cmd_has_arg(exec->arg) == NO_ARGUMENTS)
 	{
 		print_env(*env);
 		return ;

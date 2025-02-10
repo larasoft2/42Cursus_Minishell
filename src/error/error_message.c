@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 15:24:09 by racoutte          #+#    #+#             */
-/*   Updated: 2024/12/20 14:12:56 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/10 16:04:04 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	print_error_not_handled_word(char *word)
 	}
 }
 
-char	*get_error_exec_message(t_error error) // change to putend fd
+char	*get_error_exec_message(t_error error)
 {
 	if (error == COMMAND_NOT_FOUND)
 		return ("command not found");
