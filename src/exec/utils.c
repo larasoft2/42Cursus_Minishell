@@ -6,23 +6,24 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:46 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/04 17:47:54 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/10 22:04:34 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-#include "minishell.h"
-
 void	ft_close_fd(int *pipefd)
 {
+	fprintf(stderr, "je close les fds\n");
 	if (pipefd[0] != -1)
 	{
+		fprintf(stderr, "je close les fds\n");
 		close(pipefd[0]);
 		pipefd[0] = -1;
 	}
 	if (pipefd[1] != -1)
 	{
+		fprintf(stderr, "je close les fds\n");
 		close(pipefd[1]);
 		pipefd[1] = -1;
 	}
