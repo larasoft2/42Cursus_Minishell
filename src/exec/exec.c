@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/11 23:24:17 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/11 23:37:43 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,10 +181,8 @@ void    handle_redir(t_exec *ex)
 
 void    exec_commands(t_exec *ex, t_env **env, int *std_dup)
 {
-    int     fd;
     int 	command_nb;
 
-    fd = 0; //useless
     command_nb = count_command(ex);
     while (ex)
 	{
@@ -196,7 +194,7 @@ void    exec_commands(t_exec *ex, t_env **env, int *std_dup)
         }
 		else
 		{
-			ex->fd_in = fd; // = stdin_fileno
+			ex->fd_in = STDIN_FILENO;
 			ft_fork(ex, env, std_dup);
             restore_fds(std_dup);
 		 	return ;
@@ -311,7 +309,7 @@ void handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
     int         fd_in;
     // int         fd_out;
     pid_t       pid;
-  //  int         status;
+   int         status;
     t_exec      *current;
     t_exec      *block_begin;
 
@@ -370,9 +368,7 @@ void handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
             current = current->next;
         block_begin = current;
     }
-    for (int i = 0; i < 2; i++)
-        wait(NULL);
-    // while (wait(&status) > 0);
+    while (wait(&status) > 0); //waitpid
 }
 
 void    ft_process(t_env **env, t_exec *ex)
