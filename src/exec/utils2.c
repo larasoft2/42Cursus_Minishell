@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:48:29 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/11 19:49:41 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/11 22:35:41 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@ void	ft_init(t_exec *ex, int *std_dup)
 
 void    restore_fds(int *std_dup)
 {
-    dup2(std_dup[1], STDOUT_FILENO);
 	dup2(std_dup[0], STDIN_FILENO);
 	if (std_dup[0] != -1)
 	{
 		close(std_dup[0]);
 		std_dup[0] = -1;
 	}
-	if (std_dup[0] != -1)
+    dup2(std_dup[1], STDOUT_FILENO);
+	if (std_dup[1] != -1)
 	{
 		close(std_dup[1]);
 		std_dup[1] = -1;

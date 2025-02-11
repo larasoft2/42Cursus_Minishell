@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/11 20:05:01 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/11 23:24:17 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,8 @@ void ft_error(t_token_node *token, int *pipefd)
 // access F OK check infiles chez Jean pour que ca ne cree pas outfile si infile invalide
 //error check useless
 
-void	ft_open(t_exec *ex, int *pipefd)
+void	ft_open(t_exec *ex)
 {
-    (void)pipefd; //do something with this
     if (ex->type == TOKEN_REDIR_IN) 
     {
         
@@ -138,7 +137,7 @@ void    ft_exec(t_exec *ex, t_env **env)
 
 }
 
-void ft_fork(t_exec *cmd, t_env **env)
+void ft_fork(t_exec *cmd, t_env **env, int *std_dup)
 {
     pid_t   pid;
     int     status;
@@ -157,13 +156,16 @@ void ft_fork(t_exec *cmd, t_env **env)
             return;
         }
         if (pid == 0)
+        {
+            ft_close_fd(std_dup);
             ft_exec(cmd, env);
+        }
         cmd = cmd->next;
     }
     while (wait(&status) > 0);
 }
 
-void    handle_redir(t_exec *ex, int *pipefd)
+void    handle_redir(t_exec *ex)
 {
     t_exec  *current;
 
@@ -172,7 +174,7 @@ void    handle_redir(t_exec *ex, int *pipefd)
     {
         if (current->type == TOKEN_REDIR_IN || current->type == TOKEN_REDIR_OUT 
 	    || current->type == TOKEN_REDIR_APPEND)
-            ft_open(current, pipefd);
+            ft_open(current);
         current = current->next;
     }
 }
@@ -195,45 +197,34 @@ void    exec_commands(t_exec *ex, t_env **env, int *std_dup)
 		else
 		{
 			ex->fd_in = fd; // = stdin_fileno
-			ft_fork(ex, env);
+			ft_fork(ex, env, std_dup);
             restore_fds(std_dup);
 		 	return ;
 		}
 		ex = ex->next;
 	}
-    ft_close_fd(std_dup);
 }
 
 void    handle_redir_in_pipe(t_exec *ex)
 {
     t_exec  *current = ex;
 
-
-    // fprintf(stderr, "in handle redir in pipe\n");
     while (current) 
     {
-        // fprintf(stderr,"CMD IN HANDLE REDIR PIPE %s\n", current->arg[0]);
-
         if (current->type == TOKEN_REDIR_IN || current->type == TOKEN_REDIR_OUT 
             || current->type == TOKEN_REDIR_APPEND)
-        {
-            // fprintf(stderr,"[DEBUG] Applying Redirection: TYPE %i CMD %s\n", current->type, current->arg[0]);
-            ft_open(current, NULL);  // 🔹 Ouvrir mais pas `dup2()`
-        }
+                ft_open(current);
         if (current->type == TOKEN_PIPE)
         {
-            // fprintf(stderr,"[DEBUG] Found PIPE, resetting redirections.\n");
             current = current->next;
             break;
-            // if (current)
-                // fprintf(stderr,"[DEBUG] Moving to next command: %s\n", current->arg[0]);
         }
         else
             current = current->next;
     }
 }
 
-void    handle_pipes_no_redir(t_exec *ex, t_env **env)
+void    handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup)
 {
     int         pipefd[2];
     int         fd_in;
@@ -243,7 +234,7 @@ void    handle_pipes_no_redir(t_exec *ex, t_env **env)
 
     current = ex;
     fd_in = STDIN_FILENO;
-
+    ft_close_fd(std_dup);
     while (ex)
     {
         while (ex && (ex->type == TOKEN_REDIR_IN || ex->type == TOKEN_REDIR_OUT 
@@ -288,8 +279,9 @@ void    handle_pipes_no_redir(t_exec *ex, t_env **env)
                 close(pipefd[0]);
                 pipefd[0] = -1;
             }
-            handle_redir(current, pipefd); //jsp si au bon endroit
+            handle_redir(current); //jsp si au bon endroit
             ft_exec(ex, env);
+            // ft_close_fd(pipefd); NO
             exit(EXIT_FAILURE);
         }
         // parent
@@ -310,9 +302,10 @@ void    handle_pipes_no_redir(t_exec *ex, t_env **env)
             ex = ex->next;
     }
     while (wait(&status) > 0);
+    ft_close_fd(pipefd);
 }
 
-void handle_pipes_if_redir(t_exec *ex, t_env **env)
+void handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
 {
     int         pipefd[2];
     int         fd_in;
@@ -325,6 +318,7 @@ void handle_pipes_if_redir(t_exec *ex, t_env **env)
     current = ex;
     block_begin = ex;
     fd_in = -1;
+    ft_close_fd(std_dup);
     // fd_out = dup(STDOUT_FILENO);
     while (current)
     {
@@ -383,22 +377,20 @@ void handle_pipes_if_redir(t_exec *ex, t_env **env)
 
 void    ft_process(t_env **env, t_exec *ex)
 {
-	int		    pipefd[2];
 	int		    std_dup[2];
 
     ft_init(ex, std_dup);
     if (is_pipe(ex) == 1)
     {
         if (is_redir(ex) != 1)
-            handle_pipes_no_redir(ex, env);
+            handle_pipes_no_redir(ex, env, std_dup);
         else
-            handle_pipes_if_redir(ex, env);
+            handle_pipes_if_redir(ex, env, std_dup);
     }
     else if ((is_pipe(ex) != 1))
     {
-        handle_redir(ex, pipefd);
+        handle_redir(ex);
         exec_commands(ex, env, std_dup);
     }
-    ft_close_fd(std_dup);
 	return ;
 }
