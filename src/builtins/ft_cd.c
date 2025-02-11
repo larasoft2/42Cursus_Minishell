@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:09 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/07 15:10:53 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/11 17:01:27 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	change_directory_to_home(t_env *env)
 void	handle_dash(t_env *env)
 {
 	char	*old_pwd;
+	char	*current_pwd;
 	char	cwd[1024];
 
 	old_pwd = get_env_value(env, "OLDPWD");
@@ -78,12 +79,12 @@ void	handle_dash(t_env *env)
 		return ;
 	}
 	printf("%s\n", old_pwd);
-	old_pwd = get_env_value(env, "PWD");
+	current_pwd = get_env_value(env, "PWD");
 	if (chdir(old_pwd) == 0)
 	{
 		if (getcwd(cwd, sizeof(cwd)) != NULL)
 		{
-			update_env_var(env, "OLDPWD", old_pwd);
+			update_env_var(env, "OLDPWD", current_pwd);
 			update_env_var(env, "PWD", cwd);
 		}
 		else
