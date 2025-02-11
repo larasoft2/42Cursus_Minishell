@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/04 17:49:05 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/11 16:21:58 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int					ft_strcmp(char *s1, char *s2);
 int					nbr_of_args(t_exec *ex);
 int					count_command(t_exec *ex);
 int					is_pipe(t_exec *ex);
+int					is_redir(t_exec *ex);
 char				*ft_strndup(const char *s, size_t n);
 void				ft_init(t_exec *ex, int *std_dup);
 void    			restore_fds(int *std_dup);
