@@ -6,21 +6,15 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:24 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/10 17:45:15 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/11 15:56:57 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// static int	is_len_one(int fd_out)
-// {
-// 	ft_putendl_fd("exit", fd_out);
-// 	return (0);
-// }
-
 long	*get_exit_status(void)
 {
-	long	*exit_status;
+	static long	exit_status;
 
 	return (&exit_status);
 }
@@ -35,7 +29,7 @@ static int	is_numeric(char *str)
 	if (str[i] == '-' || str[i] == '+')
 		i++;
 	if (!str[i])
-		return (EXIT_SUCCESS);
+		return (EXIT_FAILURE);
 	while (str[i])
 	{
 		if (!ft_isdigit(str[i]))
@@ -45,36 +39,39 @@ static int	is_numeric(char *str)
 	return (EXIT_SUCCESS);
 }
 
-int	ft_exit(t_exec *ex, int exit_status)
+long	calculate_exit_code(long nb)
 {
-	//attention: il faut print exit ! 
-
 	long	exit_code;
+
+	exit_code = 0;
+	if (nb >= 0)
+		exit_code = nb % 256;
+	else
+		exit_code = 256 - ((-nb) % 256);
+	return (exit_code);
+}
+
+void	ft_exit(t_exec *ex)
+{
+	long	*exit_code;
 	int		len_cmd;
 
 	len_cmd = nbr_of_args(ex);
-	exit_code = 0;
-	if (check_if_cmd_has_arg(ex->arg) == NO_ARGUMENTS)
-	{
-		//exit avec le dernier $?
-	}
-	if (len_cmd > 2)
-	{
-		print_error_exec_message(TOO_MANY_ARGUMENTS, ex->arg[0]);
-		return (1) ; // seul cas ou on ne doit pas quitter le shell !!
-	}
-	if (!is_numeric(ex->arg[1]) || ft_atol(ex->arg[1]) > INT_MAX
+	exit_code = get_exit_status();
+	printf("exit\n");
+	if (!ex->arg[1])
+		exit(*exit_code); //exit avec le dernier $?
+	if (is_numeric(ex->arg[1]) == EXIT_FAILURE || ft_atol(ex->arg[1]) > INT_MAX
 		|| ft_atol(ex->arg[1]) < INT_MIN)
 	{
 		print_error_exec_message(NUMERIC_ARGUMENT_REQUIRED, ex->arg[1]);
 		exit(2);
 	}
-
-	exit_code = ft_atol(ex->arg[1]) % 256;
-	if (exit_code < 0)
-		exit_code += 256;
-
-	return (exit_code);
+	if (len_cmd > 2)
+	{
+		print_error_exec_message(TOO_MANY_ARGUMENTS, ex->arg[0]);
+		return ;// seul cas ou on ne doit pas quitter le shell !!
+	}
+	*exit_code = calculate_exit_code(ft_atol(ex->arg[1]));
+	exit(*exit_code);
 }
-
-

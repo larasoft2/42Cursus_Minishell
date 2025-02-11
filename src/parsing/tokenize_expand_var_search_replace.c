@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 14:26:55 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/07 19:18:57 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/11 15:27:31 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*dollar_special_cases(char *input, int *i, char open_quote,
 		while (ft_isdigit(input[*i]))
 			(*i)++;
 	}
-	else if (is_quote(input[*i + 1]) != '\0')
+	else if (is_quote(input[*i + 1]) != '\0' && open_quote == '\0')
 		(*i)++;
 	else if (input[*i + 1] == '?' || (open_quote == '"'
 			&& (is_metacharacter(input[*i + 1]) || ft_isspace(input[*i + 1]))))

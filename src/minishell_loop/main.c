@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:58:59 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/06 18:37:52 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/11 16:03:48 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,14 @@ int	parsing(char *input, t_token_node **token_list, t_env **env_final, t_exec **
 {
 	// t_env	*env_final;
 	// t_exec	*exec_list;
+	long	*exit_status = get_exit_status();
 
 	// env_final = NULL;
 	if (syntax_error_checker(input) == EXIT_FAILURE)
+	{
+		*exit_status = 2;
 		return (EXIT_FAILURE);
+	}
 	*token_list = tokenize_input(input);
 	if (*token_list == NULL)
 		return (EXIT_FAILURE);

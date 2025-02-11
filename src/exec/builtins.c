@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:57:10 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/07 15:06:51 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:40:06 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ int	exec_builtin(t_exec *ex, t_env **env)
 		else if (ft_strcmp(temp->arg[0], "unset") == 0)
 			ft_unset(temp, env);
 		else if (ft_strcmp(temp->arg[0], "env") == 0)
-			ft_env(*env);
+			ft_env(temp, *env);
 		else if (ft_strcmp(temp->arg[0], "exit") == 0)
-			ft_exit(&ex, env);
+			ft_exit(ex);
 		temp = temp->next;
 	}
 	return (-1);

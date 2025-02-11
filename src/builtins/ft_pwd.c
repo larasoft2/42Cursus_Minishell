@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:39 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/21 18:05:05 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/11 14:37:06 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_pwd(int fd_out)
 {
-	char dir[4096]; // posix max
+	char	dir[4096]; // posix max
 
 	if (getcwd(dir, 4096))
 	{
