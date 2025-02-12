@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/11 23:37:43 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/12 04:33:13 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,6 @@ void	open_redir_pipe(t_exec *ex)
     }
 }
 
-
 void    ft_exec(t_exec *ex, t_env **env)
 {
     char *path_cmd;
@@ -206,6 +205,7 @@ void    exec_commands(t_exec *ex, t_env **env, int *std_dup)
 void    handle_redir_in_pipe(t_exec *ex)
 {
     t_exec  *current = ex;
+
 
     while (current) 
     {
@@ -306,18 +306,14 @@ void    handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup)
 void handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
 {
     int         pipefd[2];
-    int         fd_in;
-    // int         fd_out;
     pid_t       pid;
-   int         status;
+   	int         status;
+	int 		prev_pipe_fd = -1;
     t_exec      *current;
     t_exec      *block_begin;
 
     current = ex;
     block_begin = ex;
-    fd_in = -1;
-    ft_close_fd(std_dup);
-    // fd_out = dup(STDOUT_FILENO);
     while (current)
     {
         while (current && (current->type == TOKEN_REDIR_IN || current->type == TOKEN_REDIR_OUT 
@@ -325,17 +321,30 @@ void handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
                 current = current->next;
         if (!current || current->type != TOKEN_WORD)
             break;
-        if (current->next && current->next->type == TOKEN_PIPE) // si autre cmd suit, on crée un pipe
+        if (prev_pipe_fd != -1)
+        {
+            dup2(prev_pipe_fd, STDIN_FILENO);
+            close(prev_pipe_fd);
+            prev_pipe_fd = -1;
+        }
+        if (is_pipe(current) != -1) // si autre cmd suit, on crée un pipe
         {
             if (pipe(pipefd) == -1)
             {
                 perror("pipe failed");
                 exit(EXIT_FAILURE);
             }
+            prev_pipe_fd = pipefd[0];
         }
         else
         {
             pipefd[0] = -1;
+            pipefd[1] = -1;
+        }
+        if (pipefd[1] != -1) // redirect stdout > pipe
+        {
+            dup2(pipefd[1], STDOUT_FILENO);
+            close(pipefd[1]);
             pipefd[1] = -1;
         }
         pid = fork();
@@ -346,26 +355,36 @@ void handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
         }
         if (pid == 0) // child
         {
+		    ft_close_fd(std_dup);
+			if (prev_pipe_fd != -1)
+			{
+				close(prev_pipe_fd);
+				prev_pipe_fd = -1;
+			}
             handle_redir_in_pipe(block_begin);
             ft_exec(current, env);
             exit(EXIT_FAILURE);
-        }
-        // parent
-        if (fd_in != -1) //error here
-        {
-            close(fd_in);
-            fd_in = -1;
         }
         if (pipefd[1] != -1)
         {
             close(pipefd[1]);
             pipefd[1] = -1;
         }
-        fd_in = pipefd[0];
-        while (current && current->type != TOKEN_PIPE)
+        while (current && current->type != TOKEN_PIPE)   
             current = current->next;
         if (current && current->type == TOKEN_PIPE)
             current = current->next;
+        else
+        {
+			if (prev_pipe_fd != -1)
+			{
+				close(prev_pipe_fd);
+				prev_pipe_fd = -1;
+			}
+        }
+		// Reset the 0 and 1 to the default values of STDIN and STDOUT for next iteration
+		dup2(std_dup[0], STDIN_FILENO);
+		dup2(std_dup[1], STDOUT_FILENO);
         block_begin = current;
     }
     while (wait(&status) > 0); //waitpid
@@ -388,5 +407,7 @@ void    ft_process(t_env **env, t_exec *ex)
         handle_redir(ex);
         exec_commands(ex, env, std_dup);
     }
+	close(std_dup[0]);
+	close(std_dup[1]);
 	return ;
 }
