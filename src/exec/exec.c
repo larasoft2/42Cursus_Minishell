@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/12 04:33:13 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/13 18:33:25 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ void	ft_open(t_exec *ex)
         if (ex->fd_in < 0) 
         {
             perror("Error opening input file");
-            //ft_close_fd(pipefd);
             return;
         }
         dup2(ex->fd_in, STDIN_FILENO);
@@ -76,7 +75,6 @@ void	ft_open(t_exec *ex)
         if (ex->fd_out < 0)
         {
             perror("Error opening output file");
-            // ft_close_fd(pipefd);
             return;
         }
         dup2(ex->fd_out, STDOUT_FILENO);
@@ -90,33 +88,6 @@ void	ft_open(t_exec *ex)
     {
         ex->fd_in = STDIN_FILENO;
         ex->fd_out = STDOUT_FILENO;
-    }
-}
-
-void	open_redir_pipe(t_exec *ex)
-{
-    if (ex->type == TOKEN_REDIR_IN) 
-    {
-        ex->fd_in = open(ex->arg[0], O_RDONLY);
-        if (ex->fd_in < 0) 
-        {
-            perror("Error opening input file");
-            return;
-        }
-        // fprintf(stderr, "[DEBUG] Opened input file %s -> FD %d\n", ex->arg[0], ex->fd_in);
-    } 
-    else if (ex->type == TOKEN_REDIR_OUT || ex->type == TOKEN_REDIR_APPEND) 
-    {
-        if (ex->type == TOKEN_REDIR_OUT)
-            ex->fd_out = open(ex->arg[0], O_CREAT | O_WRONLY | O_TRUNC, 0644);
-        else if (ex->type == TOKEN_REDIR_APPEND)
-            ex->fd_out = open(ex->arg[0], O_CREAT | O_WRONLY | O_APPEND, 0644);
-        if (ex->fd_out < 0)
-        {
-            perror("Error opening output file");
-            return;
-        }
-        // fprintf(stderr, "[DEBUG] Opened output file %s -> FD %d\n", ex->arg[0], ex->fd_out);
     }
 }
 
@@ -161,7 +132,7 @@ void ft_fork(t_exec *cmd, t_env **env, int *std_dup)
         }
         cmd = cmd->next;
     }
-    while (wait(&status) > 0);
+    while (wait(&status) > 0); //waipitd?
 }
 
 void    handle_redir(t_exec *ex)
@@ -261,13 +232,13 @@ void    handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup)
         }
         if (pid == 0) // child
         {
-            if (fd_in != STDIN_FILENO) // redirect stdin si nécessaire
+            if (fd_in != STDIN_FILENO)
             {
                 dup2(fd_in, STDIN_FILENO);
                 close(fd_in);
                 fd_in = -1;
             }
-            if (pipefd[1] != -1) // redirect stdout > pipe
+            if (pipefd[1] != -1)
             {
                 dup2(pipefd[1], STDOUT_FILENO);
                 close(pipefd[1]);
@@ -277,23 +248,21 @@ void    handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup)
                 close(pipefd[0]);
                 pipefd[0] = -1;
             }
-            handle_redir(current); //jsp si au bon endroit
+            handle_redir(current);
             ft_exec(ex, env);
-            // ft_close_fd(pipefd); NO
             exit(EXIT_FAILURE);
         }
         // parent
         if (fd_in != STDIN_FILENO)
         {
-            close(fd_in); // close ancien fd_in
+            close(fd_in);
             fd_in = -1;
         }
         if (pipefd[1] != -1)
         {
-            close(pipefd[1]); // close write end of pipe
+            close(pipefd[1]);
             pipefd[1] = -1;
         }
-        // prep fd_in next cmd
         fd_in = pipefd[0];
         ex = ex->next;
         if (ex && ex->type == TOKEN_PIPE)

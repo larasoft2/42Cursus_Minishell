@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/11 22:38:53 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/13 15:45:48 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ char				*is_path_exec(char *cmd, char **full_paths);
 char				*get_path(t_env *env, char *cmd);
 int					exec_builtin(t_exec *ex, t_env **env);
 int					is_builtin(t_exec *ex);
+void				handle_heredoc(t_exec *ex);
 void				ft_fork(t_exec *cmd, t_env **env, int *std_dup);
 void    			ft_process(t_env **env, t_exec *ex);
 
