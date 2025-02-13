@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:09 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/11 17:01:27 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/13 15:35:04 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	change_directory_to_home(t_env *env)
 	old_pwd = NULL;
 	if (!home)
 	{
+		modify_value_exit_code(1);
 		print_error_exec_message(NO_SUCH_FILE_OR_DIRECTORY, "HOME");
 		return ;
 	}
@@ -75,6 +76,7 @@ void	handle_dash(t_env *env)
 	old_pwd = get_env_value(env, "OLDPWD");
 	if(!old_pwd)
 	{
+		modify_value_exit_code(1);
 		print_error_exec_message(NO_SUCH_FILE_OR_DIRECTORY, "OLDPWD");
 		return ;
 	}
@@ -94,29 +96,30 @@ void	handle_dash(t_env *env)
 		perror("cd");
 }
 
-void	ft_cd(t_exec *ex, t_env *env)
+int	ft_cd(t_exec *ex, t_env *env)
 {
 	char	cwd[1024];
 
 	if (!ex->arg[1] || ft_strcmp(ex->arg[1], "~") == 0)
 	{
 		change_directory_to_home(env);
-		return ;
+		return (modify_value_exit_code(0), EXIT_SUCCESS);
 	}
 	if (ft_strcmp(ex->arg[1], "-") == 0)
 	{
 		handle_dash(env);
-		return ;
+		return (modify_value_exit_code(0), EXIT_SUCCESS);
 	}
 	if (chdir(ex->arg[1]) == 0 && getcwd(cwd, 1024) != NULL)
 	{
 		update_env_var(env, "OLDPWD", get_env_value(env, "PWD"));
 		update_env_var(env, "PWD", cwd);
+		return (modify_value_exit_code(0), EXIT_SUCCESS);
 	}
 	else
 	{
 		perror("cd");
-		return ;
+		return (modify_value_exit_code(1), EXIT_SUCCESS);
 	}
 }
 

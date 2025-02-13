@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 21:29:09 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/10 12:50:23 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/13 15:21:15 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,13 @@
 //export = affiche toutes les variables exportables (qui peuvent etre transferees aux process enfants)
 //env = affiche toutes les variables (exportables ou non !)
 
-void	ft_env(t_exec *ex, t_env *env)
+int	ft_env(t_exec *ex, t_env *env)
 {
 	if (ex->arg[1] != NULL)
 	{
 		print_error_exec_message(NO_SUCH_FILE_OR_DIRECTORY, ex->arg[1]);
-		return ;
+		return (modify_value_exit_code(127), EXIT_FAILURE);
 	}
 	print_env(env);
+	return (modify_value_exit_code(0), EXIT_SUCCESS);
 }

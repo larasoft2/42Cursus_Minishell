@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 11:31:55 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/11 16:14:28 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/13 15:17:07 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,16 +76,14 @@ int	check_error_token_redir(t_token_node *token_list)
 
 int	check_error_token(t_token_node *token_list)
 {
-	long	*exit_status = get_exit_status();
-
 	if (check_error_token_redir(token_list) == EXIT_FAILURE)
 	{
-		*exit_status = 2;
+		modify_value_exit_code(2);
 		return (EXIT_FAILURE);
 	}
 	if (check_error_token_pipe(token_list) == EXIT_FAILURE)
 	{
-		*exit_status = 2;
+		modify_value_exit_code(2);
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);

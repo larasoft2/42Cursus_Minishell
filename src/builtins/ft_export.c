@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:28 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/10 16:23:51 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/13 15:24:33 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	modify_env(char *arg, t_env **env)
 	add_var_to_env(arg, env);
 }
 
-void	ft_export(t_exec *exec, t_env **env)
+int	ft_export(t_exec *exec, t_env **env)
 {
 	size_t	i;
 
@@ -100,17 +100,18 @@ void	ft_export(t_exec *exec, t_env **env)
 	if (check_if_cmd_has_arg(exec->arg) == NO_ARGUMENTS)
 	{
 		print_env(*env);
-		return ;
+		return (modify_value_exit_code(0), EXIT_SUCCESS);
 	}
 	while (exec->arg[i])
 	{
 		if (check_if_var_name_is_valid(exec->arg[i]) == EXIT_FAILURE)
 		{
 			print_error_exec_message(NOT_A_VALID_IDENTIFIER, exec->arg[1]);
-			return ;
+			return (modify_value_exit_code(1), EXIT_FAILURE);
 		}
 		else
 			modify_env(exec->arg[i], env);
 		i++;
 	}
+	return (modify_value_exit_code(0), EXIT_SUCCESS);
 }

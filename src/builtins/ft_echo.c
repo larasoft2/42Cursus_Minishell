@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:16 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/07 18:55:35 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/13 15:20:03 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	ft_echo(t_exec *ex)
 	if (nbr_of_args(ex) < 2)
 	{
 		printf("\n");
-		return (0);
+		return (modify_value_exit_code(0), EXIT_SUCCESS);
 	}
 	if (check_n_option(ex->arg[1]) == HAS_N_OPTION)
 	{
@@ -60,5 +60,5 @@ int	ft_echo(t_exec *ex)
 	}
 	if (!has_n_option)
 		printf("\n");
-	return (EXIT_SUCCESS);
+	return (modify_value_exit_code(0), EXIT_SUCCESS);
 }

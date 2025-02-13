@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 10:20:44 by racoutte          #+#    #+#             */
-/*   Updated: 2024/08/13 14:40:48 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/12 15:41:59 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 static int	ft_size(long n)
 {
 	int	size;
-	int	i;
 
 	size = 1;
-	i = 0;
 	if (n < 0)
 	{
 		size++;

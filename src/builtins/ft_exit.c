@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:24 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/11 15:56:57 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/13 16:07:35 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,14 @@ long	*get_exit_status(void)
 	static long	exit_status;
 
 	return (&exit_status);
+}
+
+void	modify_value_exit_code(long code)
+{
+	long	*exit_status;
+
+	exit_status = get_exit_status();
+	*exit_status = code;
 }
 
 static int	is_numeric(char *str)
@@ -51,7 +59,7 @@ long	calculate_exit_code(long nb)
 	return (exit_code);
 }
 
-void	ft_exit(t_exec *ex)
+int	ft_exit(t_exec *ex)
 {
 	long	*exit_code;
 	int		len_cmd;
@@ -70,8 +78,9 @@ void	ft_exit(t_exec *ex)
 	if (len_cmd > 2)
 	{
 		print_error_exec_message(TOO_MANY_ARGUMENTS, ex->arg[0]);
-		return ;// seul cas ou on ne doit pas quitter le shell !!
+		return (modify_value_exit_code(1), EXIT_FAILURE);
 	}
 	*exit_code = calculate_exit_code(ft_atol(ex->arg[1]));
+	modify_value_exit_code(*exit_code);
 	exit(*exit_code);
 }

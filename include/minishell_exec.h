@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/11 14:39:42 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/13 15:36:03 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,13 @@ typedef struct s_env
 // BUILTINS//
 int					ft_echo(t_exec *ex);
 int					ft_pwd(int fd_out);
-void				ft_unset(t_exec *ex, t_env **env);
-void				ft_cd(t_exec *ex, t_env *env);
-void				ft_env(t_exec *ex, t_env *env);
-void				ft_export(t_exec *exec, t_env **env);
-void				ft_exit(t_exec *ex);
+int					ft_unset(t_exec *ex, t_env **env);
+int					ft_cd(t_exec *ex, t_env *env);
+int					ft_env(t_exec *ex, t_env *env);
+int					ft_export(t_exec *exec, t_env **env);
+int					ft_exit(t_exec *ex);
 long				*get_exit_status(void);
+void				modify_value_exit_code(long code);
 int					check_if_var_name_is_valid(char *arg);
 char				*extract_key_name(char *arg);
 char				*extract_var_value(char *arg);

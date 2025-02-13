@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:58:59 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/11 16:03:48 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/13 15:16:41 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,14 @@
 
 int	parsing(char *input, t_token_node **token_list, t_env **env_final, t_exec **exec_list)
 {
-	// t_env	*env_final;
-	// t_exec	*exec_list;
-	long	*exit_status = get_exit_status();
-
-	// env_final = NULL;
 	if (syntax_error_checker(input) == EXIT_FAILURE)
 	{
-		*exit_status = 2;
+		modify_value_exit_code(2);
 		return (EXIT_FAILURE);
 	}
 	*token_list = tokenize_input(input);
 	if (*token_list == NULL)
 		return (EXIT_FAILURE);
-	// env_final = get_env_list(env);
 	*token_list = clean_tokens(token_list, env_final);
 	if (init_struct_exec(*exec_list) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
@@ -36,9 +30,7 @@ int	parsing(char *input, t_token_node **token_list, t_env **env_final, t_exec **
 		return (EXIT_FAILURE);
 	// free_token_list(token_list);
 	// print_tokens_exec_list(exec_list);
-	// printf("AVANT TOUT CONTROLE - UNSET pointeur ex->arg[1] =  %p\n", &exec_list->arg[1]);
 	ft_process(env_final, *exec_list);
-	//printf("\n");
 	return (EXIT_SUCCESS);
 }
 
@@ -66,6 +58,8 @@ int	main(int ac, char **av, char **env)
 		if (parsing(input, &token_list, &env_final, &exec_list) == EXIT_FAILURE)
 		{
 			free(input);
+			free_token_list(&token_list);
+			free_exec_list(&exec_list);
 			continue ;
 		}
 		if (*input)
