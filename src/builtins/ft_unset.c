@@ -3,90 +3,89 @@
 /*                                                        :::      ::::::::   */
 /*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 15:55:03 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/23 15:25:13 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/13 15:53:55 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-void	print_env(t_env *env)
-{
-	while (env)
-	{
-		if (env->key && env->value)
-			printf("%s=%s\n", env->key, env->value);
-		else
-			printf("(unset variable)\n");
-		env = env->next;
-	}
-}
-
-int	ft_unset(t_env **env, t_exec *ex) //unset sans arg ?
+void	remove_from_env(t_env **env, char *var_name)
 {
 	t_env	*current;
 	t_env	*prev;
 
-	if (!env || !ex || !ex->arg)
-		return (1);
 	current = *env;
 	prev = NULL;
 	while (current)
 	{
-		if (ft_strcmp(current->key, ex->arg[1]) == 0) //[0] might change bc struct?
+		if (ft_strcmp(current->key, var_name) == 0)
 		{
 			if (prev)
 				prev->next = current->next;
 			else
-				(*env)->next = current->next;
-			printf("current = %s\n", current->key);
+				*env = current->next;
+			free(current->key);
+			free(current->value);
 			free(current);
 			current = NULL;
-			print_env(*env);
-			return (0);
+			return ;
 		}
 		prev = current;
 		current = current->next;
 	}
-	return (1);
 }
 
+int	ft_unset(t_exec *ex, t_env **env)
+{
+	size_t	i;
 
+	i = 1;
+	if (!env || !ex || !ex->arg || !ex->arg[1])
+		return (modify_value_exit_code(0), EXIT_SUCCESS); //renvoi silencieux, retourne 0 car c'est l'exit code qu'on doit renvoyer, pas de message d'erreur
+	while (ex->arg[i])
+	{
+		if (check_if_var_name_is_valid(ex->arg[i]) == EXIT_FAILURE)
+		{
+			printf("invalid var_name: %s\n", ex->arg[i]);
+			return (modify_value_exit_code(0), EXIT_FAILURE);
+		}
+		else
+			remove_from_env(env, ex->arg[i]);
+		i++;
+	}
+	return (modify_value_exit_code(0), EXIT_SUCCESS);
+}
 
-// int	main(int ac, char **av, char **envp)
+// int	ft_unset(t_env **env, t_exec *ex) //unset sans arg ?
 // {
-// 	t_env	*env1;
-// 	t_env	*env2;
-// 	t_env	*env3;
-// 	t_env	*env4;
-// 	t_ex	ex;
-// 	char	*args[] = {"HOME", "TEST", NULL};
+// 	t_env	*current;
+// 	t_env	*prev;
 
-// 	env1 = malloc(sizeof(t_env));
-// 	env2 = malloc(sizeof(t_env));
-// 	env3 = malloc(sizeof(t_env));
-// 	env4 = malloc(sizeof(t_env));
-// 	env1->key = strdup("USER");
-// 	env1->value = strdup("admin");
-// 	env1->next = env2;
-// 	env2->key = strdup("HOME");
-// 	env2->value = strdup("/home/admin");
-// 	env2->next = env3;
-// 	env3->key = strdup("IDK");
-// 	env3->value = strdup("/bin/bash");
-// 	env3->next = env4;
-// 	env4->key = strdup("TEST NODE");
-// 	env4->value = strdup("/path/path");
-// 	env4->next = NULL;
-// 	printf("Initial environment:\n");
-// 	print_env(env1);
-// 	ex.arg = args;
-// 	printf("\nCalling ft_unset to remove 'HOME':\n");
-// 	ft_unset(env1, &ex);
-// 	printf("\nEnvironment after unset:\n");
-// 	print_env(env1);
-// 	return (0);
+// 	if (!env || !ex || !ex->arg)
+// 		return (1);
+// 	current = *env;
+// 	prev = NULL;
+// 	while (current)
+// 	{
+// 		if (ft_strcmp(current->key, ex->arg[1]) == 0) //[0] might change bc struct?
+// 		{
+// 			if (prev)
+// 				prev->next = current->next;
+// 			else
+// 				(*env)->next = current->next;
+// 			printf("current = %s\n", current->key);
+// 			free(current);
+// 			current = NULL;
+// 			print_env(*env);
+// 			return (0);
+// 		}
+// 		prev = current;
+// 		current = current->next;
+// 	}
+// 	return (1);
 // }
+
+

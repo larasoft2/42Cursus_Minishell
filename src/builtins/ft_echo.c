@@ -3,41 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:16 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/31 19:35:57 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/13 15:20:03 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// echo, with option - n;
-// outputs the arguments passed to it
+#define HAS_N_OPTION 1
+#define NO_N_OPTION 0
 
-/*
-** ft_echo : built-in echo
-** affiche les args separes par un espace
-** si l'option -n est presente, pas de retour a la ligne
-** Array : tableau d'arguments contenant commane et args
-*/
+int	check_n_option(char *arg)
+{
+	size_t	i;
+
+	i = 2;
+	if (arg[0] == '-' && arg[1] == 'n')
+	{
+		while (arg[i] == 'n')
+			i++;
+		if (arg[i] == '\0')
+			return (HAS_N_OPTION);
+		else
+			return (NO_N_OPTION);
+	}
+	else
+		return (NO_N_OPTION);
+}
+
 
 int	ft_echo(t_exec *ex)
 {
 	int	i;
 	int	has_n_option;
 
+	i = 1;
 	has_n_option = 0;
 	if (nbr_of_args(ex) < 2)
 	{
 		printf("\n");
-		return (0);
+		return (modify_value_exit_code(0), EXIT_SUCCESS);
 	}
-	has_n_option = ft_strncmp(ex->arg[1], "-n", 2) == 0; 
-	if (has_n_option)
-		i = 2;
-	else
-		i = 1;
+	if (check_n_option(ex->arg[1]) == HAS_N_OPTION)
+	{
+		has_n_option = 1;
+		i++;
+	}
 	while (ex->arg[i])
 	{
 		printf("%s", ex->arg[i]);
@@ -47,16 +60,5 @@ int	ft_echo(t_exec *ex)
 	}
 	if (!has_n_option)
 		printf("\n");
-	return (0);
+	return (modify_value_exit_code(0), EXIT_SUCCESS);
 }
-
-// int	main(void)
-// {
-// 	t_exec	ex;
-// 	char	*args[] = {"echo", "-n", "Hello,", "world!", NULL};
-
-// 	ex.arg = args;
-// 	printf("args passed: \"-n Hello, world!\"\n");
-// 	ft_echo(&ex, STDOUT_FILENO);
-// 	return (0);
-// }

@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:08:36 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/04 17:32:32 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/13 12:00:33 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	not_handled_other_character(char *input, char *open_quote)
 				*open_quote = '\0';
 		}
 		else if (!(*open_quote) && (input[i] == ';' || input[i] == '&'
-				|| input[i] == '\\' || input[i] == '*'
+				|| input[i] == '\\' // || input[i] == '*'
 				|| input[i] == '(' || input[i] == ')'))
 		{
 			print_error_not_handled(input[i]);

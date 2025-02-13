@@ -3,39 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:24 by lusavign          #+#    #+#             */
-/*   Updated: 2025/01/21 18:05:17 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/13 16:07:35 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// // exit with no options.
-// exits the shell
-
-static int	is_len_one(int fd_out)
+long	*get_exit_status(void)
 {
-	ft_putendl_fd("exit", fd_out);
-	return (0);
+	static long	exit_status;
+
+	return (&exit_status);
 }
 
-static int	not_num(void)
+void	modify_value_exit_code(long code)
 {
-	ft_putendl_fd("minishell: exit: numeric argument required", 2);
-	return (2);
+	long	*exit_status;
+
+	exit_status = get_exit_status();
+	*exit_status = code;
 }
 
-static int	too_many_args(void)
+static int	is_numeric(char *str)
 {
-	ft_putendl_fd("minishell: exit: too many arguments", 2);
-	return (1);
-}
-
-static int	is_num(char *str)
-{
-	int	i;
+	size_t	i;
 
 	i = 0;
 	while (ft_isspace(str[i]))
@@ -43,29 +37,50 @@ static int	is_num(char *str)
 	if (str[i] == '-' || str[i] == '+')
 		i++;
 	if (!str[i])
-		return (0);
-	while (ft_isdigit(str[i]))
+		return (EXIT_FAILURE);
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (EXIT_FAILURE);
 		i++;
-	if (str[i])
-		return (0);
-	return (1);
+	}
+	return (EXIT_SUCCESS);
 }
 
-int	ft_exit(t_exec *ex, int fd_out)
+long	calculate_exit_code(long nb)
 {
-	int len;
-	int code;
+	long	exit_code;
 
-	len = nbr_of_args(ex);
-	if (len == 1)
-		return (is_len_one(fd_out));
-	else if (!is_num(ex->arg[1]))
-		return (not_num());
-	else if (len > 2)
-		return (too_many_args());
-	code = ft_atoi(ex->arg[1]) % 256;
-	if (code < 0)
-		code += 256;
-	ft_putendl_fd("exit", fd_out);
-	return (code);
+	exit_code = 0;
+	if (nb >= 0)
+		exit_code = nb % 256;
+	else
+		exit_code = 256 - ((-nb) % 256);
+	return (exit_code);
+}
+
+int	ft_exit(t_exec *ex)
+{
+	long	*exit_code;
+	int		len_cmd;
+
+	len_cmd = nbr_of_args(ex);
+	exit_code = get_exit_status();
+	printf("exit\n");
+	if (!ex->arg[1])
+		exit(*exit_code); //exit avec le dernier $?
+	if (is_numeric(ex->arg[1]) == EXIT_FAILURE || ft_atol(ex->arg[1]) > INT_MAX
+		|| ft_atol(ex->arg[1]) < INT_MIN)
+	{
+		print_error_exec_message(NUMERIC_ARGUMENT_REQUIRED, ex->arg[1]);
+		exit(2);
+	}
+	if (len_cmd > 2)
+	{
+		print_error_exec_message(TOO_MANY_ARGUMENTS, ex->arg[0]);
+		return (modify_value_exit_code(1), EXIT_FAILURE);
+	}
+	*exit_code = calculate_exit_code(ft_atol(ex->arg[1]));
+	modify_value_exit_code(*exit_code);
+	exit(*exit_code);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/04 17:51:49 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/13 18:29:06 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,20 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <signal.h>
 # include "libft.h"
 # include "minishell_exec.h"
 # include "minishell_parsing.h"
 # include <errno.h>
 # include <readline/history.h>
 # include <readline/readline.h>
-# include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <sys/wait.h>
 # include <stdbool.h>
 # include <unistd.h>
+# include <limits.h>
 
 // STRUCTURES ///////////////////////////////////////////////////////////////
 typedef enum e_error
@@ -60,14 +61,24 @@ char	*get_error_exec_message(t_error error);
 void	print_error_exec_message(t_error error, char *word);
 
 // FREE
-void	free_token_list(t_token_node *list);
+void	free_token_list(t_token_node **list);
+void	free_env_list(t_env **list);
+void	free_exec_list(t_exec **list);
+void	free_routine_all_lists(t_token_node **tokens, t_env **env,
+			t_exec **exec);
 
 // INIT
 void	init_struct(t_token_node *token_list);
 
-int	parsing(char *input, t_token_node **token_list, t_env **env_final);
+// MINISHELL LOOP
+int		parsing(char *input, t_token_node **token_list, t_env **env_final, t_exec **exec_list);
+
+// ENVIRONMENT
+void	append_list(t_env **head, char *key, char *value);
 t_env	*get_env_list(char **realenv);
 void	print_env(t_env *env);
 
+// SIGNALS
+void	init_signals(void);
 
 #endif
