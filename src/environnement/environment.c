@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/04 17:44:36 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:34:32 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,15 @@ t_env	*create_list(char *key, char *value)
 		perror(strerror(errno));
 		return (NULL);
 	}
-	list->key = key;
-	list->value = value;
+	list->key = ft_strdup(key);
+	list->value = ft_strdup(value);
+	if (!list->key || !list->value)
+	{
+		free(list->key);
+		free(list->value);
+		free(list);
+		return (NULL);
+	}
 	list->next = NULL;
 	return (list);
 }
