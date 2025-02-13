@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/10 16:27:50 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/13 18:29:06 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <signal.h>
 # include "libft.h"
 # include "minishell_exec.h"
 # include "minishell_parsing.h"
 # include <errno.h>
 # include <readline/history.h>
 # include <readline/readline.h>
-# include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
@@ -78,5 +78,7 @@ void	append_list(t_env **head, char *key, char *value);
 t_env	*get_env_list(char **realenv);
 void	print_env(t_env *env);
 
+// SIGNALS
+void	init_signals(void);
 
 #endif

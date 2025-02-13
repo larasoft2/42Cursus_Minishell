@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:58:59 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/13 15:16:41 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/13 17:36:34 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,13 @@ int	main(int ac, char **av, char **env)
 	input = NULL;
 	token_list = NULL;
 	env_final = get_env_list(env);
+	init_signals();
 	while (1)
 	{
 		input = readline("minishell> ");
 		if (!input)
 		{
-			ft_printf("exit\n");
+			printf("exit\n");
 			break ;
 		}
 		if (parsing(input, &token_list, &env_final, &exec_list) == EXIT_FAILURE)
