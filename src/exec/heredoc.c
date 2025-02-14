@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 15:37:43 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/13 18:33:21 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/14 20:23:56 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,41 +29,70 @@
 char	*generate_heredoc_name(char	*heredoc)
 {	
 	int		i;
-	char	*num;
+	char	*nb;
 	char	*tmp;
 
 	i = 0;
-	heredoc = strdup("tmpheredoc");
+	heredoc = ft_strdup("tmpheredoc");
 	if (!heredoc)
 		return (NULL);
 	while (access(heredoc, F_OK) == 0)
 	{
 		free(heredoc);
-		num = ft_itoa(++i);
-		if (!num)
+		nb = ft_itoa(++i);
+		if (!nb)
 			return (NULL);
-		tmp = ft_strjoin("tmpheredoc", num);
-		free(num);
+		tmp = ft_strjoin("tmpheredoc", nb);
+		free(nb);
 		heredoc = tmp;
 	}
+	// free(tmp); ??
 	return (heredoc);
 }
 
-void    handle_heredoc(t_exec *ex)
+int    handle_heredoc(t_exec *ex)
 {
-	char	*heredoc;
 	int		tmp;
-
+	char	*rline;
+	char	*heredoc;
+	char	*delimiter;
+	
+	tmp = 0;
 	heredoc = NULL;
-	if (ex && ex->type == TOKEN_REDIR_HEREDOC)
-	{	
-		heredoc = generate_heredoc_name(heredoc);
-		while (1)
-		{
-			tmp = open(heredoc, O_CREAT | O_RDWR | O_TRUNC, 0644);
-			heredoc = readline("> ");
-			//delimiter = ex->next->arg[0];
-			//fprintf(stderr, "delimiter is %s", delimiter);
-		}
+	if (!ex || !ex->arg || !ex->arg[0])
+	{
+		perror("No delimiter in heredoc");
+		return;
 	}
+	delimiter = ex->arg[0];
+	heredoc = generate_heredoc_name(heredoc);
+	tmp = open(heredoc, O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (tmp < 0)
+	{
+		perror("Error opening heredoc\n");
+		unlink(heredoc);
+		return; //return or return -1
+	}
+	while (1)
+	{
+		rline = readline("> ");
+		if (!rline)
+		{
+			break;
+			//return ??? exit ???
+		}
+		if (!ft_strcmp(rline, delimiter))
+		{
+			free(rline);
+			break;
+		}
+		write (tmp, rline, ft_strlen(rline));
+		write (tmp, "\n", 1);
+		free(rline);
+	}
+	close(tmp);
+	tmp = open(heredoc, O_RDONLY);
+	unlink(heredoc);
+	free(heredoc);
+	return (tmp);
 }

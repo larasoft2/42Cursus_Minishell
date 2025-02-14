@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/13 18:44:58 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/14 19:02:19 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -374,6 +374,10 @@ void    ft_process(t_env **env, t_exec *ex)
     {
         handle_redir(ex);
         exec_commands(ex, env, std_dup);
+    }
+    if (ex->type == TOKEN_REDIR_HEREDOC)
+    {
+        handle_heredoc(ex);
     }
 	close(std_dup[0]);
 	close(std_dup[1]);
