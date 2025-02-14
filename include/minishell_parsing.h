@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/13 16:53:11 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/14 13:11:31 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ int						is_var_stop_char(char c);
 void					update_index(int *i, char *word);
 
 // FINAL_EXEC_LIST
-int						init_struct_exec(t_exec *exec_list);
+int						init_struct_exec(t_exec **exec_list);
 void					init_exec_node(t_exec *new_node,
 							t_token_type type, char *value);
 t_exec					*add_exec_node_with_type(t_exec **exec_list,

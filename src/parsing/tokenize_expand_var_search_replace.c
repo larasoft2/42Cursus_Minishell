@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 14:26:55 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/11 15:27:31 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/14 12:55:35 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ char	*search_and_replace(char *input, t_env **env)
 	open_quote = '\0';
 	result = NULL;
 	final_string = ft_strdup("");
+	if (!final_string)
+		return (NULL);
 	while (input[i])
 	{
 		if (is_quote(input[i]))

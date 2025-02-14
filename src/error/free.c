@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 14:25:00 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/06 18:25:21 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/14 13:20:59 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ void	free_env_list(t_env **list)
 
 void	free_exec_list(t_exec **list)
 {
-	t_exec *temp;
-	int i;
+	t_exec	*temp;
+	int		i;
 
 	if (!list || !*list)
 		return;

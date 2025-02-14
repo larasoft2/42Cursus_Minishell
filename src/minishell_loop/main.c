@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:58:59 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/14 12:04:26 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/14 13:31:55 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	parsing(char *input, t_token_node **token_list, t_env **env_final, t_exec **
 	if (*token_list == NULL)
 		return (EXIT_FAILURE);
 	*token_list = clean_tokens(token_list, env_final);
-	if (init_struct_exec(*exec_list) == EXIT_FAILURE)
+	if (init_struct_exec(exec_list) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	*exec_list = add_all_tokens(token_list);
 	if (!exec_list)
@@ -54,6 +54,7 @@ int	main(int ac, char **av, char **env)
 		if (!input)
 		{
 			printf("exit\n");
+			free_routine_all_lists(&token_list, &env_final, &exec_list);
 			break ;
 		}
 		if (parsing(input, &token_list, &env_final, &exec_list) == EXIT_FAILURE)

@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/05 17:34:32 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/14 13:07:59 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,21 +42,21 @@ void	*ft_free_array(char **ar)
 	return (NULL);
 }
 
-void	ft_free_list(t_env *head)
-{
-	t_env	*cleaner;
+// void	ft_free_list(t_env *head)
+// {
+// 	t_env	*cleaner;
 
-	if (!head)
-		return ;
-	while (head)
-	{
-		cleaner = head->next;
-		free(head->key);
-		free(head->value);
-		free(head);
-		head = cleaner;
-	}
-}
+// 	if (!head)
+// 		return ;
+// 	while (head)
+// 	{
+// 		cleaner = head->next;
+// 		free(head->key);
+// 		free(head->value);
+// 		free(head);
+// 		head = cleaner;
+// 	}
+// }
 
 char	**put_env_in_ar(t_env *envp)
 {
@@ -72,8 +72,18 @@ char	**put_env_in_ar(t_env *envp)
 	while (envp)
 	{
 		tmp = ft_strjoin(envp->key, "=");
+		if (!tmp)
+		{
+			ft_free_array(array_env);
+			return (NULL);
+		}
 		str = ft_strjoin(tmp, envp->value);
 		free(tmp);
+		if (!str)
+		{
+			ft_free_array(array_env);
+			return (NULL);
+		}
 		array_env[i++] = str;
 		envp = envp->next;
 		str = NULL;
@@ -116,6 +126,8 @@ void	append_list(t_env **head, char *key, char *value)
 		perror(strerror(errno));
 		return ;
 	}
+	free(key);
+	free(value);
 	if (!(*head))
 	{
 		*head = new_node;
@@ -144,6 +156,12 @@ t_env	*get_env_list(char **realenv)
 		{
 			key = ft_strndup(realenv[i], pos - realenv[i]);
 			value = ft_strdup(pos + 1);
+			if (!key || !value)
+			{
+				free(key);
+				free(value);
+				return (NULL);
+			}
 			append_list(&envp, key, value);
 		}
 		i++;

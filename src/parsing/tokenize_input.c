@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:15:09 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/03 19:24:27 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/14 12:50:50 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,10 @@ t_token_node	*tokenize_input(char *input)
 		else if (!is_pipe_redirin_redirout_character(input[i]))
 			create_word_node(input, &i, &token_list);
 		if (check_error_token(token_list) == EXIT_FAILURE)
+		{
+			free_token_list(&token_list);
 			return (NULL);
+		}
 	}
 	return (token_list);
 }

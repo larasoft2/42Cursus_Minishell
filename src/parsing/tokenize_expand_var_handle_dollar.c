@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 13:46:04 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/13 12:51:09 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/14 12:54:21 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,17 @@ char	*expand(char *final_string, char *input, int *i, t_env **env)
 	expanded_var = NULL;
 	expanded_var = handle_dollar_sign(input, i, env, expanded_var);
 	if (!expanded_var)
+	{
+		free(final_string);
 		return (NULL);
+	}
 	temp = ft_strjoin(final_string, expanded_var);
 	if (!temp)
+	{
+		free(expanded_var);
+		free(final_string);
 		return (NULL);
+	}
 	free(expanded_var);
 	free(final_string);
 	return (temp);
