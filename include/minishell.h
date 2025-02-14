@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/13 18:29:06 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/14 12:04:56 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,6 @@ t_env	*get_env_list(char **realenv);
 void	print_env(t_env *env);
 
 // SIGNALS
-void	init_signals(void);
+void	handle_signals(bool exec, bool heredoc);
 
 #endif
