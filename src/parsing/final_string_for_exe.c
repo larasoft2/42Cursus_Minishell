@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 11:30:59 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/05 15:08:43 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/17 15:22:38 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,25 +42,24 @@ void	handle_token_special(t_exec **exec_list, t_token_node *current_token,
 	}
 }
 
-t_exec	*add_all_tokens(t_token_node **token_list)
+t_exec	*add_all_tokens(t_token_node **token_list, t_exec **exec_list)
 {
-	t_exec			*exec_list;
 	t_exec			*last_exec_node;
 	t_token_node	*current_token;
 	int				word_count;
 
-	exec_list = NULL;
+	*exec_list = NULL;
 	last_exec_node = NULL;
 	current_token = *token_list;
 	word_count = 0;
 	while (current_token != NULL)
 	{
-		handle_token_word(&exec_list, current_token, &word_count,
+		handle_token_word(exec_list, current_token, &word_count,
 			&last_exec_node);
-		handle_token_special(&exec_list, current_token, &word_count,
+		handle_token_special(exec_list, current_token, &word_count,
 			&last_exec_node);
 		current_token = current_token->next;
 	}
-	return (exec_list);
+	return (NULL);
 }
 

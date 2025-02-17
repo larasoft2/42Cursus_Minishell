@@ -6,39 +6,64 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:58:59 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/14 13:31:55 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/17 15:22:21 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	parsing(char *input, t_token_node **token_list, t_env **env_final, t_exec **exec_list)
+int	check_syntax_input(char *input, int *syntax_status)
 {
 	if (syntax_error_checker(input) == EXIT_FAILURE)
 	{
 		modify_value_exit_code(2);
+		*syntax_status = EXIT_FAILURE;
 		return (EXIT_FAILURE);
 	}
+	*syntax_status = EXIT_SUCCESS;
+	return (EXIT_SUCCESS);
+}
+
+int	parsing(char *input, t_token_node **token_list, t_env **env_final)
+{
 	*token_list = tokenize_input(input);
 	if (*token_list == NULL)
 		return (EXIT_FAILURE);
 	*token_list = clean_tokens(token_list, env_final);
-	if (init_struct_exec(exec_list) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	*exec_list = add_all_tokens(token_list);
-	if (!exec_list)
-		return (EXIT_FAILURE);
-	// free_token_list(token_list);
-	// print_tokens_exec_list(exec_list);
-	ft_process(env_final, *exec_list);
 	return (EXIT_SUCCESS);
+}
+
+int	tokenize_parsing(char *input, t_token_node **token_list, t_env **env_final, t_exec **exec_list)
+{
+	if (parsing(input, token_list, env_final) == EXIT_FAILURE)
+	{
+		free(input);
+		free_token_list(token_list);
+		return (EXIT_FAILURE);
+	}
+	add_all_tokens(token_list, exec_list);
+	free_token_list(token_list);
+	return (EXIT_SUCCESS);
+}
+
+void	minishell_loop(char *input, t_token_node **token_list, t_env **env_final, t_exec **exec_list)
+{
+	int	syntax_status;
+
+	syntax_status = 0;
+	add_history(input);
+	if (check_syntax_input(input, &syntax_status) == EXIT_FAILURE)
+		free(input);
+	if (syntax_status == EXIT_SUCCESS)
+		syntax_status = tokenize_parsing(input, token_list, env_final, exec_list);
+	if (syntax_status == EXIT_SUCCESS && *input)
+		ft_process(env_final, *exec_list);
 }
 
 int	main(int ac, char **av, char **env)
 {
 	(void)ac;
 	(void)av;
-
 	char			*input;
 	t_token_node	*token_list;
 	t_env			*env_final;
@@ -47,28 +72,19 @@ int	main(int ac, char **av, char **env)
 	input = NULL;
 	token_list = NULL;
 	env_final = get_env_list(env);
-	handle_signals(0, 0);
+	setup_default_signals_handling();
 	while (1)
 	{
+		setup_main_prompt_signals_handling();
 		input = readline("minishell> ");
 		if (!input)
 		{
 			printf("exit\n");
-			free_routine_all_lists(&token_list, &env_final, &exec_list);
-			break ;
+			free_env_list(&env_final);
+			exit(EXIT_FAILURE);
 		}
-		if (parsing(input, &token_list, &env_final, &exec_list) == EXIT_FAILURE)
-		{
-			free(input);
-			free_token_list(&token_list);
-			free_exec_list(&exec_list);
-			continue ;
-		}
-		if (*input)
-			add_history(input);
-		free(input);
-		//free_routine_all_lists(&token_list, &env_final, &exec_list);
+		minishell_loop(input, &token_list, &env_final, &exec_list);
+		setup_default_signals_handling();
 	}
-	// free liste env;
 	return (EXIT_SUCCESS);
 }

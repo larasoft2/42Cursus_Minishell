@@ -6,75 +6,109 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 16:33:15 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/14 12:30:38 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/17 15:24:51 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	ft_check_signal(void)
+static void	sigint_routine(int signum)
 {
-	return (0);
-}
-
-static void	sigint_prompt(int sig)
-{
-	(void)sig;
+	(void)signum;
 	modify_value_exit_code(128 + SIGINT);
-	write(STDOUT_FILENO, "\n", 1);
+	write(STDIN_FILENO, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
 }
 
-static void	sigint_exec(int sig)
+void	setup_main_prompt_signals_handling(void)
 {
-	(void)sig;
-	modify_value_exit_code(128 + SIGINT);
-	write(STDOUT_FILENO, "\n", 1);
+	signal(SIGINT, sigint_routine);
+	signal(SIGTERM, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGTSTP, SIG_IGN);
+	signal(SIGCONT, SIG_IGN);
+	signal(SIGTTIN, SIG_IGN);
+	signal(SIGTTOU, SIG_IGN);
+	signal(SIGPIPE, SIG_IGN);
 }
 
-static void	sigint_heredoc(int sig)
+void	setup_default_signals_handling(void)
 {
-	(void)sig;
-	modify_value_exit_code(128 + SIGINT);
-	//appeler une fonction qui detruit le heredoc.. destroy_heredoc()
-	rl_event_hook = ft_check_signal;
-	rl_done = 1; // termine readline
+	signal(SIGINT, SIG_IGN);
+	signal(SIGTERM, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGTSTP, SIG_IGN);
+	signal(SIGCONT, SIG_IGN);
+	signal(SIGTTIN, SIG_IGN);
+	signal(SIGTTOU, SIG_IGN);
+	signal(SIGPIPE, SIG_IGN);
 }
 
-static void	sigquit_exec(int sig)
-{
-	(void)sig;
-	modify_value_exit_code(128 + SIGQUIT);
-	write(STDOUT_FILENO, "Quit (core dumped)\n", 20);
-}
+// static int	ft_check_signal(void)
+// {
+// 	return (0);
+// }
 
-void	handle_signals(bool exec, bool heredoc)
-{
-	struct sigaction sa;
+// static void	sigint_prompt(int sig)
+// {
+// 	(void)sig;
+// 	modify_value_exit_code(128 + SIGINT);
+// 	write(STDOUT_FILENO, "\n", 1);
+// 	rl_on_new_line();
+// 	rl_replace_line("", 0);
+// 	rl_redisplay();
+// }
 
-	sa.sa_flags = SA_RESTART;
-	sigemptyset(&sa.sa_mask);
-	if (exec)
-	{
-		sa.sa_handler = sigint_exec;
-		sigaction(SIGINT, &sa, NULL);
-		sa.sa_handler = sigquit_exec;
-		sigaction(SIGQUIT, &sa, NULL);
-	}
-	else if (heredoc)
-	{
-		sa.sa_handler = sigint_heredoc;
-		sigaction(SIGINT, &sa, NULL);
-		sa.sa_handler = SIG_IGN;
-		sigaction(SIGQUIT, &sa, NULL);
-	}
-	else
-	{
-		sa.sa_handler = sigint_prompt;
-		sigaction(SIGINT, &sa, NULL);
-		sa.sa_handler = SIG_IGN;
-		sigaction(SIGQUIT, &sa, NULL);
-	}
-}
+// static void	sigint_exec(int sig)
+// {
+// 	(void)sig;
+// 	modify_value_exit_code(128 + SIGINT);
+// 	write(STDOUT_FILENO, "\n", 1);
+// }
+
+// static void	sigint_heredoc(int sig)
+// {
+// 	(void)sig;
+// 	modify_value_exit_code(128 + SIGINT);
+// 	//appeler une fonction qui detruit le heredoc.. destroy_heredoc()
+// 	rl_event_hook = ft_check_signal;
+// 	rl_done = 1; // termine readline
+// }
+
+// static void	sigquit_exec(int sig)
+// {
+// 	(void)sig;
+// 	modify_value_exit_code(128 + SIGQUIT);
+// 	write(STDOUT_FILENO, "Quit (core dumped)\n", 20);
+// }
+
+// void	handle_signals(bool exec, bool heredoc)
+// {
+// 	struct sigaction sa;
+
+// 	sa.sa_flags = SA_RESTART;
+// 	sigemptyset(&sa.sa_mask);
+// 	if (exec)
+// 	{
+// 		sa.sa_handler = sigint_exec;
+// 		sigaction(SIGINT, &sa, NULL);
+// 		sa.sa_handler = sigquit_exec;
+// 		sigaction(SIGQUIT, &sa, NULL);
+// 	}
+// 	else if (heredoc)
+// 	{
+// 		sa.sa_handler = sigint_heredoc;
+// 		sigaction(SIGINT, &sa, NULL);
+// 		sa.sa_handler = SIG_IGN;
+// 		sigaction(SIGQUIT, &sa, NULL);
+// 	}
+// 	else
+// 	{
+// 		sa.sa_handler = sigint_prompt;
+// 		sigaction(SIGINT, &sa, NULL);
+// 		sa.sa_handler = SIG_IGN;
+// 		sigaction(SIGQUIT, &sa, NULL);
+// 	}
+// }
