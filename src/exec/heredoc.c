@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 15:37:43 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/14 20:23:56 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/17 21:04:35 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*generate_heredoc_name(char	*heredoc)
 	char	*tmp;
 
 	i = 0;
-	heredoc = ft_strdup("tmpheredoc");
+	heredoc = ft_strdup(".tmpheredoc");
 	if (!heredoc)
 		return (NULL);
 	while (access(heredoc, F_OK) == 0)
@@ -42,7 +42,7 @@ char	*generate_heredoc_name(char	*heredoc)
 		nb = ft_itoa(++i);
 		if (!nb)
 			return (NULL);
-		tmp = ft_strjoin("tmpheredoc", nb);
+		tmp = ft_strjoin(".tmpheredoc", nb);
 		free(nb);
 		heredoc = tmp;
 	}
@@ -50,7 +50,7 @@ char	*generate_heredoc_name(char	*heredoc)
 	return (heredoc);
 }
 
-int    handle_heredoc(t_exec *ex)
+int	handle_heredoc(t_exec *ex)
 {
 	int		tmp;
 	char	*rline;
@@ -62,7 +62,7 @@ int    handle_heredoc(t_exec *ex)
 	if (!ex || !ex->arg || !ex->arg[0])
 	{
 		perror("No delimiter in heredoc");
-		return;
+		return (-1);
 	}
 	delimiter = ex->arg[0];
 	heredoc = generate_heredoc_name(heredoc);
@@ -71,7 +71,7 @@ int    handle_heredoc(t_exec *ex)
 	{
 		perror("Error opening heredoc\n");
 		unlink(heredoc);
-		return; //return or return -1
+		return (-1);
 	}
 	while (1)
 	{
@@ -92,7 +92,7 @@ int    handle_heredoc(t_exec *ex)
 	}
 	close(tmp);
 	tmp = open(heredoc, O_RDONLY);
-	unlink(heredoc);
-	free(heredoc);
+	// unlink(heredoc);
+	// free(heredoc);
 	return (tmp);
 }

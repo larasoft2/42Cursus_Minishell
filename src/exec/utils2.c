@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:48:29 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/12 04:35:16 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/17 20:15:02 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ int	is_redir(t_exec *ex)
 	i = 0;
 	while (ex)
 	{
-		if (ex->type == TOKEN_REDIR_IN || ex->type == TOKEN_REDIR_OUT)
+		if (ex->type == TOKEN_REDIR_IN || ex->type == TOKEN_REDIR_OUT 
+			|| ex->type == TOKEN_REDIR_APPEND || ex->type == TOKEN_REDIR_HEREDOC)
 			return (1);
 		ex = ex->next;
 	}
