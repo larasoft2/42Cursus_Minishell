@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_exec.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/13 18:49:05 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/17 15:30:06 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int					ft_unset(t_exec *ex, t_env **env);
 int					ft_cd(t_exec *ex, t_env *env);
 int					ft_env(t_exec *ex, t_env *env);
 int					ft_export(t_exec *exec, t_env **env);
-int					ft_exit(t_exec *ex);
+int					ft_exit(t_exec *ex, t_env *env);
 long				*get_exit_status(void);
 void				modify_value_exit_code(long code);
 int					check_if_var_name_is_valid(char *arg);

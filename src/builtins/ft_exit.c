@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:24 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/13 16:07:35 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/17 15:29:40 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ long	calculate_exit_code(long nb)
 	return (exit_code);
 }
 
-int	ft_exit(t_exec *ex)
+int	ft_exit(t_exec *ex, t_env *env) // ATTENTION FERMETURE FDS avant exit !!
 {
 	long	*exit_code;
 	int		len_cmd;
@@ -67,12 +67,20 @@ int	ft_exit(t_exec *ex)
 	len_cmd = nbr_of_args(ex);
 	exit_code = get_exit_status();
 	printf("exit\n");
+	(void)env;
 	if (!ex->arg[1])
+	{
+		free_env_list(&env);
+		free_exec_list(&ex);
 		exit(*exit_code); //exit avec le dernier $?
+	}
 	if (is_numeric(ex->arg[1]) == EXIT_FAILURE || ft_atol(ex->arg[1]) > INT_MAX
 		|| ft_atol(ex->arg[1]) < INT_MIN)
 	{
 		print_error_exec_message(NUMERIC_ARGUMENT_REQUIRED, ex->arg[1]);
+		free_env_list(&env);
+		free_exec_list(&ex);
+		//free_routine_exec_and_env_lists(&env, &ex);
 		exit(2);
 	}
 	if (len_cmd > 2)
@@ -81,6 +89,10 @@ int	ft_exit(t_exec *ex)
 		return (modify_value_exit_code(1), EXIT_FAILURE);
 	}
 	*exit_code = calculate_exit_code(ft_atol(ex->arg[1]));
+	printf("hey\n");
 	modify_value_exit_code(*exit_code);
+	free_env_list(&env);
+	free_exec_list(&ex);
+	//free_routine_exec_and_env_lists(&env, &ex);
 	exit(*exit_code);
 }

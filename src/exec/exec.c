@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/13 18:33:25 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/17 15:28:52 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void ft_error(t_token_node *token, int *pipefd)
 {
     ft_putstr_fd(strerror(errno), STDERR_FILENO);
     ft_putstr_fd(": ", STDERR_FILENO);
-    if (token && (token->type == TOKEN_REDIR_IN || token->type == TOKEN_REDIR_OUT 
+    if (token && (token->type == TOKEN_REDIR_IN || token->type == TOKEN_REDIR_OUT
 	|| token->type == TOKEN_REDIR_APPEND || token->type == TOKEN_REDIR_HEREDOC))
         ft_putendl_fd(token->value, STDERR_FILENO);
     else
@@ -50,11 +50,11 @@ void ft_error(t_token_node *token, int *pipefd)
 
 void	ft_open(t_exec *ex)
 {
-    if (ex->type == TOKEN_REDIR_IN) 
+    if (ex->type == TOKEN_REDIR_IN)
     {
-        
+
         ex->fd_in = open(ex->arg[0], O_RDONLY);
-        if (ex->fd_in < 0) 
+        if (ex->fd_in < 0)
         {
             perror("Error opening input file");
             return;
@@ -65,8 +65,8 @@ void	ft_open(t_exec *ex)
             close(ex->fd_in);
             ex->fd_in = -1;
         }
-    } 
-    else if (ex->type == TOKEN_REDIR_OUT || ex->type == TOKEN_REDIR_APPEND) 
+    }
+    else if (ex->type == TOKEN_REDIR_OUT || ex->type == TOKEN_REDIR_APPEND)
     {
         if (ex->type == TOKEN_REDIR_OUT)
             ex->fd_out = open(ex->arg[0], O_CREAT | O_WRONLY | O_TRUNC, 0644);
@@ -83,7 +83,7 @@ void	ft_open(t_exec *ex)
             close(ex->fd_out);
             ex->fd_out = -1;
         }
-    } 
+    }
     else
     {
         ex->fd_in = STDIN_FILENO;
@@ -94,27 +94,35 @@ void	ft_open(t_exec *ex)
 void    ft_exec(t_exec *ex, t_env **env)
 {
     char *path_cmd;
-    
-    path_cmd = get_path(*env, ex->arg[0]);
+	char	**env_array;
+
+	path_cmd = get_path(*env, ex->arg[0]);
+	env_array = put_env_in_ar(*env);
     if (!path_cmd)
     {
-        fprintf(stderr, "command not found: %s\n", ex->arg[0]);
+		print_error_exec_message(COMMAND_NOT_FOUND, ex->arg[0]);
+		ft_free_and_null(env_array);
+		free_exec_list(&ex);
+		//free_routine_exec_and_env_lists(env, &ex);
         exit(EXIT_FAILURE); //free
     }
-    execve(path_cmd, ex->arg, put_env_in_ar(*env));
+    execve(path_cmd, ex->arg, env_array);
     perror("execve");
+	ft_free_and_null(env_array);
+	free(path_cmd);
+	free_exec_list(&ex);
+	//free_routine_exec_and_env_lists(env, &ex);
     exit(EXIT_FAILURE); //pq exit failure
-
 }
 
 void ft_fork(t_exec *cmd, t_env **env, int *std_dup)
 {
     pid_t   pid;
     int     status;
-    
+
     while (cmd)
     {
-        while (cmd && (cmd->type == TOKEN_REDIR_IN || cmd->type == TOKEN_REDIR_OUT 
+        while (cmd && (cmd->type == TOKEN_REDIR_IN || cmd->type == TOKEN_REDIR_OUT
             || cmd->type == TOKEN_REDIR_APPEND || cmd->type == TOKEN_PIPE))
             cmd = cmd->next;
         if (!cmd || cmd->type != TOKEN_WORD)
@@ -122,7 +130,7 @@ void ft_fork(t_exec *cmd, t_env **env, int *std_dup)
         pid = fork();
         if (pid == -1)
         {
-            perror(strerror(errno)); 
+            perror(strerror(errno));
             return;
         }
         if (pid == 0)
@@ -142,7 +150,7 @@ void    handle_redir(t_exec *ex)
     current = ex;
     while (current)
     {
-        if (current->type == TOKEN_REDIR_IN || current->type == TOKEN_REDIR_OUT 
+        if (current->type == TOKEN_REDIR_IN || current->type == TOKEN_REDIR_OUT
 	    || current->type == TOKEN_REDIR_APPEND)
             ft_open(current);
         current = current->next;
@@ -178,9 +186,9 @@ void    handle_redir_in_pipe(t_exec *ex)
     t_exec  *current = ex;
 
 
-    while (current) 
+    while (current)
     {
-        if (current->type == TOKEN_REDIR_IN || current->type == TOKEN_REDIR_OUT 
+        if (current->type == TOKEN_REDIR_IN || current->type == TOKEN_REDIR_OUT
             || current->type == TOKEN_REDIR_APPEND)
                 ft_open(current);
         if (current->type == TOKEN_PIPE)
@@ -206,7 +214,7 @@ void    handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup)
     ft_close_fd(std_dup);
     while (ex)
     {
-        while (ex && (ex->type == TOKEN_REDIR_IN || ex->type == TOKEN_REDIR_OUT 
+        while (ex && (ex->type == TOKEN_REDIR_IN || ex->type == TOKEN_REDIR_OUT
         || ex->type == TOKEN_REDIR_APPEND))
                 ex = ex->next;
         if (!ex || ex->type != TOKEN_WORD)
@@ -285,7 +293,7 @@ void handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
     block_begin = ex;
     while (current)
     {
-        while (current && (current->type == TOKEN_REDIR_IN || current->type == TOKEN_REDIR_OUT 
+        while (current && (current->type == TOKEN_REDIR_IN || current->type == TOKEN_REDIR_OUT
         || current->type == TOKEN_REDIR_APPEND))
                 current = current->next;
         if (!current || current->type != TOKEN_WORD)
@@ -339,7 +347,7 @@ void handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
             close(pipefd[1]);
             pipefd[1] = -1;
         }
-        while (current && current->type != TOKEN_PIPE)   
+        while (current && current->type != TOKEN_PIPE)
             current = current->next;
         if (current && current->type == TOKEN_PIPE)
             current = current->next;
