@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 15:37:43 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/17 21:04:35 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/18 00:24:30 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ int	handle_heredoc(t_exec *ex)
 		rline = readline("> ");
 		if (!rline)
 		{
+			free(heredoc);
 			break;
 			//return ??? exit ???
 		}

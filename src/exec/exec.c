@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/17 21:37:09 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/18 16:03:35 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void    ft_exec(t_exec *ex, t_env **env)
     }
     execve(path_cmd, ex->arg, put_env_in_ar(*env));
     perror("execve");
-    exit(EXIT_FAILURE); //pq exit failure
+    exit(EXIT_FAILURE);
 
 }
 
@@ -285,8 +285,6 @@ void    handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup)
     while (wait(&status) > 0);
     ft_close_fd(pipefd);
 }
-
-
 
 void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
 {
