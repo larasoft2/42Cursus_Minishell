@@ -1,24 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   signals_heredoc.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/10 21:29:09 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/18 17:29:28 by racoutte         ###   ########.fr       */
+/*   Created: 2025/02/18 18:26:46 by racoutte          #+#    #+#             */
+/*   Updated: 2025/02/18 18:28:03 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_env(t_exec *ex, t_env *env)
+static int	ft_check_signal(void)
 {
-	if (ex->arg[1] != NULL)
-	{
-		print_error_exec_message(NO_SUCH_FILE_OR_DIRECTORY, ex->arg[1]);
-		return (modify_value_exit_code(127), EXIT_FAILURE);
-	}
-	print_env(env);
-	return (modify_value_exit_code(0), EXIT_SUCCESS);
+	return (0);
+}
+
+void	destroy_heredoc(char *heredoc)
+{
+	if (heredoc)
+		unlink(heredoc);
+}
+
+void	sigint_heredoc(int sig)
+{
+	(void)sig;
+	modify_value_exit_code(128 + SIGINT);
+	//destroy_heredoc?
+	write(STDOUT_FILENO, "\n", 1);
+	rl_event_hook = ft_check_signal;
+	rl_done = 1;
 }

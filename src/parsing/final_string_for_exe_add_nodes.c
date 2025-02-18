@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 13:40:04 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/03 19:50:27 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/14 12:52:27 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ t_exec	*add_exec_node_with_type(t_exec **exec_list, t_token_type type,
 	}
 	init_exec_node(new_node, type, value);
 	if (!new_node->arg)
+	{
+		free(new_node);
 		return (NULL);
+	}
 	if (*exec_list == NULL)
 		*exec_list = new_node;
 	else

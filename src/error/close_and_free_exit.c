@@ -1,24 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   close_and_free_exit.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/10 21:29:09 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/18 17:29:28 by racoutte         ###   ########.fr       */
+/*   Created: 2025/02/18 17:30:32 by racoutte          #+#    #+#             */
+/*   Updated: 2025/02/18 17:32:44 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_env(t_exec *ex, t_env *env)
+void	close_and_free_before_exit(t_env *env, t_exec *ex, int *std_dup)
 {
-	if (ex->arg[1] != NULL)
-	{
-		print_error_exec_message(NO_SUCH_FILE_OR_DIRECTORY, ex->arg[1]);
-		return (modify_value_exit_code(127), EXIT_FAILURE);
-	}
-	print_env(env);
-	return (modify_value_exit_code(0), EXIT_SUCCESS);
+	free_env_list(&env);
+	free_exec_list(&ex);
+	close(std_dup[0]);
+	close(std_dup[1]);
 }

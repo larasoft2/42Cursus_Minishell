@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 13:46:04 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/13 12:51:09 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:46:04 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,16 @@ char	*handle_dollar_sign(char *input, int *i, t_env **env,
 char	*handle_exit_error(char *final_string, int *i)
 {
 	long	exit_status;
+	char	*temp_itoa;
+	char	*temp;
 
+	temp = final_string;
 	exit_status = *get_exit_status();
-	final_string = ft_strjoin(final_string, ft_itoa(exit_status)); //ft_itoa(*get_exit_status()) a la place de la 2eme string ?
+	temp_itoa = ft_itoa(exit_status);
+	final_string = ft_strjoin(temp, temp_itoa);
 	(*i)++;
+	free(temp);
+	free(temp_itoa);
 	return (final_string);
 }
 
@@ -88,10 +94,17 @@ char	*expand(char *final_string, char *input, int *i, t_env **env)
 	expanded_var = NULL;
 	expanded_var = handle_dollar_sign(input, i, env, expanded_var);
 	if (!expanded_var)
+	{
+		free(final_string);
 		return (NULL);
+	}
 	temp = ft_strjoin(final_string, expanded_var);
 	if (!temp)
+	{
+		free(expanded_var);
+		free(final_string);
 		return (NULL);
+	}
 	free(expanded_var);
 	free(final_string);
 	return (temp);

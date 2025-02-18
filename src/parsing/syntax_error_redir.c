@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 11:43:40 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/29 14:03:32 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/18 15:51:54 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ int	input_ends_with_redir(char *input)
 int	count_redir(char symbol, int *count)
 {
 	if ((symbol == '>'
-		&& error_message_redir_right(*count) == WRONG_NUMBER_REDIR)
-			|| (symbol == '<'
-				&& error_message_redir_left(*count) == WRONG_NUMBER_REDIR))
+			&& error_message_redir_right(*count) == WRONG_NUMBER_REDIR)
+		|| (symbol == '<'
+			&& error_message_redir_left(*count) == WRONG_NUMBER_REDIR))
 	{
 		return (WRONG_NUMBER_REDIR);
 	}
@@ -45,7 +45,8 @@ int	handle_redir_symbol(char *input, size_t *i, int *count, char symbol)
 	while (input[*i] == symbol)
 	{
 		(*count)++;
-		if (input[*i + 1] == '\0' || (input[*i + 1] && ft_isspace(input[*i + 1])))
+		if (input[*i + 1] == '\0' || (input[*i + 1]
+				&& ft_isspace(input[*i + 1])))
 		{
 			if (count_redir(symbol, count) == WRONG_NUMBER_REDIR)
 				return (WRONG_NUMBER_REDIR);
@@ -82,7 +83,7 @@ int	number_redir_right(char *input, char *open_quote)
 		{
 			if (!input[i + 1]
 				|| handle_redir_symbol(input, &i, &count, '>')
-					== WRONG_NUMBER_REDIR)
+				== WRONG_NUMBER_REDIR)
 				return (WRONG_NUMBER_REDIR);
 		}
 		i++;
@@ -110,7 +111,7 @@ int	number_redir_left(char *input, char *open_quote)
 		{
 			if (!input[i + 1]
 				|| handle_redir_symbol(input, &i, &count, '<')
-					== WRONG_NUMBER_REDIR)
+				== WRONG_NUMBER_REDIR)
 				return (WRONG_NUMBER_REDIR);
 		}
 		i++;

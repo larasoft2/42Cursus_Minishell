@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_exec.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/13 18:49:05 by lusavign         ###   ########.fr       */
+/*   Created: 2025/02/18 18:08:01 by racoutte          #+#    #+#             */
+/*   Updated: 2025/02/18 18:09:17 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef MINISHELL_EXEC_H
 # define MINISHELL_EXEC_H
@@ -38,10 +37,8 @@ typedef struct s_exec
 	int fd_in;           // fd for stdin
 	int fd_out;          // fd for stdout
 	// int std_dup[2];
-	long	exit_status;
 	struct s_exec *next; // next cmd
 }					t_exec;
-
 
 typedef struct s_env
 {
@@ -57,7 +54,7 @@ int					ft_unset(t_exec *ex, t_env **env);
 int					ft_cd(t_exec *ex, t_env *env);
 int					ft_env(t_exec *ex, t_env *env);
 int					ft_export(t_exec *exec, t_env **env);
-int					ft_exit(t_exec *ex);
+int					ft_exit(t_exec *ex, t_env *env, int *std_dup);
 long				*get_exit_status(void);
 void				modify_value_exit_code(long code);
 int					check_if_var_name_is_valid(char *arg);
@@ -81,9 +78,9 @@ void				ft_close_fd(int *pipefd);
 char				**put_env_in_ar(t_env *envp);
 char				*is_path_exec(char *cmd, char **full_paths);
 char				*get_path(t_env *env, char *cmd);
-int					exec_builtin(t_exec *ex, t_env **env);
+int					exec_builtin(t_exec *ex, t_env **env, int *std_dup);
 int					is_builtin(t_exec *ex);
-void				handle_heredoc(t_exec *ex);
+int					handle_heredoc(t_exec *ex);
 void				ft_fork(t_exec *cmd, t_env **env, int *std_dup);
 void    			ft_process(t_env **env, t_exec *ex);
 

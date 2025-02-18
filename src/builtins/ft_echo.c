@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:16 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/13 15:20:03 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:28:59 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int	check_n_option(char *arg)
 	else
 		return (NO_N_OPTION);
 }
-
 
 int	ft_echo(t_exec *ex)
 {

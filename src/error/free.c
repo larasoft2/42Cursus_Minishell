@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 14:25:00 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/06 18:25:21 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:54:05 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	free_token_list(t_token_node **list)
 {
-	t_token_node *temp;
+	t_token_node	*temp;
 
 	if (!list || !*list)
 		return ;
@@ -30,51 +30,43 @@ void	free_token_list(t_token_node **list)
 
 void	free_env_list(t_env **list)
 {
-	t_env *temp;
+	t_env	*temp;
+	t_env	*next;
 
 	if (!list || !*list)
 		return ;
-	while (*list)
+	temp = *list;
+	while (temp)
 	{
-		temp = *list;
-		*list = (*list)->next;
+		next = temp->next;
 		free(temp->key);
 		free(temp->value);
 		free(temp);
+		temp = next;
 	}
 	*list = NULL;
 }
 
 void	free_exec_list(t_exec **list)
 {
-	t_exec *temp;
-	int i;
+	t_exec	*temp;
+	t_exec	*next;
 
 	if (!list || !*list)
-		return;
-	while (*list)
+		return ;
+	temp = *list;
+	if (list != NULL)
 	{
-		temp = *list;
-		*list = (*list)->next;
-		if (temp->arg)
+		while (temp)
 		{
-			i = 0;
-			while (temp->arg[i])
+			next = temp->next;
+			if (temp->arg)
 			{
-				free(temp->arg[i]);
-				i++;
+				ft_free_and_null(temp->arg);
 			}
-			free(temp->arg);
+			free(temp);
+			temp = next;
 		}
-		free(temp);
 	}
 	*list = NULL;
-}
-
-void	free_routine_all_lists(t_token_node **tokens, t_env **env,
-	t_exec **exec)
-{
-	free_token_list(tokens);
-	free_env_list(env);
-	free_exec_list(exec);
 }

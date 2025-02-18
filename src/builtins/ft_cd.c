@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:09 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/13 15:35:04 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:28:49 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 char	*get_env_value(t_env *env, char *key)
 {
-	t_env *temp;
+	t_env	*temp;
 
 	temp = env;
 	while (temp)
 	{
 		if (ft_strcmp(temp->key, key) == 0)
-			return temp->value;
+			return (temp->value);
 		temp = temp->next;
 	}
 	return (NULL);
@@ -28,7 +28,7 @@ char	*get_env_value(t_env *env, char *key)
 
 void	update_env_var(t_env *env, char *key, char *new_value)
 {
-	t_env *temp;
+	t_env	*temp;
 
 	temp = env;
 	while (temp)
@@ -74,7 +74,7 @@ void	handle_dash(t_env *env)
 	char	cwd[1024];
 
 	old_pwd = get_env_value(env, "OLDPWD");
-	if(!old_pwd)
+	if (!old_pwd)
 	{
 		modify_value_exit_code(1);
 		print_error_exec_message(NO_SUCH_FILE_OR_DIRECTORY, "OLDPWD");
