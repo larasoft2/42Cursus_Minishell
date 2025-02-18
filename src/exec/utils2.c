@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:48:29 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/17 20:15:02 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/18 23:08:15 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	ft_init(t_exec *ex, int *std_dup)
 {
     ex->fd_in = STDIN_FILENO;
     ex->fd_out = STDOUT_FILENO;
+	// ex->heredoc_name = NULL;
     std_dup[0] = dup(STDIN_FILENO);
     std_dup[1] = dup(STDOUT_FILENO);
 }
@@ -36,7 +37,23 @@ void    restore_fds(int *std_dup)
 	}
 }
 
-int	is_pipe(t_exec *ex)
+int	has_heredoc(t_exec *ex)
+{
+	int	i;
+
+	if (!ex)
+		return (0);
+	i = 0;
+	while (ex)
+	{
+		if (ex->type == TOKEN_REDIR_HEREDOC)
+			return (1);
+		ex = ex->next;
+	}
+	return (-1);
+}
+
+int	has_pipe(t_exec *ex)
 {
 	int	i;
 
@@ -52,7 +69,7 @@ int	is_pipe(t_exec *ex)
 	return (-1);
 }
 
-int	is_redir(t_exec *ex)
+int	has_redir(t_exec *ex)
 {
 	int	i;
 

@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/17 19:51:43 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/18 23:08:10 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@
 
 typedef struct s_exec
 {
-	char **arg;          // contains args for one cmd {ls "-l", ...}
-	t_token_type type;  // list of redirs
-	int fd_in;           // fd for stdin
-	int fd_out;          // fd for stdout
-	// int std_dup[2];
-	long	exit_status;
-	struct s_exec *next; // next cmd
+	char			**arg;
+	// char			*heredoc_name;
+	int				fd_in;
+	int				fd_out;
+	long			exit_status;
+	t_token_type	type;
+	struct s_exec *next;
 }					t_exec;
 
 
@@ -70,8 +70,9 @@ int					check_if_cmd_has_arg(char **arg);
 int					ft_strcmp(char *s1, char *s2);
 int					nbr_of_args(t_exec *ex);
 int					count_command(t_exec *ex);
-int					is_pipe(t_exec *ex);
-int					is_redir(t_exec *ex);
+int					has_pipe(t_exec *ex);
+int					has_redir(t_exec *ex);
+int					has_heredoc(t_exec *ex);
 char				*ft_strndup(const char *s, size_t n);
 void				ft_init(t_exec *ex, int *std_dup);
 void    			restore_fds(int *std_dup);

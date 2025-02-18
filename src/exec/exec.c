@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/18 16:03:35 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/18 23:30:25 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,12 @@ void	ft_open(t_exec *ex, int *fd_in)
             return;
         }
     }
-    else if (ex->type == TOKEN_REDIR_HEREDOC)
-    {
-        if (*fd_in > 2)
-            ft_close_fds(*fd_in);
-        *fd_in = handle_heredoc(ex);
-    }
+    // else if (ex->type == TOKEN_REDIR_HEREDOC)
+    // {
+    //     if (*fd_in > 2)
+    //         ft_close_fds(*fd_in);
+    //     *fd_in = handle_heredoc(ex);
+    // }
     else if (ex->type == TOKEN_REDIR_OUT || ex->type == TOKEN_REDIR_APPEND) 
     {
         if (ex->type == TOKEN_REDIR_OUT)
@@ -286,93 +286,121 @@ void    handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup)
     ft_close_fd(pipefd);
 }
 
-void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
+void    ft_open_heredocs(t_exec *ex, int pipefd)
 {
-    int         pipefd[2];
-    pid_t       pid;
-   	int         status;
-	int 		prev_pipe_fd = -1;
-    t_exec      *current;
-    t_exec      *block_begin;
-	int			temp_in;
-	
-    current = ex;
-	pipefd[0] = 0;
-	block_begin = ex;
-    while (current)
+    t_exec  *current = ex;
+    int     fd_in;
+
+    fd_in = pipefd;
+    while (current) 
     {
-        while (current && (current->type == TOKEN_REDIR_IN || current->type == TOKEN_REDIR_OUT 
-        || current->type == TOKEN_REDIR_APPEND || current->type == TOKEN_REDIR_HEREDOC))
-                current = current->next;
-        if (!current || current->type != TOKEN_WORD)
-            break;
-		temp_in = prev_pipe_fd;
-		if (prev_pipe_fd != -1)
-            prev_pipe_fd = -1;
-        if (is_pipe(current) != -1) // si autre cmd suit, on crée un pipe
+        if (current->type == TOKEN_REDIR_HEREDOC)
         {
-            prev_pipe_fd = pipefd[0];
-            if (pipe(pipefd) == -1)
+            if (fd_in > 2)
+                ft_close_fds(fd_in);
+            fd_in = handle_heredoc(current);
+            if (fd_in < 0)
             {
-                perror("pipe failed");
-                exit(EXIT_FAILURE);
+                perror("Error handling heredoc");
+                return;
             }
         }
-        else
-        {
-            pipefd[0] = -1;
-            pipefd[1] = -1;
-        }
-        if (pipefd[1] != -1) // redirect stdout > pipe
-        {
-            dup2(pipefd[1], STDOUT_FILENO);
-			fprintf(stderr, "CLOSING HERE 1\n");
-            ft_close_fds(pipefd[1]);
-            pipefd[1] = -1;
-        }
-        pid = fork();
-        if (pid == -1)
-        {
-            perror("fork failed"); //close fds
-            exit(EXIT_FAILURE);
-        }
-        if (pid == 0) // child
-        {
-		    ft_close_fd(std_dup);
+        current = current->next;
+    }
+    if (fd_in > 2)
+    {
+        dup2(fd_in, STDIN_FILENO);
+        ft_close_fds(fd_in);
+    }
+}
+
+void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
+{
+	int			pipefd[2];
+	int			status;
+	int 		prev_pipe_fd = -1;
+	int			temp_in;
+	pid_t		pid;
+	t_exec		*current;
+	t_exec		*block_begin;
+
+	current = ex;
+	block_begin = ex;
+	while (current)
+	{
+		while (current && (current->type == TOKEN_REDIR_IN || current->type == TOKEN_REDIR_OUT 
+		|| current->type == TOKEN_REDIR_APPEND || current->type == TOKEN_REDIR_HEREDOC))
+				current = current->next;
+		if (!current || current->type != TOKEN_WORD)
+			break;
+		temp_in = prev_pipe_fd;
+		if (prev_pipe_fd != -1)
+		{
+			dup2(prev_pipe_fd, STDIN_FILENO);
+			close(prev_pipe_fd);
+			prev_pipe_fd = -1;
+		}
+		if (has_pipe(current) != -1) // si autre cmd suit, on crée un pipe
+		{
+			if (pipe(pipefd) == -1)
+			{
+				perror("pipe failed");
+				exit(EXIT_FAILURE);
+			}
+			prev_pipe_fd = pipefd[0];
+		}
+		else
+		{
+			pipefd[0] = -1;
+			pipefd[1] = -1;
+		}
+		if (pipefd[1] != -1) // redirect stdout > pipe
+		{
+			dup2(pipefd[1], STDOUT_FILENO);
+			close(pipefd[1]);
+			pipefd[1] = -1;
+		}
+		pid = fork();
+		if (pid == -1)
+		{
+			perror("fork failed"); //close fds
+			exit(EXIT_FAILURE);
+		}
+		if (pid == 0) // child
+		{
+			ft_close_fd(std_dup);
 			if (prev_pipe_fd != -1)
 			{
-				fprintf(stderr, "CLOSING HERE 2\n");
-				ft_close_fds(prev_pipe_fd);
+				close(prev_pipe_fd);
 				prev_pipe_fd = -1;
 			}
-            handle_redir_in_pipe(block_begin, temp_in);
-            ft_exec(current, env);
-            exit(EXIT_FAILURE);
-        }
-        if (pipefd[1] != -1)
-        {
-			fprintf(stderr, "CLOSING HERE 3\n");
-            ft_close_fds(pipefd[1]);
-            pipefd[1] = -1;
-        }
-        while (current && current->type != TOKEN_PIPE)   
-            current = current->next;
-        if (current && current->type == TOKEN_PIPE)
-            current = current->next;
-        else
-        {
+			handle_redir_in_pipe(block_begin, temp_in);
+			ft_exec(current, env);
+			exit(EXIT_FAILURE);
+		}
+		if (pipefd[1] != -1)
+		{
+			close(pipefd[1]);
+			pipefd[1] = -1;
+		}
+		while (current && current->type != TOKEN_PIPE)   
+			current = current->next;
+		if (current && current->type == TOKEN_PIPE)
+			current = current->next;
+		else
+		{
 			if (prev_pipe_fd != -1)
 			{
-				fprintf(stderr, "CLOSING HERE 4\n");
-				ft_close_fds(prev_pipe_fd);
+				close(prev_pipe_fd);
 				prev_pipe_fd = -1;
 			}
-        }
+		}
+		// Reset the 0 and 1 to the default values of STDIN and STDOUT for next iteration
 		dup2(std_dup[0], STDIN_FILENO);
 		dup2(std_dup[1], STDOUT_FILENO);
-        block_begin = current;
-    }
-    while (wait(&status) > 0); //waitpid
+		block_begin = current;
+	}
+	while (wait(&status) > 0); //waitpid
 }
 
 void    ft_process(t_env **env, t_exec *ex)
@@ -380,14 +408,18 @@ void    ft_process(t_env **env, t_exec *ex)
 	int		    std_dup[2];
 
     ft_init(ex, std_dup);
-    if (is_pipe(ex) == 1)
+    if (has_pipe(ex) == 1)
     {
-        if (is_redir(ex) != 1) //if pipes
+        if (has_redir(ex) != 1) //if pipes
             handle_pipes_no_redir(ex, env, std_dup); 
         else
+        {
+            if (has_heredoc(ex) == 1)
+                ft_open_heredocs(ex, ex->fd_in);
             handle_pipes_if_redir(ex, env, std_dup);
-    }
-    else if ((is_pipe(ex) != 1)) //no pipes
+        }
+        }
+    else if ((has_pipe(ex) != 1)) //no pipes
     {
         handle_redir(ex); 
         exec_commands(ex, env, std_dup);
