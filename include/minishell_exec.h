@@ -5,11 +5,10 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/18 14:59:26 by racoutte         ###   ########.fr       */
+/*   Created: 2025/02/18 18:08:01 by racoutte          #+#    #+#             */
+/*   Updated: 2025/02/18 18:09:17 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef MINISHELL_EXEC_H
 # define MINISHELL_EXEC_H
@@ -40,7 +39,6 @@ typedef struct s_exec
 	// int std_dup[2];
 	struct s_exec *next; // next cmd
 }					t_exec;
-
 
 typedef struct s_env
 {
