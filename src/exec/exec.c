@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/18 23:30:25 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/19 00:22:53 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	ft_close_fds(int fd)
 		close(fd);
 }
 
-void	ft_open(t_exec *ex, int *fd_in)
+void	ft_open(t_exec *ex, int *fd_in, char *hd_name)
 {
     if (ex->type == TOKEN_REDIR_IN) 
     {
@@ -66,12 +66,17 @@ void	ft_open(t_exec *ex, int *fd_in)
             return;
         }
     }
-    // else if (ex->type == TOKEN_REDIR_HEREDOC)
-    // {
-    //     if (*fd_in > 2)
-    //         ft_close_fds(*fd_in);
-    //     *fd_in = handle_heredoc(ex);
-    // }
+	else if (ex->type == TOKEN_REDIR_HEREDOC)
+	{
+		if (*fd_in > 2)
+			ft_close_fds(*fd_in);
+		*fd_in = open(hd_name, O_RDONLY);
+		if (*fd_in < 0)
+		{
+			perror("Error opening heredoc file");
+			return;
+		}
+	}
     else if (ex->type == TOKEN_REDIR_OUT || ex->type == TOKEN_REDIR_APPEND) 
     {
         if (ex->type == TOKEN_REDIR_OUT)
@@ -151,7 +156,7 @@ void    handle_redir(t_exec *ex)
     while (current)
     {
         if (current->type > 1)
-            ft_open(current, &fd_in);
+            ft_open(current, &fd_in, NULL);
         current = current->next;
     }
 	if (fd_in > 2)
@@ -185,7 +190,7 @@ void    exec_commands(t_exec *ex, t_env **env, int *std_dup)
 	}
 }
 
-void    handle_redir_in_pipe(t_exec *ex, int pipefd)
+void    handle_redir_in_pipe(t_exec *ex, int pipefd, char *hd_name)
 {
     t_exec  *current = ex;
 	int		fd_in;
@@ -194,7 +199,7 @@ void    handle_redir_in_pipe(t_exec *ex, int pipefd)
 	while (current) 
     {
         if (current->type > 1)
-            ft_open(current, &fd_in);
+            ft_open(current, &fd_in, hd_name);
         if (current->type == TOKEN_PIPE)
             break;
         else
@@ -286,7 +291,7 @@ void    handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup)
     ft_close_fd(pipefd);
 }
 
-void    ft_open_heredocs(t_exec *ex, int pipefd)
+void    ft_open_heredocs(t_exec *ex, int pipefd, char *heredoc_name)
 {
     t_exec  *current = ex;
     int     fd_in;
@@ -298,7 +303,7 @@ void    ft_open_heredocs(t_exec *ex, int pipefd)
         {
             if (fd_in > 2)
                 ft_close_fds(fd_in);
-            fd_in = handle_heredoc(current);
+            fd_in = handle_heredoc(current, heredoc_name);
             if (fd_in < 0)
             {
                 perror("Error handling heredoc");
@@ -314,7 +319,7 @@ void    ft_open_heredocs(t_exec *ex, int pipefd)
     }
 }
 
-void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
+void	handle_pipes_if_redir(t_exec *ex, t_env **env, char *hd_name, int *std_dup)
 {
 	int			pipefd[2];
 	int			status;
@@ -374,7 +379,7 @@ void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
 				close(prev_pipe_fd);
 				prev_pipe_fd = -1;
 			}
-			handle_redir_in_pipe(block_begin, temp_in);
+			handle_redir_in_pipe(block_begin, temp_in, hd_name);
 			ft_exec(current, env);
 			exit(EXIT_FAILURE);
 		}
@@ -406,19 +411,22 @@ void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
 void    ft_process(t_env **env, t_exec *ex)
 {
 	int		    std_dup[2];
+	t_heredoc	*hd;
 
     ft_init(ex, std_dup);
+	hd = NULL;
+	hd->heredoc_name = NULL;
     if (has_pipe(ex) == 1)
     {
         if (has_redir(ex) != 1) //if pipes
-            handle_pipes_no_redir(ex, env, std_dup); 
+            handle_pipes_no_redir(ex, env, std_dup); //pas de HD ici
         else
         {
             if (has_heredoc(ex) == 1)
-                ft_open_heredocs(ex, ex->fd_in);
-            handle_pipes_if_redir(ex, env, std_dup);
+                ft_open_heredocs(ex, ex->fd_in, hd->heredoc_name);
+            handle_pipes_if_redir(ex, env, hd->heredoc_name, std_dup);
         }
-        }
+    }
     else if ((has_pipe(ex) != 1)) //no pipes
     {
         handle_redir(ex); 
@@ -426,5 +434,7 @@ void    ft_process(t_env **env, t_exec *ex)
     }
 	ft_close_fds(std_dup[0]);
 	ft_close_fds(std_dup[1]);
+	if (hd->heredoc_name != NULL)
+    	unlink(hd->heredoc_name);
 	return ;
 }

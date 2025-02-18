@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/18 23:08:10 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/19 00:14:01 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@
 typedef struct s_exec
 {
 	char			**arg;
-	// char			*heredoc_name;
 	int				fd_in;
 	int				fd_out;
 	long			exit_status;
@@ -42,6 +41,10 @@ typedef struct s_exec
 	struct s_exec *next;
 }					t_exec;
 
+typedef struct s_heredoc
+{
+	char	*heredoc_name;
+}	t_heredoc;
 
 typedef struct s_env
 {
@@ -84,7 +87,7 @@ char				*is_path_exec(char *cmd, char **full_paths);
 char				*get_path(t_env *env, char *cmd);
 int					exec_builtin(t_exec *ex, t_env **env);
 int					is_builtin(t_exec *ex);
-int					handle_heredoc(t_exec *ex);
+int					handle_heredoc(t_exec *ex, char *hd_name);
 void				ft_fork(t_exec *cmd, t_env **env, int *std_dup);
 void    			ft_process(t_env **env, t_exec *ex);
 

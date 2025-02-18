@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:48:29 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/18 23:08:15 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/19 00:22:43 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	ft_init(t_exec *ex, int *std_dup)
 {
     ex->fd_in = STDIN_FILENO;
     ex->fd_out = STDOUT_FILENO;
-	// ex->heredoc_name = NULL;
     std_dup[0] = dup(STDIN_FILENO);
     std_dup[1] = dup(STDOUT_FILENO);
 }
