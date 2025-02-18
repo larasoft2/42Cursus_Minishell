@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:24 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/17 15:29:40 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/18 11:32:29 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ int	ft_exit(t_exec *ex, t_env *env) // ATTENTION FERMETURE FDS avant exit !!
 		print_error_exec_message(NUMERIC_ARGUMENT_REQUIRED, ex->arg[1]);
 		free_env_list(&env);
 		free_exec_list(&ex);
-		//free_routine_exec_and_env_lists(&env, &ex);
 		exit(2);
 	}
 	if (len_cmd > 2)
@@ -89,10 +88,8 @@ int	ft_exit(t_exec *ex, t_env *env) // ATTENTION FERMETURE FDS avant exit !!
 		return (modify_value_exit_code(1), EXIT_FAILURE);
 	}
 	*exit_code = calculate_exit_code(ft_atol(ex->arg[1]));
-	printf("hey\n");
 	modify_value_exit_code(*exit_code);
 	free_env_list(&env);
 	free_exec_list(&ex);
-	//free_routine_exec_and_env_lists(&env, &ex);
 	exit(*exit_code);
 }

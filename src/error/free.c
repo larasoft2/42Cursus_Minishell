@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 14:25:00 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/17 15:28:34 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/17 15:36:44 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,30 +33,27 @@ void	free_env_list(t_env **list)
 	t_env	*temp;
 	t_env	*next;
 
-	// if (!list || !*list)
-	// 	return ;
+	if (!list || !*list)
+		return ;
 	temp = *list;
 	while (temp)
 	{
-		//printf("Free env: %s=%s\n", temp->key, temp->value);
 		next = temp->next;
 		free(temp->key);
 		free(temp->value);
 		free(temp);
 		temp = next;
 	}
-	//*list = NULL;
-	//printf("ENV LIST CLEARED\n");
+	*list = NULL;
 }
 
 void	free_exec_list(t_exec **list)
 {
 	t_exec	*temp;
 	t_exec	*next;
-	//int		i;
 
-	// if (!list || !*list)
-	// 	return;
+	if (!list || !*list)
+		return ;
 	temp = *list;
 	if (list != NULL)
 	{
@@ -70,9 +67,8 @@ void	free_exec_list(t_exec **list)
 			free(temp);
 			temp = next;
 		}
-		//*list = NULL;
 	}
-	//printf("EXECCCCC LIST CLEARED\n");
+	*list = NULL;
 }
 
 // void	free_routine_exec_and_env_lists(t_exec **exec) //t_env **env,

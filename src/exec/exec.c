@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/17 15:28:52 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/18 11:08:36 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ void    ft_exec(t_exec *ex, t_env **env)
 		print_error_exec_message(COMMAND_NOT_FOUND, ex->arg[0]);
 		ft_free_and_null(env_array);
 		free_exec_list(&ex);
+		free_env_list(env);
 		//free_routine_exec_and_env_lists(env, &ex);
         exit(EXIT_FAILURE); //free
     }
@@ -383,6 +384,10 @@ void    ft_process(t_env **env, t_exec *ex)
     {
         handle_redir(ex);
         exec_commands(ex, env, std_dup);
+    }
+	if (ex->type == TOKEN_REDIR_HEREDOC)
+    {
+        handle_heredoc(ex);
     }
 	close(std_dup[0]);
 	close(std_dup[1]);

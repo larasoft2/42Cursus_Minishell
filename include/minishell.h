@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/17 15:25:07 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/17 17:56:49 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,6 @@ void	print_env(t_env *env);
 //void	handle_signals(bool exec, bool heredoc);
 void	setup_default_signals_handling(void);
 void	setup_main_prompt_signals_handling(void);
+void	setup_heredoc_signals_handling(void);
 
 #endif

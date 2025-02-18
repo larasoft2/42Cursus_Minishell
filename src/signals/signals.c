@@ -6,15 +6,26 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 16:33:15 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/17 15:24:51 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/17 18:00:58 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	sigint_routine(int signum)
+static int	ft_check_signal(void)
 {
-	(void)signum;
+	return (0);
+}
+
+void	destroy_heredoc(char *heredoc)
+{
+	if (heredoc)
+		unlink(heredoc);
+}
+
+static void	sigint_prompt(int sig)
+{
+	(void)sig;
 	modify_value_exit_code(128 + SIGINT);
 	write(STDIN_FILENO, "\n", 1);
 	rl_on_new_line();
@@ -22,9 +33,32 @@ static void	sigint_routine(int signum)
 	rl_redisplay();
 }
 
+static void	sigint_heredoc(int sig)
+{
+	(void)sig;
+	modify_value_exit_code(128 + SIGINT);
+	write(STDOUT_FILENO, "\n", 1);
+	rl_event_hook = ft_check_signal;
+	rl_done = 1;
+}
+
+// static void	sigint_exec(int sig)
+// {
+// 	(void)sig;
+// 	modify_value_exit_code(128 + SIGINT);
+// 	write(STDOUT_FILENO, "\n", 1);
+// }
+
+// static void	sigquit_exec(int sig)
+// {
+// 	(void)sig;
+// 	modify_value_exit_code(128 + SIGQUIT);
+// 	write(STDOUT_FILENO, "Quit (core dumped)\n", 20);
+// }
+
 void	setup_main_prompt_signals_handling(void)
 {
-	signal(SIGINT, sigint_routine);
+	signal(SIGINT, sigint_prompt);
 	signal(SIGTERM, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGTSTP, SIG_IGN);
@@ -37,6 +71,18 @@ void	setup_main_prompt_signals_handling(void)
 void	setup_default_signals_handling(void)
 {
 	signal(SIGINT, SIG_IGN);
+	signal(SIGTERM, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGTSTP, SIG_IGN);
+	signal(SIGCONT, SIG_IGN);
+	signal(SIGTTIN, SIG_IGN);
+	signal(SIGTTOU, SIG_IGN);
+	signal(SIGPIPE, SIG_IGN);
+}
+
+void	setup_heredoc_signals_handling(void)
+{
+	signal(SIGINT, sigint_heredoc);
 	signal(SIGTERM, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGTSTP, SIG_IGN);

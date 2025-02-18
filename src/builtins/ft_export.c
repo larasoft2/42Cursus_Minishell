@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:28 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/13 15:24:33 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/18 11:25:56 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,15 @@ int	check_if_var_name_already_exists(char *arg, t_env *env)
 		{
 			new_value = extract_var_value(arg);
 			if (!new_value)
-				return (EXIT_FAILURE);
+				return (free(key), EXIT_FAILURE);
 			modify_value(new_value, temp);
 			free(new_value);
+			free(key);
 			return (EXIT_SUCCESS);
 		}
 		temp = temp->next;
 	}
-	return (EXIT_FAILURE);
+	return (free(key), EXIT_FAILURE);
 }
 
 void	add_var_to_env(char *arg, t_env **env)
@@ -80,9 +81,6 @@ void	add_var_to_env(char *arg, t_env **env)
 		return ;
 	}
 	append_list(env, key, value);
-	free(key);
-	if (value)
-		free(value);
 }
 
 void	modify_env(char *arg, t_env **env)
