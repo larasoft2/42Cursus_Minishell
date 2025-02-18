@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/18 18:06:18 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/18 18:28:29 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,10 @@ void	print_env(t_env *env);
 void	setup_default_signals_handling(void);
 void	setup_main_prompt_signals_handling(void);
 void	setup_heredoc_signals_handling(void);
-void    setup_command_mode_signals_handling(void);
+void	setup_command_mode_signals_handling(void);
+void	sigint_handler(int sig);
+void	sigint_prompt(int sig);
+void	sigint_heredoc(int sig);
+void	sigquit_handler(int sig);
 
 #endif

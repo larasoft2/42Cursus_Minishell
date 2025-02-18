@@ -6,72 +6,22 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 16:33:15 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/18 16:36:52 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/18 18:29:30 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	ft_check_signal(void)
+void	setup_command_mode_signals_handling(void)
 {
-	return (0);
-}
-
-void	destroy_heredoc(char *heredoc)
-{
-	if (heredoc)
-		unlink(heredoc);
-}
-
-static void	sigint_prompt(int sig)
-{
-	(void)sig;
-	modify_value_exit_code(128 + SIGINT);
-	write(STDIN_FILENO, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
-
-static void	sigint_heredoc(int sig)
-{
-	(void)sig;
-	modify_value_exit_code(128 + SIGINT);
-	write(STDOUT_FILENO, "\n", 1);
-	rl_event_hook = ft_check_signal;
-	rl_done = 1;
-}
-
-// static void	sigint_exec(int sig)
-// {
-// 	(void)sig;
-// 	modify_value_exit_code(128 + SIGINT);
-// 	write(STDOUT_FILENO, "\n", 1);
-// }
-
-// static void	sigquit_exec(int sig)
-// {
-// 	(void)sig;
-// 	modify_value_exit_code(128 + SIGQUIT);
-// 	write(STDOUT_FILENO, "Quit (core dumped)\n", 20);
-// }
-
-static void    sigint_handler(int signum)
-{
-    (void)signum;
-    write(STDOUT_FILENO, "\n", 1);
-}
-
-void    setup_command_mode_signals_handling(void)
-{
-    signal(SIGINT, sigint_handler);
-    signal(SIGTERM, SIG_DFL);
-    signal(SIGQUIT, SIG_DFL);
-    signal(SIGTSTP, SIG_DFL);
-    signal(SIGCONT, SIG_DFL);
-    signal(SIGTTIN, SIG_DFL);
-    signal(SIGTTOU, SIG_DFL);
-    signal(SIGPIPE, SIG_DFL);
+	signal(SIGINT, sigint_handler);
+	signal(SIGTERM, SIG_DFL);
+	signal(SIGQUIT, sigquit_handler);
+	signal(SIGTSTP, SIG_DFL);
+	signal(SIGCONT, SIG_DFL);
+	signal(SIGTTIN, SIG_DFL);
+	signal(SIGTTOU, SIG_DFL);
+	signal(SIGPIPE, SIG_DFL);
 }
 
 void	setup_main_prompt_signals_handling(void)
@@ -139,13 +89,6 @@ void	setup_heredoc_signals_handling(void)
 // 	//appeler une fonction qui detruit le heredoc.. destroy_heredoc()
 // 	rl_event_hook = ft_check_signal;
 // 	rl_done = 1; // termine readline
-// }
-
-// static void	sigquit_exec(int sig)
-// {
-// 	(void)sig;
-// 	modify_value_exit_code(128 + SIGQUIT);
-// 	write(STDOUT_FILENO, "Quit (core dumped)\n", 20);
 // }
 
 // void	handle_signals(bool exec, bool heredoc)
