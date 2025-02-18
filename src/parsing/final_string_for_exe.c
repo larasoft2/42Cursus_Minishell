@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 11:30:59 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/17 15:22:38 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/18 15:49:55 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,3 @@ t_exec	*add_all_tokens(t_token_node **token_list, t_exec **exec_list)
 	}
 	return (NULL);
 }
-

@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 13:42:08 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/03 13:00:49 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/18 15:52:41 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ t_token_node	*create_token_node(t_token_type type, char *value)
 	}
 	new_token->type = type;
 	new_token->value = ft_strdup(value);
-	//new_token->to_delete = 0;
 	if (!new_token->value)
 	{
 		ft_putstr_fd("Error: malloc strdup failed\n", STDERR_FILENO);

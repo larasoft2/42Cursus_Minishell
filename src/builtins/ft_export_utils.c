@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 15:59:57 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/06 16:01:05 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:52:49 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	check_if_var_name_is_valid(char *arg)
 	size_t	i;
 
 	if (!ft_isalpha(arg[0]) && arg[0] != '_')
-			return (EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	i = 1;
 	while (arg[i] && arg[i] != '=')
 	{

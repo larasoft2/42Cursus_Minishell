@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:28 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/18 11:25:56 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:52:38 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	add_var_to_env(char *arg, t_env **env)
 
 	key = extract_key_name(arg);
 	if (!key)
-		return;
+		return ;
 	value = extract_var_value(arg);
 	if (!value)
 		value = ft_strdup("");

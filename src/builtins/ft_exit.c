@@ -6,26 +6,11 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:24 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/18 11:32:29 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:50:37 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-long	*get_exit_status(void)
-{
-	static long	exit_status;
-
-	return (&exit_status);
-}
-
-void	modify_value_exit_code(long code)
-{
-	long	*exit_status;
-
-	exit_status = get_exit_status();
-	*exit_status = code;
-}
 
 static int	is_numeric(char *str)
 {
@@ -59,7 +44,15 @@ long	calculate_exit_code(long nb)
 	return (exit_code);
 }
 
-int	ft_exit(t_exec *ex, t_env *env) // ATTENTION FERMETURE FDS avant exit !!
+void	exec_exit_with_code(t_exec *ex, t_env *env, int *std_dup,
+		long *exit_code)
+{
+	*exit_code = calculate_exit_code(ft_atol(ex->arg[1]));
+	modify_value_exit_code(*exit_code);
+	close_and_free_before_exit(env, ex, std_dup);
+}
+
+int	ft_exit(t_exec *ex, t_env *env, int *std_dup)
 {
 	long	*exit_code;
 	int		len_cmd;
@@ -67,19 +60,16 @@ int	ft_exit(t_exec *ex, t_env *env) // ATTENTION FERMETURE FDS avant exit !!
 	len_cmd = nbr_of_args(ex);
 	exit_code = get_exit_status();
 	printf("exit\n");
-	(void)env;
 	if (!ex->arg[1])
 	{
-		free_env_list(&env);
-		free_exec_list(&ex);
-		exit(*exit_code); //exit avec le dernier $?
+		close_and_free_before_exit(env, ex, std_dup);
+		exit(*exit_code);
 	}
 	if (is_numeric(ex->arg[1]) == EXIT_FAILURE || ft_atol(ex->arg[1]) > INT_MAX
 		|| ft_atol(ex->arg[1]) < INT_MIN)
 	{
 		print_error_exec_message(NUMERIC_ARGUMENT_REQUIRED, ex->arg[1]);
-		free_env_list(&env);
-		free_exec_list(&ex);
+		close_and_free_before_exit(env, ex, std_dup);
 		exit(2);
 	}
 	if (len_cmd > 2)
@@ -87,9 +77,6 @@ int	ft_exit(t_exec *ex, t_env *env) // ATTENTION FERMETURE FDS avant exit !!
 		print_error_exec_message(TOO_MANY_ARGUMENTS, ex->arg[0]);
 		return (modify_value_exit_code(1), EXIT_FAILURE);
 	}
-	*exit_code = calculate_exit_code(ft_atol(ex->arg[1]));
-	modify_value_exit_code(*exit_code);
-	free_env_list(&env);
-	free_exec_list(&ex);
+	exec_exit_with_code(ex, env, std_dup, exit_code);
 	exit(*exit_code);
 }

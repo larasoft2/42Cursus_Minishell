@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/18 11:08:36 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:09:49 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,16 +104,14 @@ void    ft_exec(t_exec *ex, t_env **env)
 		ft_free_and_null(env_array);
 		free_exec_list(&ex);
 		free_env_list(env);
-		//free_routine_exec_and_env_lists(env, &ex);
-        exit(EXIT_FAILURE); //free
+        exit(EXIT_FAILURE);
     }
     execve(path_cmd, ex->arg, env_array);
     perror("execve");
 	ft_free_and_null(env_array);
 	free(path_cmd);
 	free_exec_list(&ex);
-	//free_routine_exec_and_env_lists(env, &ex);
-    exit(EXIT_FAILURE); //pq exit failure
+    exit(EXIT_FAILURE);
 }
 
 void ft_fork(t_exec *cmd, t_env **env, int *std_dup)
@@ -134,8 +132,11 @@ void ft_fork(t_exec *cmd, t_env **env, int *std_dup)
             perror(strerror(errno));
             return;
         }
+		if (pid > 0)
+			setup_command_mode_signals_handling();
         if (pid == 0)
         {
+			setup_command_mode_signals_handling();
             ft_close_fd(std_dup);
             ft_exec(cmd, env);
         }
@@ -167,7 +168,7 @@ void    exec_commands(t_exec *ex, t_env **env, int *std_dup)
 	{
     	if ((command_nb == 1) && (is_builtin(ex) == 1))
     	{
-			exec_builtin(ex, env);
+			exec_builtin(ex, env, std_dup);
             restore_fds(std_dup);
             return ;
         }

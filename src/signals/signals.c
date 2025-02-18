@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 16:33:15 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/17 18:00:58 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/18 16:36:52 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,24 @@ static void	sigint_heredoc(int sig)
 // 	modify_value_exit_code(128 + SIGQUIT);
 // 	write(STDOUT_FILENO, "Quit (core dumped)\n", 20);
 // }
+
+static void    sigint_handler(int signum)
+{
+    (void)signum;
+    write(STDOUT_FILENO, "\n", 1);
+}
+
+void    setup_command_mode_signals_handling(void)
+{
+    signal(SIGINT, sigint_handler);
+    signal(SIGTERM, SIG_DFL);
+    signal(SIGQUIT, SIG_DFL);
+    signal(SIGTSTP, SIG_DFL);
+    signal(SIGCONT, SIG_DFL);
+    signal(SIGTTIN, SIG_DFL);
+    signal(SIGTTOU, SIG_DFL);
+    signal(SIGPIPE, SIG_DFL);
+}
 
 void	setup_main_prompt_signals_handling(void)
 {

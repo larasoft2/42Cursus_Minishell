@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:58:59 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/18 11:29:39 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/18 16:54:25 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ int	parsing(char *input, t_token_node **token_list, t_env **env_final)
 	return (EXIT_SUCCESS);
 }
 
-int	tokenize_parsing(char *input, t_token_node **token_list, t_env **env_final, t_exec **exec_list)
+int	tokenize_parsing(char *input, t_token_node **token_list,
+	t_env **env_final, t_exec **exec_list)
 {
 	if (parsing(input, token_list, env_final) == EXIT_FAILURE)
 	{
@@ -46,7 +47,8 @@ int	tokenize_parsing(char *input, t_token_node **token_list, t_env **env_final, 
 	return (EXIT_SUCCESS);
 }
 
-void	minishell_loop(char *input, t_token_node **token_list, t_env **env_final, t_exec **exec_list)
+void	minishell_loop(char *input, t_token_node **token_list,
+		t_env **env_final, t_exec **exec_list)
 {
 	int	syntax_status;
 
@@ -55,7 +57,8 @@ void	minishell_loop(char *input, t_token_node **token_list, t_env **env_final, t
 	if (check_syntax_input(input, &syntax_status) == EXIT_FAILURE)
 		free(input);
 	if (syntax_status == EXIT_SUCCESS)
-		syntax_status = tokenize_parsing(input, token_list, env_final, exec_list);
+		syntax_status = tokenize_parsing(input, token_list, env_final,
+				exec_list);
 	if (syntax_status == EXIT_SUCCESS && *input)
 	{
 		ft_process(env_final, *exec_list);
@@ -74,13 +77,13 @@ void	check_ctrl_d(t_env **env, t_exec *exec_list)
 
 int	main(int ac, char **av, char **env)
 {
-	(void)ac;
-	(void)av;
 	char			*input;
 	t_token_node	*token_list;
 	t_env			*env_final;
 	t_exec			*exec_list;
 
+	(void)ac;
+	(void)av;
 	input = NULL;
 	token_list = NULL;
 	exec_list = NULL;

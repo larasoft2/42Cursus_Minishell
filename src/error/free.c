@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 14:25:00 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/17 15:36:44 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:54:05 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	free_token_list(t_token_node **list)
 {
-	t_token_node *temp;
+	t_token_node	*temp;
 
 	if (!list || !*list)
 		return ;
@@ -70,16 +70,3 @@ void	free_exec_list(t_exec **list)
 	}
 	*list = NULL;
 }
-
-// void	free_routine_exec_and_env_lists(t_exec **exec) //t_env **env,
-// {
-// 	//free_env_list(env);
-// 	free_exec_list(exec);
-// }
-
-// void	free_routine_all_lists(t_exec **exec) //t_token_node **tokens, t_env **env,
-// {
-// 	//free_token_list(tokens);
-// 	//free_env_list(env);
-// 	free_exec_list(exec);
-// }

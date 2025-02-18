@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/14 13:07:59 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/18 17:54:54 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,22 +41,6 @@ void	*ft_free_array(char **ar)
 	ar = NULL;
 	return (NULL);
 }
-
-// void	ft_free_list(t_env *head)
-// {
-// 	t_env	*cleaner;
-
-// 	if (!head)
-// 		return ;
-// 	while (head)
-// 	{
-// 		cleaner = head->next;
-// 		free(head->key);
-// 		free(head->value);
-// 		free(head);
-// 		head = cleaner;
-// 	}
-// }
 
 char	**put_env_in_ar(t_env *envp)
 {

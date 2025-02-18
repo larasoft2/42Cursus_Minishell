@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/17 17:33:05 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/18 14:59:26 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ typedef struct s_exec
 	int fd_in;           // fd for stdin
 	int fd_out;          // fd for stdout
 	// int std_dup[2];
-	long	exit_status;
 	struct s_exec *next; // next cmd
 }					t_exec;
 
@@ -57,7 +56,7 @@ int					ft_unset(t_exec *ex, t_env **env);
 int					ft_cd(t_exec *ex, t_env *env);
 int					ft_env(t_exec *ex, t_env *env);
 int					ft_export(t_exec *exec, t_env **env);
-int					ft_exit(t_exec *ex, t_env *env);
+int					ft_exit(t_exec *ex, t_env *env, int *std_dup);
 long				*get_exit_status(void);
 void				modify_value_exit_code(long code);
 int					check_if_var_name_is_valid(char *arg);
@@ -81,7 +80,7 @@ void				ft_close_fd(int *pipefd);
 char				**put_env_in_ar(t_env *envp);
 char				*is_path_exec(char *cmd, char **full_paths);
 char				*get_path(t_env *env, char *cmd);
-int					exec_builtin(t_exec *ex, t_env **env);
+int					exec_builtin(t_exec *ex, t_env **env, int *std_dup);
 int					is_builtin(t_exec *ex);
 int					handle_heredoc(t_exec *ex);
 void				ft_fork(t_exec *cmd, t_env **env, int *std_dup);
