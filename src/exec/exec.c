@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/19 17:03:52 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/19 17:11:24 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -446,6 +446,9 @@ void    ft_process(t_env **env, t_exec *ex)
 	ft_close_fds(std_dup[0]);
 	ft_close_fds(std_dup[1]);
 	if (ex->hd_name != NULL)
+	{
     	unlink(ex->hd_name);
+		free(ex->hd_name);
+	}
 	return ;
 }

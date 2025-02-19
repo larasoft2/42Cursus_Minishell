@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 15:37:43 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/19 16:55:42 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/19 17:13:34 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@ char	*generate_heredoc_name(char	*heredoc)
 
 int	handle_heredoc(t_exec *ex)
 {
-	int		tmp;
-	char	*rline;
 	int		tmp;
 	char	*rline;
 	char	*heredoc;
