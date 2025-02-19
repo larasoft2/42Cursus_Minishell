@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/19 22:27:58 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/20 00:27:45 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ void	ft_open(t_exec *ex, int *fd_in)
     }
 	else if (ex->type == TOKEN_REDIR_HEREDOC)
 	{
-        fprintf(stderr, "NOM DU HEREDOC %s\n", ex->hd_name);
 		if (*fd_in > 2)
 			ft_close_fds(*fd_in);
 		*fd_in = open(ex->hd_name, O_RDONLY);
@@ -90,7 +89,6 @@ void	ft_open(t_exec *ex, int *fd_in)
             return;
         }
         dup2(ex->fd_out, STDOUT_FILENO);
-		// printf("test\n");
         if (ex->fd_out != -1)
         {
             ft_close_fds(ex->fd_out);
@@ -176,7 +174,6 @@ void    handle_redir(t_exec *ex)
 		dup2(fd_in, STDIN_FILENO);
 		ft_close_fds(fd_in);
 	}
-	// printf("test2\n");
 }
 
 void    exec_commands(t_exec *ex, t_env **env, int *std_dup)
@@ -423,6 +420,7 @@ void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
 void    ft_process(t_env **env, t_exec *ex)
 {
 	int		    std_dup[2];
+    t_exec      *current = ex;
 
     ft_init(ex, std_dup);
     if (has_pipe(ex) == 1)
@@ -445,10 +443,15 @@ void    ft_process(t_env **env, t_exec *ex)
     }
 	ft_close_fds(std_dup[0]);
 	ft_close_fds(std_dup[1]);
-	if (ex->hd_name != NULL)
-	{
-    	unlink(ex->hd_name);
-		free(ex->hd_name);
-	}
+    while (current)
+    {
+        if (current->hd_name)
+        {
+            unlink(current->hd_name);
+            free(current->hd_name);
+            current->hd_name = NULL;
+        }
+        current = current->next;
+    }
 	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 15:37:43 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/19 17:13:34 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/20 00:28:22 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ char	*generate_heredoc_name(char	*heredoc)
 		free(nb);
 		heredoc = tmp;
 	}
-	// free(tmp); ??
 	return (heredoc);
 }
 
@@ -65,7 +64,11 @@ int	handle_heredoc(t_exec *ex)
 		return (-1);
 	}
 	delimiter = ex->arg[0];
-	heredoc = generate_heredoc_name(heredoc);
+	heredoc = generate_heredoc_name(heredoc); //send no arg instead of hd
+	if (!heredoc)
+		return (-1);
+	if (ex->hd_name)
+		free(ex->hd_name);
 	ex->hd_name = heredoc;
 	tmp = open(heredoc, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (tmp < 0)

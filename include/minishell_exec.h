@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:08:01 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/19 16:53:35 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/20 00:21:05 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,16 @@ typedef struct s_exec
 	int				fd_in;
 	int				fd_out;
 	long			exit_status;
+	// t_hd			hd;
 	t_token_type	type;
 	struct s_exec *next;
 }					t_exec;
 
+typedef struct	s_hd
+{
+	char			*hd_name;
+	struct s_hd		*next;	
+}	t_hd;
 
 typedef struct s_env
 {
