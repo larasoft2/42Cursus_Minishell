@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:48:29 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/18 11:37:15 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:56:26 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,23 @@ void    restore_fds(int *std_dup)
 	}
 }
 
-int	is_pipe(t_exec *ex)
+int	has_heredoc(t_exec *ex)
+{
+	int	i;
+
+	if (!ex)
+		return (0);
+	i = 0;
+	while (ex)
+	{
+		if (ex->type == TOKEN_REDIR_HEREDOC)
+			return (1);
+		ex = ex->next;
+	}
+	return (-1);
+}
+
+int	has_pipe(t_exec *ex)
 {
 	int	i;
 
@@ -52,7 +68,7 @@ int	is_pipe(t_exec *ex)
 	return (-1);
 }
 
-int	is_redir(t_exec *ex)
+int	has_redir(t_exec *ex)
 {
 	int	i;
 
@@ -61,7 +77,8 @@ int	is_redir(t_exec *ex)
 	i = 0;
 	while (ex)
 	{
-		if (ex->type == TOKEN_REDIR_IN || ex->type == TOKEN_REDIR_OUT)
+		if (ex->type == TOKEN_REDIR_IN || ex->type == TOKEN_REDIR_OUT 
+			|| ex->type == TOKEN_REDIR_APPEND || ex->type == TOKEN_REDIR_HEREDOC)
 			return (1);
 		ex = ex->next;
 	}

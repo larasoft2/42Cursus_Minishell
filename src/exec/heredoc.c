@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 15:37:43 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/17 17:55:00 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/19 17:13:34 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*generate_heredoc_name(char	*heredoc)
 	char	*tmp;
 
 	i = 0;
-	heredoc = ft_strdup("tmpheredoc");
+	heredoc = ft_strdup(".tmpheredoc");
 	if (!heredoc)
 		return (NULL);
 	while (access(heredoc, F_OK) == 0)
@@ -42,7 +42,7 @@ char	*generate_heredoc_name(char	*heredoc)
 		nb = ft_itoa(++i);
 		if (!nb)
 			return (NULL);
-		tmp = ft_strjoin("tmpheredoc", nb);
+		tmp = ft_strjoin(".tmpheredoc", nb);
 		free(nb);
 		heredoc = tmp;
 	}
@@ -50,13 +50,13 @@ char	*generate_heredoc_name(char	*heredoc)
 	return (heredoc);
 }
 
-int    handle_heredoc(t_exec *ex)
+int	handle_heredoc(t_exec *ex)
 {
 	int		tmp;
 	char	*rline;
 	char	*heredoc;
 	char	*delimiter;
-
+	
 	tmp = 0;
 	heredoc = NULL;
 	if (!ex || !ex->arg || !ex->arg[0])
@@ -66,19 +66,20 @@ int    handle_heredoc(t_exec *ex)
 	}
 	delimiter = ex->arg[0];
 	heredoc = generate_heredoc_name(heredoc);
+	ex->hd_name = heredoc;
 	tmp = open(heredoc, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (tmp < 0)
 	{
 		perror("Error opening heredoc\n");
 		unlink(heredoc);
-		return (-1); //return or return -1
+		return (-1);
 	}
-	setup_heredoc_signals_handling();
 	while (1)
 	{
 		rline = readline("> ");
 		if (!rline)
 		{
+			free(heredoc);
 			break;
 			//return ??? exit ???
 		}
@@ -91,10 +92,7 @@ int    handle_heredoc(t_exec *ex)
 		write (tmp, "\n", 1);
 		free(rline);
 	}
-	setup_default_signals_handling();
 	close(tmp);
 	tmp = open(heredoc, O_RDONLY);
-	unlink(heredoc);
-	free(heredoc);
 	return (tmp);
 }
