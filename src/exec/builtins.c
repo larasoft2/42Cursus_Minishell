@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:57:10 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/19 16:54:50 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/19 22:45:34 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	exec_builtin(t_exec *ex, t_env **env, int *std_dup)
 	while (temp)
 	{
 		if (ft_strcmp(temp->arg[0], "echo") == 0)
-			ft_echo(ex);
+			ft_echo(temp);
 		else if (ft_strcmp(temp->arg[0], "cd") == 0)
 			ft_cd(temp, *env);
 		else if (ft_strcmp(temp->arg[0], "pwd") == 0)
@@ -71,7 +71,7 @@ int	exec_builtin(t_exec *ex, t_env **env, int *std_dup)
 		else if (ft_strcmp(temp->arg[0], "env") == 0)
 			ft_env(temp, *env);
 		else if (ft_strcmp(temp->arg[0], "exit") == 0)
-			ft_exit(ex, *env, std_dup);
+			ft_exit(ex, *env, std_dup); 			//pourquoi pas passer temps?
 		temp = temp->next;
 	}
 	return (-1);
