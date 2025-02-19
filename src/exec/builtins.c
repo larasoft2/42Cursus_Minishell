@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:57:10 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/19 16:42:59 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:54:50 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,14 @@ int is_builtin(t_exec *ex)
 			return (1);
 		else if (ft_strcmp(temp->arg[0], "exit") == 0)
 			return (1);
+		if (temp->next == NULL)
+			break;
 		temp = temp->next;
 	}
 	return (-1);
 }
 
-int	exec_builtin(t_exec *ex, t_env **env)
+int	exec_builtin(t_exec *ex, t_env **env, int *std_dup)
 {
 	t_exec	*temp;
 
@@ -69,7 +71,7 @@ int	exec_builtin(t_exec *ex, t_env **env)
 		else if (ft_strcmp(temp->arg[0], "env") == 0)
 			ft_env(temp, *env);
 		else if (ft_strcmp(temp->arg[0], "exit") == 0)
-			ft_exit(ex);
+			ft_exit(ex, *env, std_dup);
 		temp = temp->next;
 	}
 	return (-1);

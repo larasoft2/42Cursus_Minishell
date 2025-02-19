@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/19 16:48:25 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/19 17:03:52 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void ft_error(t_token_node *token, int *pipefd)
 {
     ft_putstr_fd(strerror(errno), STDERR_FILENO);
     ft_putstr_fd(": ", STDERR_FILENO);
-    if (token && (token->type == TOKEN_REDIR_IN || token->type == TOKEN_REDIR_OUT 
+    if (token && (token->type == TOKEN_REDIR_IN || token->type == TOKEN_REDIR_OUT
 	|| token->type == TOKEN_REDIR_APPEND || token->type == TOKEN_REDIR_HEREDOC))
         ft_putendl_fd(token->value, STDERR_FILENO);
     else
@@ -55,7 +55,7 @@ void	ft_close_fds(int fd)
 
 void	ft_open(t_exec *ex, int *fd_in)
 {
-    if (ex->type == TOKEN_REDIR_IN) 
+    if (ex->type == TOKEN_REDIR_IN)
     {
         if (*fd_in > 2)
             ft_close_fds(*fd_in);
@@ -96,7 +96,7 @@ void	ft_open(t_exec *ex, int *fd_in)
             ft_close_fds(ex->fd_out);
             ex->fd_out = -1;
         }
-    } 
+    }
     else
     {
         *fd_in = STDIN_FILENO;
@@ -107,24 +107,31 @@ void	ft_open(t_exec *ex, int *fd_in)
 void    ft_exec(t_exec *ex, t_env **env)
 {
     char *path_cmd;
-    
-    path_cmd = get_path(*env, ex->arg[0]);
+	char	**env_array;
+
+	path_cmd = get_path(*env, ex->arg[0]);
+	env_array = put_env_in_ar(*env);
     if (!path_cmd)
     {
-        fprintf(stderr, "command not found: %s\n", ex->arg[0]);
-        exit(EXIT_FAILURE); //free
+		print_error_exec_message(COMMAND_NOT_FOUND, ex->arg[0]);
+		ft_free_and_null(env_array);
+		free_exec_list(&ex);
+		free_env_list(env);
+        exit(EXIT_FAILURE);
     }
-    execve(path_cmd, ex->arg, put_env_in_ar(*env));
+    execve(path_cmd, ex->arg, env_array);
     perror("execve");
+	ft_free_and_null(env_array);
+	free(path_cmd);
+	free_exec_list(&ex);
     exit(EXIT_FAILURE);
-
 }
 
 void ft_fork(t_exec *cmd, t_env **env, int *std_dup)
 {
     pid_t   pid;
     int     status;
-    
+
     while (cmd)
     {
         while (cmd && (cmd->type == TOKEN_REDIR_IN || cmd->type == TOKEN_REDIR_OUT 
@@ -135,11 +142,14 @@ void ft_fork(t_exec *cmd, t_env **env, int *std_dup)
         pid = fork();
         if (pid == -1)
         {
-            perror(strerror(errno)); 
+            perror(strerror(errno));
             return;
         }
+		if (pid > 0)
+			setup_command_mode_signals_handling();
         if (pid == 0)
         {
+			setup_command_mode_signals_handling();
             ft_close_fd(std_dup);
             ft_exec(cmd, env);
         }
@@ -178,7 +188,7 @@ void    exec_commands(t_exec *ex, t_env **env, int *std_dup)
 	{
     	if ((command_nb == 1) && (is_builtin(ex) == 1))
     	{
-			exec_builtin(ex, env);
+			exec_builtin(ex, env, std_dup);
             restore_fds(std_dup);
             return ;
         }

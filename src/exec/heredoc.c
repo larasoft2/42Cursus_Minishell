@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 15:37:43 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/19 15:13:37 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:55:42 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 //Si le fichier existe tu rajoutes 1 puis strjoin(name, atoi(I)s
 
 char	*generate_heredoc_name(char	*heredoc)
-{	
+{
 	int		i;
 	char	*nb;
 	char	*tmp;
@@ -52,6 +52,8 @@ char	*generate_heredoc_name(char	*heredoc)
 
 int	handle_heredoc(t_exec *ex)
 {
+	int		tmp;
+	char	*rline;
 	int		tmp;
 	char	*rline;
 	char	*heredoc;

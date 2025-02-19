@@ -6,11 +6,9 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/13 18:29:06 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/18 18:28:29 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -64,14 +62,16 @@ void	print_error_exec_message(t_error error, char *word);
 void	free_token_list(t_token_node **list);
 void	free_env_list(t_env **list);
 void	free_exec_list(t_exec **list);
-void	free_routine_all_lists(t_token_node **tokens, t_env **env,
-			t_exec **exec);
+void	close_and_free_before_exit(t_env *env, t_exec *ex, int *std_dup);
 
 // INIT
 void	init_struct(t_token_node *token_list);
 
 // MINISHELL LOOP
-int		parsing(char *input, t_token_node **token_list, t_env **env_final, t_exec **exec_list);
+int		parsing(char *input, t_token_node **token_list, t_env **env_final);
+int		check_syntax_input(char *input, int *syntax_status);
+int		tokenize_parsing(char *input, t_token_node **token_list,
+			t_env **env_final, t_exec **exec_list);
 
 // ENVIRONMENT
 void	append_list(t_env **head, char *key, char *value);
@@ -79,6 +79,13 @@ t_env	*get_env_list(char **realenv);
 void	print_env(t_env *env);
 
 // SIGNALS
-void	init_signals(void);
+void	setup_default_signals_handling(void);
+void	setup_main_prompt_signals_handling(void);
+void	setup_heredoc_signals_handling(void);
+void	setup_command_mode_signals_handling(void);
+void	sigint_handler(int sig);
+void	sigint_prompt(int sig);
+void	sigint_heredoc(int sig);
+void	sigquit_handler(int sig);
 
 #endif
