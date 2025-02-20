@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/20 00:27:45 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/20 22:30:37 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	ft_open(t_exec *ex, int *fd_in)
         if (*fd_in > 2)
             ft_close_fds(*fd_in);
         *fd_in = open(ex->arg[0], O_RDONLY);
-        if (*fd_in < 0) 
+        if (*fd_in < 0)
         {
             perror("Error opening input file");
             return;
@@ -77,7 +77,7 @@ void	ft_open(t_exec *ex, int *fd_in)
 			return;
 		}
 	}
-    else if (ex->type == TOKEN_REDIR_OUT || ex->type == TOKEN_REDIR_APPEND) 
+    else if (ex->type == TOKEN_REDIR_OUT || ex->type == TOKEN_REDIR_APPEND)
     {
         if (ex->type == TOKEN_REDIR_OUT)
             ex->fd_out = open(ex->arg[0], O_CREAT | O_WRONLY | O_TRUNC, 0644);
@@ -132,7 +132,7 @@ void ft_fork(t_exec *cmd, t_env **env, int *std_dup)
 
     while (cmd)
     {
-        while (cmd && (cmd->type == TOKEN_REDIR_IN || cmd->type == TOKEN_REDIR_OUT 
+        while (cmd && (cmd->type == TOKEN_REDIR_IN || cmd->type == TOKEN_REDIR_OUT
             || cmd->type == TOKEN_REDIR_APPEND || cmd->type == TOKEN_PIPE || cmd->type == TOKEN_REDIR_HEREDOC))
             cmd = cmd->next;
         if (!cmd || cmd->type != TOKEN_WORD)
@@ -206,7 +206,7 @@ void    handle_redir_in_pipe(t_exec *ex, int pipefd)
 	int		fd_in;
 
 	fd_in = pipefd;
-	while (current) 
+	while (current)
     {
         if (current->type > 1)
             ft_open(current, &fd_in);
@@ -235,7 +235,7 @@ void    handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup)
     ft_close_fd(std_dup);
     while (ex)
     {
-        while (ex && (ex->type == TOKEN_REDIR_IN || ex->type == TOKEN_REDIR_OUT 
+        while (ex && (ex->type == TOKEN_REDIR_IN || ex->type == TOKEN_REDIR_OUT
         || ex->type == TOKEN_REDIR_APPEND || ex->type == TOKEN_REDIR_HEREDOC))
                 ex = ex->next;
         if (!ex || ex->type != TOKEN_WORD)
@@ -307,7 +307,7 @@ void    ft_open_heredocs(t_exec *ex, int pipefd)
     int     fd_in;
 
     fd_in = pipefd;
-    while (current) 
+    while (current)
     {
         if (current->type == TOKEN_REDIR_HEREDOC)
         {
@@ -343,9 +343,33 @@ void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
 	block_begin = ex;
 	while (current)
 	{
-		while (current && (current->type == TOKEN_REDIR_IN || current->type == TOKEN_REDIR_OUT 
+		while (current && (current->type == TOKEN_REDIR_IN || current->type == TOKEN_REDIR_OUT
 		|| current->type == TOKEN_REDIR_APPEND || current->type == TOKEN_REDIR_HEREDOC))
 				current = current->next;
+		t_exec *temp = block_begin;
+		bool has_command = false;
+		while (temp && temp != current)
+		{
+			if (temp->type == TOKEN_WORD)
+			{
+				has_command = true;
+				break;
+			}
+			temp = temp->next;
+		}
+		if (!has_command && current && current->type == TOKEN_PIPE)
+		{
+			if (pipe(pipefd) == -1)
+			{
+				perror("pipe failed");
+				exit(EXIT_FAILURE);
+			}
+			prev_pipe_fd = pipefd[0];
+			close(pipefd[1]);  // Close the write end since we're not writing
+			current = current->next; // Move past the pipe
+			block_begin = current;   // Start a new block
+			continue;                // Skip the rest of the loop
+		}
 		if (!current || current->type != TOKEN_WORD)
 			break;
 		temp_in = prev_pipe_fd;
@@ -398,7 +422,7 @@ void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
 			close(pipefd[1]);
 			pipefd[1] = -1;
 		}
-		while (current && current->type != TOKEN_PIPE)   
+		while (current && current->type != TOKEN_PIPE)
 			current = current->next;
 		if (current && current->type == TOKEN_PIPE)
 			current = current->next;
@@ -438,7 +462,7 @@ void    ft_process(t_env **env, t_exec *ex)
     {
         if (has_heredoc(ex) == 1)
         	ft_open_heredocs(ex, ex->fd_in);
-        handle_redir(ex); 
+        handle_redir(ex);
         exec_commands(ex, env, std_dup);
     }
 	ft_close_fds(std_dup[0]);

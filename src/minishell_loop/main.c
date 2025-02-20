@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:58:59 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/19 17:18:01 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/20 18:31:44 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	minishell_loop(char *input, t_token_node **token_list,
 				exec_list);
 	if (syntax_status == EXIT_SUCCESS && *input)
 	{
+		//print_tokens_exec_list(*exec_list);
 		ft_process(env_final, *exec_list);
 		free_exec_list(exec_list);
 	}
@@ -53,15 +54,16 @@ int	main(int ac, char **av, char **env)
 	token_list = NULL;
 	exec_list = NULL;
 	env_final = get_env_list(env);
-	setup_default_signals_handling();
+	// setup_default_signals_handling();
 	while (1)
 	{
-		setup_main_prompt_signals_handling();
+		// setup_main_prompt_signals_handling();
 		input = readline("minishell> ");
 		if (!input)
 			check_ctrl_d(&env_final, exec_list);
 		minishell_loop(input, &token_list, &env_final, &exec_list);
-		setup_default_signals_handling();
+		//print_tokens_exec_list(exec_list);
+		// setup_default_signals_handling();
 	}
 	return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:48:29 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/19 16:56:26 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/20 17:53:51 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,8 @@ int	has_heredoc(t_exec *ex)
 
 int	has_pipe(t_exec *ex)
 {
-	int	i;
-
 	if (!ex)
 		return (0);
-	i = 0;
 	while (ex)
 	{
 		if (ex->type == TOKEN_PIPE)
