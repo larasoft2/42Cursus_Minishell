@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:18:24 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/18 18:31:56 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/20 15:43:42 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	sigquit_handler(int sig)
 {
 	(void)sig;
+	g_signal = 128 + SIGQUIT;
 	modify_value_exit_code(128 + SIGQUIT);
 	write(STDOUT_FILENO, "Quit (core dumped)\n", 20);
 }
@@ -22,6 +23,7 @@ void	sigquit_handler(int sig)
 void	sigint_prompt(int sig)
 {
 	(void)sig;
+	g_signal = 128 + SIGINT;
 	modify_value_exit_code(128 + SIGINT);
 	write(STDIN_FILENO, "\n", 1);
 	rl_on_new_line();
@@ -32,5 +34,12 @@ void	sigint_prompt(int sig)
 void	sigint_handler(int sig)
 {
 	(void)sig;
+	g_signal = 128 + SIGINT;
 	write(STDOUT_FILENO, "\n", 1);
+}
+
+void	sigpipe_handler(int sig)
+{
+	(void)sig;
+	g_signal = 0;
 }

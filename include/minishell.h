@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/18 18:28:29 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/20 15:43:56 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 # include <stdbool.h>
 # include <unistd.h>
 # include <limits.h>
+
+extern int g_signal;
 
 // STRUCTURES ///////////////////////////////////////////////////////////////
 typedef enum e_error
@@ -87,5 +89,6 @@ void	sigint_handler(int sig);
 void	sigint_prompt(int sig);
 void	sigint_heredoc(int sig);
 void	sigquit_handler(int sig);
+void	sigpipe_handler(int sig);
 
 #endif

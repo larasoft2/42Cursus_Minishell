@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 15:37:43 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/19 17:13:34 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/20 16:21:15 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,15 @@
 
 //unlink to remove file
 //Si le fichier existe tu rajoutes 1 puis strjoin(name, atoi(I)s
+
+void	print_delimiter_error_message(char *delimiter)
+{
+	ft_putstr_fd("minishell: warning: here-document delimited by ", 2);
+	ft_putstr_fd("end-of-file (wanted '", 2);
+	if (delimiter != NULL)
+		ft_putstr_fd(delimiter, 2);
+	ft_putstr_fd("')\n", 2);
+}
 
 char	*generate_heredoc_name(char	*heredoc)
 {
@@ -56,7 +65,7 @@ int	handle_heredoc(t_exec *ex)
 	char	*rline;
 	char	*heredoc;
 	char	*delimiter;
-	
+
 	tmp = 0;
 	heredoc = NULL;
 	if (!ex || !ex->arg || !ex->arg[0])
@@ -74,14 +83,19 @@ int	handle_heredoc(t_exec *ex)
 		unlink(heredoc);
 		return (-1);
 	}
+	setup_heredoc_signals_handling();
 	while (1)
 	{
+		if (g_signal == SIGINT)
+			break ;
 		rline = readline("> ");
+		if (g_signal == SIGINT)
+			break ;
 		if (!rline)
 		{
-			free(heredoc);
+			//free(heredoc);
+			print_delimiter_error_message(delimiter);
 			break;
-			//return ??? exit ???
 		}
 		if (!ft_strcmp(rline, delimiter))
 		{
@@ -94,5 +108,7 @@ int	handle_heredoc(t_exec *ex)
 	}
 	close(tmp);
 	tmp = open(heredoc, O_RDONLY);
+	g_signal = 0;
+	setup_default_signals_handling();
 	return (tmp);
 }
