@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:57:10 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/19 22:45:34 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/20 23:39:48 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 // environment variable name,
 // and returns a pointer to the corresponding value string.
 
-int is_builtin(t_exec *ex)
+int	is_builtin(t_exec *ex)
 {
 	t_exec	*temp;
 
@@ -28,22 +28,14 @@ int is_builtin(t_exec *ex)
 		return (-1);
 	while (temp)
 	{
-		if (ft_strcmp(temp->arg[0], "echo") == 0)
+		if (ft_strcmp(temp->arg[0], "echo") == 0
+			|| ft_strcmp(temp->arg[0], "cd") == 0
+			|| ft_strcmp(temp->arg[0], "pwd") == 0
+			|| ft_strcmp(temp->arg[0], "export") == 0
+			|| ft_strcmp(temp->arg[0], "unset") == 0
+			|| ft_strcmp(temp->arg[0], "env") == 0
+			|| ft_strcmp(temp->arg[0], "exit") == 0)
 			return (1);
-		else if (ft_strcmp(temp->arg[0], "cd") == 0)
-			return (1);
-		else if (ft_strcmp(temp->arg[0], "pwd") == 0)
-			return (1);
-		else if (ft_strcmp(temp->arg[0], "export") == 0)
-			return (1);
-		else if (ft_strcmp(temp->arg[0], "unset") == 0)
-			return (1);
-		else if (ft_strcmp(temp->arg[0], "env") == 0)
-			return (1);
-		else if (ft_strcmp(temp->arg[0], "exit") == 0)
-			return (1);
-		if (temp->next == NULL)
-			break;
 		temp = temp->next;
 	}
 	return (-1);
@@ -71,7 +63,7 @@ int	exec_builtin(t_exec *ex, t_env **env, int *std_dup)
 		else if (ft_strcmp(temp->arg[0], "env") == 0)
 			ft_env(temp, *env);
 		else if (ft_strcmp(temp->arg[0], "exit") == 0)
-			ft_exit(ex, *env, std_dup); 			//pourquoi pas passer temps?
+			ft_exit(ex, *env, std_dup);
 		temp = temp->next;
 	}
 	return (-1);

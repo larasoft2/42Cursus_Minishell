@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:46 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/11 19:52:27 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/20 23:47:25 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,11 @@ void	ft_close_fd(int *pipefd)
 	}
 }
 
-char	*ft_strndup(const char *s, size_t n) // protection si string vide??
+/* protection si string vide??*/
+char	*ft_strndup(const char *s, size_t n)
 {
-	size_t i;
-	char *dest;
+	size_t	i;
+	char	*dest;
 
 	i = 0;
 	dest = (char *)malloc(sizeof(char) * (n + 1));
