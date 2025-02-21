@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:57:10 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/20 23:39:48 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/21 14:38:48 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int	is_builtin(t_exec *ex)
 			|| ft_strcmp(temp->arg[0], "env") == 0
 			|| ft_strcmp(temp->arg[0], "exit") == 0)
 			return (1);
+		if (temp->next == NULL)
+			break ;
 		temp = temp->next;
 	}
 	return (-1);
