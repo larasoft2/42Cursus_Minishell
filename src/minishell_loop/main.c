@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:58:59 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/21 16:29:56 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/21 19:30:02 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ int	main(int ac, char **av, char **env)
 	input = NULL;
 	token_list = NULL;
 	exec_list = NULL;
-	env_final = get_env_list(env);
+	env_final = NULL;
+	env_final = set_env(env_final, env); //if ac != 1 ?
 	setup_default_signals_handling();
 	while (1)
 	{
@@ -62,7 +63,6 @@ int	main(int ac, char **av, char **env)
 		if (!input)
 			check_ctrl_d(&env_final, exec_list);
 		minishell_loop(input, &token_list, &env_final, &exec_list);
-		//print_tokens_exec_list(exec_list);
 		setup_default_signals_handling();
 	}
 	return (EXIT_SUCCESS);

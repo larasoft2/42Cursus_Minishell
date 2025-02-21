@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/21 16:26:40 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/21 16:48:35 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ void    ft_exec(t_exec *ex, t_env **env)
 	ft_free_and_null(env_array);
 	free(path_cmd);
 	free_exec_list(&ex);
+	free_env_list(env);
     exit(EXIT_FAILURE);
 }
 
@@ -469,7 +470,6 @@ void ft_process(t_env **env, t_exec *ex)
     ft_init(ex, std_dup);
 
     // If no command but has heredoc, treat like 'cat'
-	printf("g_signal ft_process = %d\n", g_signal);
     if (!has_command && has_heredoc(ex) == 1 && g_signal != SIGINT)
     {
         ft_open_heredocs(ex, ex->fd_in);

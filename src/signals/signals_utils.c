@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:18:24 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/20 15:43:42 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/21 18:02:09 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	sigint_handler(int sig)
 {
 	(void)sig;
 	g_signal = 128 + SIGINT;
+	modify_value_exit_code(128 + SIGINT);
 	write(STDOUT_FILENO, "\n", 1);
 }
 
