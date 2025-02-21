@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/20 23:15:16 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/21 17:42:09 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,42 +16,9 @@
 // then options and args as second
 // env as last
 // ft_close_fd at the end
-
-
 // 	// check errors, parsing???
-
-void print_exec_args(t_exec *ex)
-{
-    while (ex)
-    {
-        printf("Arguments for command:\n");
-        for (int i = 0; ex->arg && ex->arg[i]; i++)
-            printf("  [%d]: %s\n", i, ex->arg[i]);
-        ex = ex->next;
-    }
-}
-
-void ft_error(t_token_node *token, int *pipefd)
-{
-    ft_putstr_fd(strerror(errno), STDERR_FILENO);
-    ft_putstr_fd(": ", STDERR_FILENO);
-    if (token && (token->type == TOKEN_REDIR_IN || token->type == TOKEN_REDIR_OUT
-	|| token->type == TOKEN_REDIR_APPEND || token->type == TOKEN_REDIR_HEREDOC))
-        ft_putendl_fd(token->value, STDERR_FILENO);
-    else
-        ft_putendl_fd("Invalid redirection or command.", STDERR_FILENO);
-    ft_close_fd(pipefd);
-    //exit(1);
-}
-
 // access F OK check infiles chez Jean pour que ca ne cree pas outfile si infile invalide
 //error check useless
-
-void	ft_close_fds(int fd)
-{
-	if (fd > 2)
-		close(fd);
-}
 
 void	ft_open(t_exec *ex, int *fd_in)
 {
@@ -448,7 +415,6 @@ void ft_process(t_env **env, t_exec *ex)
     t_exec      *current = ex;
     bool        has_command = false;
 
-    // Check if there are any actual commands
     current = ex;
     while (current)
     {
@@ -459,21 +425,16 @@ void ft_process(t_env **env, t_exec *ex)
         }
         current = current->next;
     }
-
     ft_init(ex, std_dup);
-
-    // If no command but has heredoc, treat like 'cat'
     if (!has_command && has_heredoc(ex) == 1)
     {
         ft_open_heredocs(ex, ex->fd_in);
         handle_redir(ex);
-        // If no command specified with heredoc, read from stdin and write to stdout
         dup2(std_dup[0], STDIN_FILENO);
         dup2(std_dup[1], STDOUT_FILENO);
     }
     else if (has_pipe(ex) == 1)
     {
-        // Rest of your existing code...
         if (has_redir(ex) != 1)
             handle_pipes_no_redir(ex, env, std_dup);
         else
@@ -490,8 +451,6 @@ void ft_process(t_env **env, t_exec *ex)
         handle_redir(ex);
         exec_commands(ex, env, std_dup);
     }
-
-    // Clean up heredoc temporary files
     ft_close_fds(std_dup[0]);
     ft_close_fds(std_dup[1]);
     current = ex;

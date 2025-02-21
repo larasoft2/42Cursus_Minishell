@@ -6,25 +6,11 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:46 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/20 23:47:25 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/21 17:41:27 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	ft_close_fd(int *pipefd)
-{
-	if (pipefd[0] != -1)
-	{
-		close(pipefd[0]);
-		pipefd[0] = -1;
-	}
-	if (pipefd[1] != -1)
-	{
-		close(pipefd[1]);
-		pipefd[1] = -1;
-	}
-}
 
 /* protection si string vide??*/
 char	*ft_strndup(const char *s, size_t n)

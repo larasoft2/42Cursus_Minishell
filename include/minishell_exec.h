@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:08:01 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/20 22:31:07 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/21 17:41:51 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int					has_heredoc(t_exec *ex);
 char				*ft_strndup(const char *s, size_t n);
 void				ft_init(t_exec *ex, int *std_dup);
 void    			restore_fds(int *std_dup);
+void				ft_close_fds(int fd);
 void				ft_close_fd(int *pipefd);
 
 // EXEC//

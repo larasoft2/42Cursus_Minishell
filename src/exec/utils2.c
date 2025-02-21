@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:48:29 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/20 23:50:16 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/21 17:41:20 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,6 @@ void	ft_init(t_exec *ex, int *std_dup)
 	ex->fd_out = STDOUT_FILENO;
 	std_dup[0] = dup(STDIN_FILENO);
 	std_dup[1] = dup(STDOUT_FILENO);
-}
-
-void	restore_fds(int *std_dup)
-{
-	dup2(std_dup[0], STDIN_FILENO);
-	if (std_dup[0] != -1)
-	{
-		close(std_dup[0]);
-		std_dup[0] = -1;
-	}
-	dup2(std_dup[1], STDOUT_FILENO);
-	if (std_dup[1] != -1)
-	{
-		close(std_dup[1]);
-		std_dup[1] = -1;
-	}
 }
 
 int	has_heredoc(t_exec *ex)
