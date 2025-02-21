@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/02/18 18:28:29 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/21 18:35:49 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 # include <stdbool.h>
 # include <unistd.h>
 # include <limits.h>
+
+extern int g_signal;
 
 // STRUCTURES ///////////////////////////////////////////////////////////////
 typedef enum e_error
@@ -77,6 +79,7 @@ int		tokenize_parsing(char *input, t_token_node **token_list,
 void	append_list(t_env **head, char *key, char *value);
 t_env	*get_env_list(char **realenv);
 void	print_env(t_env *env);
+t_env	*set_env(t_env *env_final, char **env);
 
 // SIGNALS
 void	setup_default_signals_handling(void);
@@ -87,5 +90,6 @@ void	sigint_handler(int sig);
 void	sigint_prompt(int sig);
 void	sigint_heredoc(int sig);
 void	sigquit_handler(int sig);
+void	sigpipe_handler(int sig);
 
 #endif

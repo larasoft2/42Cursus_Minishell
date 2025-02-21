@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_exec.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:08:01 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/19 16:53:35 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/21 18:03:45 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int					ft_unset(t_exec *ex, t_env **env);
 int					ft_cd(t_exec *ex, t_env *env);
 int					ft_env(t_exec *ex, t_env *env);
 int					ft_export(t_exec *exec, t_env **env);
+void				add_var_to_env(char *arg, t_env **env);
 int					ft_exit(t_exec *ex, t_env *env, int *std_dup);
 long				*get_exit_status(void);
 void				modify_value_exit_code(long code);

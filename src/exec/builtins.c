@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:57:10 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/19 16:54:50 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/20 10:18:13 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	exec_builtin(t_exec *ex, t_env **env, int *std_dup)
 	while (temp)
 	{
 		if (ft_strcmp(temp->arg[0], "echo") == 0)
-			ft_echo(ex);
+			ft_echo(temp);
 		else if (ft_strcmp(temp->arg[0], "cd") == 0)
 			ft_cd(temp, *env);
 		else if (ft_strcmp(temp->arg[0], "pwd") == 0)

@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 13:44:04 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/27 17:43:05 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/20 20:51:03 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*str_append(char *str, char c)
 	new_str = malloc(sizeof(char) * (len + 2));
 	if (!new_str)
 	{
-		ft_putstr_fd("Error: Memory allocation failes\n", STDERR_FILENO);
+		ft_putstr_fd("Error: Memory allocation failed\n", STDERR_FILENO);
 		return (NULL);
 	}
 	while (i < len)

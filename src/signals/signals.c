@@ -6,11 +6,13 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 16:33:15 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/18 18:29:30 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:55:56 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int g_signal = 0;
 
 void	setup_command_mode_signals_handling(void)
 {
@@ -39,18 +41,6 @@ void	setup_main_prompt_signals_handling(void)
 void	setup_default_signals_handling(void)
 {
 	signal(SIGINT, SIG_IGN);
-	signal(SIGTERM, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGTSTP, SIG_IGN);
-	signal(SIGCONT, SIG_IGN);
-	signal(SIGTTIN, SIG_IGN);
-	signal(SIGTTOU, SIG_IGN);
-	signal(SIGPIPE, SIG_IGN);
-}
-
-void	setup_heredoc_signals_handling(void)
-{
-	signal(SIGINT, sigint_heredoc);
 	signal(SIGTERM, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGTSTP, SIG_IGN);
