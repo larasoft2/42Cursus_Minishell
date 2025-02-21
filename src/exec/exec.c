@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/21 17:42:09 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/21 18:56:29 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,55 +19,6 @@
 // 	// check errors, parsing???
 // access F OK check infiles chez Jean pour que ca ne cree pas outfile si infile invalide
 //error check useless
-
-void	ft_open(t_exec *ex, int *fd_in)
-{
-    if (ex->type == TOKEN_REDIR_IN)
-    {
-        if (*fd_in > 2)
-            ft_close_fds(*fd_in);
-        *fd_in = open(ex->arg[0], O_RDONLY);
-        if (*fd_in < 0)
-        {
-            perror("Error opening input file");
-            return;
-        }
-    }
-	else if (ex->type == TOKEN_REDIR_HEREDOC)
-	{
-		if (*fd_in > 2)
-			ft_close_fds(*fd_in);
-		*fd_in = open(ex->hd_name, O_RDONLY);
-		if (*fd_in < 0)
-		{
-			perror("Error opening heredoc file");
-			return;
-		}
-	}
-    else if (ex->type == TOKEN_REDIR_OUT || ex->type == TOKEN_REDIR_APPEND)
-    {
-        if (ex->type == TOKEN_REDIR_OUT)
-            ex->fd_out = open(ex->arg[0], O_CREAT | O_WRONLY | O_TRUNC, 0644);
-        else if (ex->type == TOKEN_REDIR_APPEND)
-            ex->fd_out = open(ex->arg[0], O_CREAT | O_WRONLY | O_APPEND, 0644);
-        if (ex->fd_out < 0)
-        {
-            perror("Error opening output file");
-            return;
-        }
-        dup2(ex->fd_out, STDOUT_FILENO);
-        if (ex->fd_out != -1)
-        {
-            ft_close_fds(ex->fd_out);
-            ex->fd_out = -1;
-        }
-    }
-    else
-    {
-        *fd_in = STDIN_FILENO;
-        ex->fd_out = STDOUT_FILENO;
-    }
-}
 
 void    ft_exec(t_exec *ex, t_env **env)
 {
@@ -123,73 +74,7 @@ void ft_fork(t_exec *cmd, t_env **env, int *std_dup)
     while (wait(&status) > 0); //waipitd?
 }
 
-void    handle_redir(t_exec *ex)
-{
-    t_exec  *current;
-	int		fd_in;
-
-	fd_in = 0;
-    current = ex;
-    while (current)
-    {
-        if (current->type > 1)
-            ft_open(current, &fd_in);
-        current = current->next;
-    }
-	if (fd_in > 2)
-	{
-		dup2(fd_in, STDIN_FILENO);
-		ft_close_fds(fd_in);
-	}
-}
-
-void    exec_commands(t_exec *ex, t_env **env, int *std_dup)
-{
-    int 	command_nb;
-
-    command_nb = count_command(ex);
-    while (ex)
-	{
-    	if ((command_nb == 1) && (is_builtin(ex) == 1))
-    	{
-			exec_builtin(ex, env, std_dup);
-            restore_fds(std_dup);
-            return ;
-        }
-		else
-		{
-			ex->fd_in = STDIN_FILENO;
-			ft_fork(ex, env, std_dup);
-            restore_fds(std_dup);
-		 	return ;
-		}
-		ex = ex->next;
-	}
-}
-
-void    handle_redir_in_pipe(t_exec *ex, int pipefd)
-{
-    t_exec  *current = ex;
-	int		fd_in;
-
-	fd_in = pipefd;
-	while (current)
-    {
-        if (current->type > 1)
-            ft_open(current, &fd_in);
-        if (current->type == TOKEN_PIPE)
-            break;
-        else
-            current = current->next;
-    }
-	if (fd_in > 2)
-	{
-		dup2(fd_in, STDIN_FILENO);
-		ft_close_fds(fd_in);
-	}
-}
-
-void    handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup)
+void    handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup) //pipe no redir
 {
     int         pipefd[2];
     int         fd_in;
@@ -268,43 +153,17 @@ void    handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup)
     ft_close_fd(pipefd);
 }
 
-void    ft_open_heredocs(t_exec *ex, int pipefd)
-{
-    t_exec  *current = ex;
-    int     fd_in;
-
-    fd_in = pipefd;
-    while (current)
-    {
-        if (current->type == TOKEN_REDIR_HEREDOC)
-        {
-            if (fd_in > 2)
-                ft_close_fds(fd_in);
-            fd_in = handle_heredoc(current);
-            if (fd_in < 0)
-            {
-                perror("Error handling heredoc");
-                return;
-            }
-        }
-        current = current->next;
-    }
-    if (fd_in > 2)
-    {
-        dup2(fd_in, STDIN_FILENO);
-        ft_close_fds(fd_in);
-    }
-}
-
-void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
+void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup) //pipe + redir
 {
 	int			pipefd[2];
 	int			status;
 	int 		prev_pipe_fd = -1;
 	int			temp_in;
+    bool        has_command;
 	pid_t		pid;
 	t_exec		*current;
 	t_exec		*block_begin;
+    t_exec      *temp;
 
 	current = ex;
 	block_begin = ex;
@@ -313,8 +172,8 @@ void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
 		while (current && (current->type == TOKEN_REDIR_IN || current->type == TOKEN_REDIR_OUT
 		|| current->type == TOKEN_REDIR_APPEND || current->type == TOKEN_REDIR_HEREDOC))
 				current = current->next;
-		t_exec *temp = block_begin;
-		bool has_command = false;
+		temp = block_begin;
+		has_command = false;
 		while (temp && temp != current)
 		{
 			if (temp->type == TOKEN_WORD)
@@ -409,12 +268,39 @@ void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
 	while (wait(&status) > 0); //waitpid
 }
 
+
+
+void    exec_commands(t_exec *ex, t_env **env, int *std_dup)
+{
+    int 	command_nb;
+
+    command_nb = count_command(ex);
+    while (ex)
+	{
+    	if ((command_nb == 1) && (is_builtin(ex) == 1))
+    	{
+			exec_builtin(ex, env, std_dup);
+            restore_fds(std_dup);
+            return ;
+        }
+		else
+		{
+			ex->fd_in = STDIN_FILENO;
+			ft_fork(ex, env, std_dup);
+            restore_fds(std_dup);
+		 	return ;
+		}
+		ex = ex->next;
+	}
+}
+
 void ft_process(t_env **env, t_exec *ex)
 {
     int         std_dup[2];
     t_exec      *current = ex;
-    bool        has_command = false;
+    bool        has_command;
 
+    has_command = false;
     current = ex;
     while (current)
     {
@@ -453,7 +339,7 @@ void ft_process(t_env **env, t_exec *ex)
     }
     ft_close_fds(std_dup[0]);
     ft_close_fds(std_dup[1]);
-    current = ex;
+    current = ex; //pq j'ai mis ca
     while (current)
     {
         if (current->hd_name)
