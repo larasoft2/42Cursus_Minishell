@@ -6,11 +6,26 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:40:57 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/21 17:43:30 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/21 23:51:22 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_exec	*get_next_exec_token(t_exec *ex)
+{
+	ex = ex->next;
+	if (ex && ex->type == TOKEN_PIPE)
+		ex = ex->next;
+	return (ex);
+}
+
+t_exec	*find_next_valid_token(t_exec *ex)
+{
+	while (ex && (ex->type > 1))
+		ex = ex->next;
+	return (ex);
+}
 
 void	restore_fds(int *std_dup)
 {
