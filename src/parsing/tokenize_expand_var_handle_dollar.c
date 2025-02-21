@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 13:46:04 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/18 17:46:04 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/20 20:49:46 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ char	*handle_exit_error(char *final_string, int *i)
 	exit_status = *get_exit_status();
 	temp_itoa = ft_itoa(exit_status);
 	final_string = ft_strjoin(temp, temp_itoa);
+	if (!final_string)
+		return (NULL);
 	(*i)++;
 	free(temp);
 	free(temp_itoa);

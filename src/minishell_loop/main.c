@@ -3,21 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:58:59 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/19 17:18:01 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/21 16:29:56 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 void	minishell_loop(char *input, t_token_node **token_list,
-		t_env **env_final, t_exec **exec_list)
+	t_env **env_final, t_exec **exec_list)
 {
 	int	syntax_status;
 
 	syntax_status = 0;
+	g_signal = 0;
 	add_history(input);
 	if (check_syntax_input(input, &syntax_status) == EXIT_FAILURE)
 		free(input);
@@ -61,6 +62,7 @@ int	main(int ac, char **av, char **env)
 		if (!input)
 			check_ctrl_d(&env_final, exec_list);
 		minishell_loop(input, &token_list, &env_final, &exec_list);
+		//print_tokens_exec_list(exec_list);
 		setup_default_signals_handling();
 	}
 	return (EXIT_SUCCESS);

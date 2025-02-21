@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/20 15:59:52 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/21 16:26:40 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	ft_open(t_exec *ex, int *fd_in)
             return;
         }
     }
-	else if (ex->type == TOKEN_REDIR_HEREDOC)
+	else if (ex->type == TOKEN_REDIR_HEREDOC && g_signal != SIGINT)
 	{
 		if (*fd_in > 2)
 			ft_close_fds(*fd_in);
@@ -259,10 +259,10 @@ void    handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup)
             perror("fork failed");
             exit(EXIT_FAILURE);
         }
-		if (pid > 0)
+        if (pid > 0)
 			setup_command_mode_signals_handling();
-        if (pid == 0) // child
-        {
+		if (pid == 0) // child
+		{
 			setup_command_mode_signals_handling();
             if (fd_in != STDIN_FILENO)
             {
@@ -312,7 +312,7 @@ void    ft_open_heredocs(t_exec *ex, int pipefd)
     fd_in = pipefd;
     while (current)
     {
-        if (current->type == TOKEN_REDIR_HEREDOC)
+        if (current->type == TOKEN_REDIR_HEREDOC && g_signal != SIGINT)
         {
             if (fd_in > 2)
                 ft_close_fds(fd_in);
@@ -349,6 +349,31 @@ void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
 		while (current && (current->type == TOKEN_REDIR_IN || current->type == TOKEN_REDIR_OUT
 		|| current->type == TOKEN_REDIR_APPEND || current->type == TOKEN_REDIR_HEREDOC))
 				current = current->next;
+		t_exec *temp = block_begin;
+		bool has_command = false;
+		while (temp && temp != current)
+		{
+			if (temp->type == TOKEN_WORD)
+			{
+				has_command = true;
+				break;
+			}
+			temp = temp->next;
+		}
+
+		if (!has_command && current && current->type == TOKEN_PIPE)
+		{
+			if (pipe(pipefd) == -1)
+			{
+				perror("pipe failed");
+				exit(EXIT_FAILURE);
+			}
+			prev_pipe_fd = pipefd[0];
+			close(pipefd[1]);  // Close the write end since we're not writing
+			current = current->next; // Move past the pipe
+			block_begin = current;   // Start a new block
+			continue;                // Skip the rest of the loop
+		}
 		if (!current || current->type != TOKEN_WORD)
 			break;
 		temp_in = prev_pipe_fd;
@@ -423,32 +448,60 @@ void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
 	while (wait(&status) > 0); //waitpid
 }
 
-void    ft_process(t_env **env, t_exec *ex)
+void ft_process(t_env **env, t_exec *ex)
 {
-	int		    std_dup[2];
+    int         std_dup[2];
     t_exec      *current = ex;
+    bool        has_command = false;
+
+    // Check if there are any actual commands
+    current = ex;
+    while (current)
+    {
+        if (current->type == TOKEN_WORD)
+        {
+            has_command = true;
+            break;
+        }
+        current = current->next;
+    }
 
     ft_init(ex, std_dup);
-    if (has_pipe(ex) == 1)
+
+    // If no command but has heredoc, treat like 'cat'
+	printf("g_signal ft_process = %d\n", g_signal);
+    if (!has_command && has_heredoc(ex) == 1 && g_signal != SIGINT)
     {
-        if (has_redir(ex) != 1) //if pipes
-            handle_pipes_no_redir(ex, env, std_dup); //pas de HD ici
+        ft_open_heredocs(ex, ex->fd_in);
+        handle_redir(ex);
+        // If no command specified with heredoc, read from stdin and write to stdout
+        dup2(std_dup[0], STDIN_FILENO);
+        dup2(std_dup[1], STDOUT_FILENO);
+    }
+    else if (has_pipe(ex) == 1)
+    {
+        // Rest of your existing code...
+        if (has_redir(ex) != 1)
+            handle_pipes_no_redir(ex, env, std_dup);
         else
         {
-            if (has_heredoc(ex) == 1)
+            if (has_heredoc(ex) == 1 && g_signal != SIGINT)
                 ft_open_heredocs(ex, ex->fd_in);
             handle_pipes_if_redir(ex, env, std_dup);
         }
     }
-    else if ((has_pipe(ex) != 1)) //no pipes
+    else if ((has_pipe(ex) != 1))
     {
-        if (has_heredoc(ex) == 1)
-        	ft_open_heredocs(ex, ex->fd_in);
+        if (has_heredoc(ex) == 1 && g_signal != SIGINT)
+            ft_open_heredocs(ex, ex->fd_in);
         handle_redir(ex);
         exec_commands(ex, env, std_dup);
     }
-	ft_close_fds(std_dup[0]);
-	ft_close_fds(std_dup[1]);
+
+    // Clean up heredoc temporary files
+    ft_close_fds(std_dup[0]);
+    ft_close_fds(std_dup[1]);
+    current = ex;
     while (current)
     {
         if (current->hd_name)
@@ -459,5 +512,5 @@ void    ft_process(t_env **env, t_exec *ex)
         }
         current = current->next;
     }
-	return ;
+    return;
 }

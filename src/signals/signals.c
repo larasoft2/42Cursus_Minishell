@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 16:33:15 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/20 15:44:13 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/20 19:55:56 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	setup_command_mode_signals_handling(void)
 	signal(SIGCONT, SIG_DFL);
 	signal(SIGTTIN, SIG_DFL);
 	signal(SIGTTOU, SIG_DFL);
-	signal(SIGPIPE, sigpipe_handler);
+	signal(SIGPIPE, SIG_DFL);
 }
 
 void	setup_main_prompt_signals_handling(void)
