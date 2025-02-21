@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/21 18:56:29 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/21 19:53:16 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void ft_fork(t_exec *cmd, t_env **env, int *std_dup)
     while (wait(&status) > 0); //waipitd?
 }
 
-void    handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup) //pipe no redir
+void    handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup)
 {
     int         pipefd[2];
     int         fd_in;
@@ -153,7 +153,7 @@ void    handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup) //pipe no r
     ft_close_fd(pipefd);
 }
 
-void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup) //pipe + redir
+void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
 {
 	int			pipefd[2];
 	int			status;
@@ -267,8 +267,6 @@ void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup) //pipe + redir
 	}
 	while (wait(&status) > 0); //waitpid
 }
-
-
 
 void    exec_commands(t_exec *ex, t_env **env, int *std_dup)
 {
