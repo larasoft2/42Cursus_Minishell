@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 17:42:56 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/21 19:36:50 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/21 19:41:46 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_env	*build_basic_env(t_env *env_final)
 		return (NULL);
 	add_var_to_env("SHLVL=1", &env_final);
 	add_var_to_env(pwd, &env_final);
+	add_var_to_env("OLDPWD=", &env_final);
 	free(pwd);
 	return (env_final);
 }
