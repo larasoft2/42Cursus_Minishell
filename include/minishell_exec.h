@@ -50,12 +50,23 @@ typedef struct s_env
 
 typedef struct s_struct
 {
-
     int 		fd_in;
     int			pipefd[2];
 	t_exec		*ex;
     t_exec		*current;
-} t_struct;
+}					t_struct;
+
+typedef struct	s_pipes 
+{
+	int			fd_in;
+	int			pipefd[2];
+	int			std_dup[2];
+	bool		has_command;
+	pid_t		pid;
+	t_exec		*current;
+	t_exec		*block_begin;
+	
+}					t_pipes;
 
 // BUILTINS//
 int					ft_echo(t_exec *ex);
@@ -97,18 +108,27 @@ t_exec				*get_next_exec_token(t_exec *ex);
 t_exec				*find_next_valid_token(t_exec *ex);
 
 // EXEC//
+
+bool				has_command_in_block(t_exec *begin, t_exec *end);
+
 int					exec_builtin(t_exec *ex, t_env **env, int *std_dup);
 int					is_builtin(t_exec *ex);
 int					handle_heredoc(t_exec *ex);
+int					setup_pipe(int pipefd[2]);
 
 char				**put_env_in_ar(t_env *envp);
 char				*is_path_exec(char *cmd, char **full_paths);
 char				*get_path(t_env *env, char *cmd);
+
+void				skip_redirections(t_exec **current);
+void				setup_io_for_command(t_pipes *p);
+void				handle_empty_pipe(t_pipes *p);
 void				redir_out(t_exec *ex);
 void				redir_in(t_exec *ex, int *fd_in);
 void				handle_redir(t_exec *ex);
 void				handle_redir_in_pipe(t_exec *ex, int pipefd);
 void				handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup);
+void				handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup);
 void				ft_exec(t_exec *ex, t_env **env);
 void				ft_fork(t_exec *cmd, t_env **env, int *std_dup);
 void    			ft_process(t_env **env, t_exec *ex);
@@ -117,3 +137,4 @@ void    			ft_process(t_env **env, t_exec *ex);
 void				*ft_free_array(char **ar);
 
 #endif
+

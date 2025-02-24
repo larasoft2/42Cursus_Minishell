@@ -61,9 +61,6 @@ void	add_word(char **arg, char *value, int i)
 t_exec	*add_word_to_exec_word_node(t_exec **exec_list, char *value,
 	int *word_count, t_exec **last_exec_node)
 {
-	t_exec	*temp;
-
-	temp = *exec_list;
 	if (*exec_list == NULL || *word_count == 0)
 	{
 		add_exec_node_with_type(exec_list, TOKEN_WORD, value);

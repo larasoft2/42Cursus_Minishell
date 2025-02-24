@@ -42,9 +42,7 @@ void	handle_child_io(int fd_in, int *pipefd)
 		ft_close_fds(pipefd[1]);
 	}
 	if (pipefd[0] != -1)
-	{
 		ft_close_fds(pipefd[0]);
-	}
 }
 
 void	execute_child_process(t_struct *data, t_env **env)

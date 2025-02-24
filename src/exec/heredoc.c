@@ -12,32 +12,33 @@
 
 #include "minishell.h"
 
-void    ft_open_heredocs(t_exec *ex, int pipefd)
+void	ft_open_heredocs(t_exec *ex, int pipefd)
 {
-    t_exec  *current = ex;
-    int     fd_in;
+	int		fd_in;
+	t_exec	*current;
 
-    fd_in = pipefd;
-    while (current)
-    {
-        if (current->type == TOKEN_REDIR_HEREDOC)
-        {
-            if (fd_in > 2)
-                ft_close_fds(fd_in);
-            fd_in = handle_heredoc(current);
-            if (fd_in < 0)
-            {
-                perror("Error handling heredoc");
-                return;
-            }
-        }
-        current = current->next;
-    }
-    if (fd_in > 2)
-    {
-        dup2(fd_in, STDIN_FILENO);
-        ft_close_fds(fd_in);
-    }
+	fd_in = pipefd;
+	current = ex;
+	while (current)
+	{
+		if (current->type == TOKEN_REDIR_HEREDOC)
+		{
+			if (fd_in > 2)
+				ft_close_fds(fd_in);
+			fd_in = handle_heredoc(current);
+			if (fd_in < 0)
+			{
+				perror("Error handling heredoc");
+				return ;
+			}
+		}
+		current = current->next;
+	}
+	if (fd_in > 2)
+	{
+		dup2(fd_in, STDIN_FILENO);
+		ft_close_fds(fd_in);
+	}
 }
 
 char	*generate_heredoc_name(char	*heredoc)

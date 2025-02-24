@@ -1,0 +1,93 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipe_no_redir.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
+/*   Updated: 2025/02/21 23:52:26 by lusavign         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+void	child_process(t_pipes *p, t_env **env)
+{
+	ft_close_fd(p->std_dup);
+	if (p->fd_in != -1)
+	{
+		close(p->fd_in);
+		p->fd_in = -1;
+	}
+	handle_redir_in_pipe(p->block_begin, p->fd_in);
+	ft_exec(p->current, env);
+	exit(EXIT_FAILURE);
+}
+
+void	create_process(t_pipes *p, t_env **env)
+{
+	p->pid = fork();
+	if (p->pid == -1)
+	{
+		perror("fork failed");
+		exit(EXIT_FAILURE);
+	}
+	if (p->pid == 0)
+		child_process(p, env);
+}
+
+void	clean_up_after_command(t_pipes *p)
+{
+	if (p->pipefd[1] != -1)
+	{
+		close(p->pipefd[1]);
+		p->pipefd[1] = -1;
+	}
+	while (p->current && p->current->type != TOKEN_PIPE)
+		p->current = p->current->next;
+	if (p->current && p->current->type == TOKEN_PIPE)
+		p->current = p->current->next;
+	else if (p->fd_in != -1)
+	{
+		close(p->fd_in);
+		p->fd_in = -1;
+	}
+	dup2(p->std_dup[0], STDIN_FILENO);
+	dup2(p->std_dup[1], STDOUT_FILENO);
+	p->block_begin = p->current;
+}
+
+void	handle_command_block(t_pipes *p, t_env **env)
+{
+	setup_io_for_command(p);
+	create_process(p, env);
+	clean_up_after_command(p);
+}
+
+void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
+{
+	int			status;
+	t_pipes		p;
+
+	p.fd_in = -1;
+	p.current = ex;
+	p.block_begin = ex;
+	p.std_dup[0] = std_dup[0];
+	p.std_dup[1] = std_dup[1];
+	while (p.current)
+	{
+		skip_redirections(&p.current);
+		p.has_command = has_command_in_block(p.block_begin, p.current);
+		if (!p.has_command && p.current && p.current->type == TOKEN_PIPE)
+		{
+			handle_empty_pipe(&p);
+			continue ;
+		}
+		if (!p.current || p.current->type != TOKEN_WORD)
+			break ;
+		handle_command_block(&p, env);
+	}
+	while (wait(&status) > 0)
+		continue ;
+}
