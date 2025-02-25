@@ -53,6 +53,20 @@ int	ft_strcmp(char *s1, char *s2)
 	return (0);
 }
 
+bool	check_command_in_list(t_exec *ex)
+{
+	t_exec	*current;
+
+	current = ex;
+	while (current)
+	{
+		if (current->type == TOKEN_WORD)
+			return (true);
+		current = current->next;
+	}
+	return (false);
+}
+
 int	count_command(t_exec *ex)
 {
 	int	i;

@@ -88,12 +88,18 @@ void				modify_value_exit_code(long code);
 void				modify_value(char *new_value, t_env *env_var);
 
 // EXEC UTILS//
+bool				check_command_in_list(t_exec *ex);
+bool				check_command_in_block(t_exec *begin, t_exec *end);
+
 int					ft_strcmp(char *s1, char *s2);
+int					ft_open(t_exec *ex, int *fd_in);
 int					nbr_of_args(t_exec *ex);
 int					count_command(t_exec *ex);
 int					has_pipe(t_exec *ex);
 int					has_redir(t_exec *ex);
 int					has_heredoc(t_exec *ex);
+int					redir_out(t_exec *ex);
+int					redir_in(t_exec *ex, int *fd_in);
 
 char				*ft_strndup(const char *s, size_t n);
 
@@ -101,16 +107,12 @@ void				ft_init(t_exec *ex, int *std_dup);
 void    			restore_fds(int *std_dup);
 void				ft_close_fds(int fd);
 void				ft_close_fd(int *pipefd);
-void    			ft_open(t_exec *ex, int *fd_in);
 void				ft_open_heredocs(t_exec *ex, int pipefd);
 
 t_exec				*get_next_exec_token(t_exec *ex);
 t_exec				*find_next_valid_token(t_exec *ex);
 
 // EXEC//
-
-bool				has_command_in_block(t_exec *begin, t_exec *end);
-
 int					exec_builtin(t_exec *ex, t_env **env, int *std_dup);
 int					is_builtin(t_exec *ex);
 int					handle_heredoc(t_exec *ex);
@@ -123,8 +125,6 @@ char				*get_path(t_env *env, char *cmd);
 void				skip_redirections(t_exec **current);
 void				setup_io_for_command(t_pipes *p);
 void				handle_empty_pipe(t_pipes *p);
-void				redir_out(t_exec *ex);
-void				redir_in(t_exec *ex, int *fd_in);
 void				handle_redir(t_exec *ex);
 void				handle_redir_in_pipe(t_exec *ex, int pipefd);
 void				handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup);

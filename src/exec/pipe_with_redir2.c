@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-bool	has_command_in_block(t_exec *begin, t_exec *end)
+bool	check_command_in_block(t_exec *begin, t_exec *end)
 {
 	t_exec	*temp;
 

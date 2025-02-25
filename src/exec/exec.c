@@ -67,7 +67,7 @@ void	ft_fork(t_exec *cmd, t_env **env, int *std_dup)
 		}
 		cmd = cmd->next;
 	}
-	while (wait(&status) > 0) //waipitd?
+	while (wait(&status) > 0)
 		continue ;
 }
 
@@ -95,24 +95,9 @@ void	exec_commands(t_exec *ex, t_env **env, int *std_dup)
 	}
 }
 
-void	ft_process(t_env **env, t_exec *ex)
+void	process_commands(t_exec *ex, t_env **env,
+	int *std_dup, bool has_command)
 {
-	int			std_dup[2];
-	bool		has_command;
-	t_exec		*current;
-
-	has_command = false;
-	current = ex;
-	while (current)
-	{
-		if (current->type == TOKEN_WORD)
-		{
-			has_command = true;
-			break ;
-		}
-		current = current->next;
-	}
-	ft_init(ex, std_dup);
 	if (!has_command && has_heredoc(ex) == 1)
 	{
 		ft_open_heredocs(ex, ex->fd_in);
@@ -131,16 +116,27 @@ void	ft_process(t_env **env, t_exec *ex)
 			handle_pipes_if_redir(ex, env, std_dup);
 		}
 	}
-	else if ((has_pipe(ex) != 1))
+	else if (has_pipe(ex) != 1)
 	{
 		if (has_heredoc(ex) == 1)
 			ft_open_heredocs(ex, ex->fd_in);
 		handle_redir(ex);
 		exec_commands(ex, env, std_dup);
 	}
+}
+
+void	ft_process(t_env **env, t_exec *ex)
+{
+	int		std_dup[2];
+	bool	has_command;
+	t_exec	*current;
+
+	has_command = check_command_in_list(ex);
+	ft_init(ex, std_dup);
+	process_commands(ex, env, std_dup, has_command);
 	ft_close_fds(std_dup[0]);
 	ft_close_fds(std_dup[1]);
-	current = ex; //pq j'ai mis ca
+	current = ex;
 	while (current)
 	{
 		if (current->hd_name)

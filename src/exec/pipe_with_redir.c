@@ -78,7 +78,7 @@ void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
 	while (p.current)
 	{
 		skip_redirections(&p.current);
-		p.has_command = has_command_in_block(p.block_begin, p.current);
+		p.has_command = check_command_in_block(p.block_begin, p.current);
 		if (!p.has_command && p.current && p.current->type == TOKEN_PIPE)
 		{
 			handle_empty_pipe(&p);
