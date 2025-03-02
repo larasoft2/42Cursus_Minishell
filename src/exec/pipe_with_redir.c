@@ -20,7 +20,10 @@ void	child_process(t_pipes *p, t_env **env)
 		close(p->fd_in);
 		p->fd_in = -1;
 	}
-	handle_redir_in_pipe(p->block_begin, p->fd_in);
+	if (handle_redir_in_pipe(p->block_begin, p->fd_in) == EXIT_FAILURE)
+	{
+		exit(EXIT_FAILURE);
+	}
 	ft_exec(p->current, env);
 	exit(EXIT_FAILURE);
 }

@@ -95,12 +95,13 @@ void	exec_commands(t_exec *ex, t_env **env, int *std_dup)
 	}
 }
 
-void	process_commands(t_exec *ex, t_env **env,
+int	process_commands(t_exec *ex, t_env **env,
 	int *std_dup, bool has_command)
 {
+	if (has_heredoc(ex) == 1)
+		ft_open_heredocs(ex, ex->fd_in);
 	if (!has_command && has_heredoc(ex) == 1)
 	{
-		ft_open_heredocs(ex, ex->fd_in);
 		handle_redir(ex);
 		dup2(std_dup[0], STDIN_FILENO);
 		dup2(std_dup[1], STDOUT_FILENO);
@@ -110,19 +111,15 @@ void	process_commands(t_exec *ex, t_env **env,
 		if (has_redir(ex) != 1)
 			handle_pipes_no_redir(ex, env, std_dup);
 		else
-		{
-			if (has_heredoc(ex) == 1)
-				ft_open_heredocs(ex, ex->fd_in);
 			handle_pipes_if_redir(ex, env, std_dup);
-		}
 	}
 	else if (has_pipe(ex) != 1)
 	{
-		if (has_heredoc(ex) == 1)
-			ft_open_heredocs(ex, ex->fd_in);
-		handle_redir(ex);
+		if (handle_redir(ex) == EXIT_FAILURE)
+			return (EXIT_FAILURE);
 		exec_commands(ex, env, std_dup);
 	}
+	return (EXIT_SUCCESS);
 }
 
 void	ft_process(t_env **env, t_exec *ex)

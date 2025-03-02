@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	redir_out(t_exec *ex)
+int	redir_out(t_exec *ex)
 {
 	if (ex->type == TOKEN_REDIR_OUT || ex->type == TOKEN_REDIR_APPEND)
 	{
@@ -22,8 +22,8 @@ void	redir_out(t_exec *ex)
 			ex->fd_out = open(ex->arg[0], O_CREAT | O_WRONLY | O_APPEND, 0644);
 		if (ex->fd_out < 0)
 		{
-			perror("Error opening output file");
-			return ;
+			perror(strerror(errno));
+			return (EXIT_FAILURE);
 		}
 		dup2(ex->fd_out, STDOUT_FILENO);
 		if (ex->fd_out != -1)
@@ -32,9 +32,10 @@ void	redir_out(t_exec *ex)
 			ex->fd_out = -1;
 		}
 	}
+	return (EXIT_SUCCESS);
 }
 
-void	redir_in(t_exec *ex, int *fd_in)
+int	redir_in(t_exec *ex, int *fd_in)
 {
 	if (ex->type == TOKEN_REDIR_IN)
 	{
@@ -43,8 +44,8 @@ void	redir_in(t_exec *ex, int *fd_in)
 		*fd_in = open(ex->arg[0], O_RDONLY);
 		if (*fd_in < 0)
 		{
-			perror("Error opening input file");
-			return ;
+			perror(strerror(errno)); //changer msg erreur
+			return (EXIT_FAILURE);
 		}
 	}
 	else if (ex->type == TOKEN_REDIR_HEREDOC)
@@ -54,26 +55,29 @@ void	redir_in(t_exec *ex, int *fd_in)
 		*fd_in = open(ex->hd_name, O_RDONLY);
 		if (*fd_in < 0)
 		{
-			perror("Error opening heredoc file");
-			return ;
+			perror(strerror(errno));
+			return (EXIT_FAILURE);
 		}
 	}
+	return (EXIT_SUCCESS);
 }
 
-void	ft_open(t_exec *ex, int *fd_in)
+int	ft_open(t_exec *ex, int *fd_in)
 {
 	if (ex->type == TOKEN_REDIR_IN || ex->type == TOKEN_REDIR_HEREDOC)
-		redir_in(ex, fd_in);
-	else if (ex->type == TOKEN_REDIR_OUT || ex->type == TOKEN_REDIR_APPEND)
-		redir_out(ex);
-	else
 	{
-		*fd_in = STDIN_FILENO;
-		ex->fd_out = STDOUT_FILENO;
+		if (redir_in(ex, fd_in) != EXIT_SUCCESS)
+			return (EXIT_FAILURE);
 	}
+	if (ex->type == TOKEN_REDIR_OUT || ex->type == TOKEN_REDIR_APPEND)
+	{
+		if (redir_out(ex) != EXIT_SUCCESS)
+			return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
 }
 
-void	handle_redir(t_exec *ex)
+int	handle_redir(t_exec *ex)
 {
 	t_exec	*current;
 	int		fd_in;
@@ -83,7 +87,10 @@ void	handle_redir(t_exec *ex)
 	while (current)
 	{
 		if (current->type > 1)
-			ft_open(current, &fd_in);
+		{
+			if (ft_open(current, &fd_in) == EXIT_FAILURE)
+				return (EXIT_FAILURE);
+		}
 		current = current->next;
 	}
 	if (fd_in > 2)
@@ -91,9 +98,10 @@ void	handle_redir(t_exec *ex)
 		dup2(fd_in, STDIN_FILENO);
 		ft_close_fds(fd_in);
 	}
+	return (EXIT_SUCCESS);
 }
 
-void	handle_redir_in_pipe(t_exec *ex, int pipefd)
+int	handle_redir_in_pipe(t_exec *ex, int pipefd)
 {
 	int		fd_in;
 	t_exec	*current;
@@ -103,7 +111,10 @@ void	handle_redir_in_pipe(t_exec *ex, int pipefd)
 	while (current)
 	{
 		if (current->type > 1)
-			ft_open(current, &fd_in);
+		{
+			if (ft_open(current, &fd_in) == EXIT_FAILURE)
+				return (EXIT_FAILURE);
+		}
 		if (current->type == TOKEN_PIPE)
 			break ;
 		else
@@ -114,4 +125,5 @@ void	handle_redir_in_pipe(t_exec *ex, int pipefd)
 		dup2(fd_in, STDIN_FILENO);
 		ft_close_fds(fd_in);
 	}
+	return (EXIT_SUCCESS);
 }
