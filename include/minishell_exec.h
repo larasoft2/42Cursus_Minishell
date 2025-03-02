@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_exec.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:08:01 by racoutte          #+#    #+#             */
 /*   Updated: 2025/02/21 23:51:57 by lusavign         ###   ########.fr       */
@@ -75,6 +75,7 @@ int					ft_unset(t_exec *ex, t_env **env);
 int					ft_cd(t_exec *ex, t_env *env);
 int					ft_env(t_exec *ex, t_env *env);
 int					ft_export(t_exec *exec, t_env **env);
+void				add_var_to_env(char *arg, t_env **env);
 int					ft_exit(t_exec *ex, t_env *env, int *std_dup);
 int					check_if_cmd_has_arg(char **arg);
 int					check_if_var_name_is_valid(char *arg);

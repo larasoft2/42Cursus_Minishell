@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
 /*   Updated: 2025/02/21 23:13:31 by lusavign         ###   ########.fr       */
@@ -40,7 +40,8 @@ void	ft_exec(t_exec *ex, t_env **env)
 	ft_free_and_null(env_array);
 	free(path_cmd);
 	free_exec_list(&ex);
-	exit(EXIT_FAILURE);
+	free_env_list(env);
+    exit(EXIT_FAILURE);
 }
 
 void	ft_fork(t_exec *cmd, t_env **env, int *std_dup)
