@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/03 15:09:13 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/03 17:45:29 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	ft_exec(t_exec *ex, t_env **env)
 		ft_free_and_null(env_array);
 		free_exec_list(&ex);
 		free_env_list(env);
-		exit(EXIT_FAILURE);
+		exit(127);
 	}
 	execve(path_cmd, ex->arg, env_array);
 	perror("execve");
@@ -70,6 +70,9 @@ void	ft_fork(t_exec *cmd, t_env **env, int *std_dup)
 	}
 	while (wait(&status) > 0)
 		continue ;
+	modify_value_exit_code(status / 256);
+	if (g_signal != 0)
+		modify_value_exit_code(g_signal);
 }
 
 void	exec_commands(t_exec *ex, t_env **env, int *std_dup)

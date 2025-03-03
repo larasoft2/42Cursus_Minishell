@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:07:44 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/03 15:20:04 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/03 17:47:21 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,31 @@ char	*is_path_exec(char *cmd, char **full_paths)
 	return (NULL);
 }
 
-char	*check_direct_path(char *cmd, t_exec *ex, t_env **env)
+char *check_direct_path(char *cmd, t_exec *ex, t_env **env)
 {
-	if (cmd && (cmd[0] == '/' || cmd[0] == '.'))
-	{
-		if (access(cmd, F_OK | X_OK) == 0)
-			return (ft_strdup(cmd));
-		else
-		{
-			print_error(cmd);
-			free_exec_list(&ex);
-			free_env_list(env);
-			exit(EXIT_FAILURE);
-		}
-	}
-	return (NULL);
+    if (cmd && (cmd[0] == '/' || cmd[0] == '.'))
+    {
+        if (access(cmd, F_OK) == 0)
+        {
+            if (access(cmd, X_OK) == 0)
+                return (ft_strdup(cmd));
+            else
+            {
+                print_error(cmd);
+                free_exec_list(&ex);
+                free_env_list(env);
+                exit(126);
+            }
+        }
+        else
+        {
+            print_error(cmd);
+            free_exec_list(&ex);
+            free_env_list(env);
+            exit(127);
+        }
+    }
+    return (NULL);
 }
 
 char	*get_path(t_env *env, char *cmd, t_exec *ex)

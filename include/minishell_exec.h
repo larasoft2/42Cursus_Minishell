@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:08:01 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/03 15:09:51 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/03 17:05:28 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 
 typedef struct s_exec
 {
+	// pid_t			*pid;
 	char			*hd_name;
 	char			**arg;
 	int				fd_in;

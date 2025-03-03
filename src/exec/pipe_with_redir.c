@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipe_no_redir.c                                    :+:      :+:    :+:   */
+/*   pipe_with_redir.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/21 23:52:26 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/03 17:10:32 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,18 @@ void	handle_command_block(t_pipes *p, t_env **env)
 
 void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
 {
+	int			i;
 	int			status;
+	pid_t		*pid;
 	t_pipes		p;
 
+	i = 0; //ft_init
 	p.fd_in = -1;
 	p.current = ex;
 	p.block_begin = ex;
 	p.std_dup[0] = std_dup[0];
 	p.std_dup[1] = std_dup[1];
+	pid = malloc(count_command(ex) * sizeof(pid_t));
 	while (p.current)
 	{
 		skip_redirections(&p.current);
@@ -95,7 +99,10 @@ void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
 		if (!p.current || p.current->type != TOKEN_WORD)
 			break ;
 		handle_command_block(&p, env);
+		pid[i++] = p.pid;
 	}
-	while (wait(&status) > 0)
+	i = 0;
+	while (waitpid(pid[i++], &status, 0) > 0)
 		continue ;
+	modify_value_exit_code(status / 256);
 }
