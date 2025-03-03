@@ -27,6 +27,7 @@ void	minishell_loop(char *input, t_token_node **token_list,
 				exec_list);
 	if (syntax_status == EXIT_SUCCESS && *input)
 	{
+		//print_tokens_exec_list(*exec_list);
 		ft_process(env_final, *exec_list);
 		free_exec_list(exec_list);
 	}
@@ -41,7 +42,7 @@ void	check_ctrl_d(t_env **env, t_exec *exec_list)
 	exit(EXIT_FAILURE);
 }
 
-int	main(int ac, char **av, char **env)
+int	main(int ac, char **av, char **env) //add condition if ac > 1, code shouldn't run
 {
 	char			*input;
 	t_token_node	*token_list;
@@ -58,12 +59,13 @@ int	main(int ac, char **av, char **env)
 	setup_default_signals_handling();
 	while (1)
 	{
-		setup_main_prompt_signals_handling();
+		// setup_main_prompt_signals_handling();
 		input = readline("minishell> ");
 		if (!input)
 			check_ctrl_d(&env_final, exec_list);
 		minishell_loop(input, &token_list, &env_final, &exec_list);
-		setup_default_signals_handling();
+		//print_tokens_exec_list(exec_list);
+		// setup_default_signals_handling();
 	}
 	return (EXIT_SUCCESS);
 }

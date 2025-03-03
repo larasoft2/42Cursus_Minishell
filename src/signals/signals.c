@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 16:33:15 by racoutte          #+#    #+#             */
 /*   Updated: 2025/02/20 19:55:56 by racoutte         ###   ########.fr       */
@@ -23,7 +23,7 @@ void	setup_command_mode_signals_handling(void)
 	signal(SIGCONT, SIG_DFL);
 	signal(SIGTTIN, SIG_DFL);
 	signal(SIGTTOU, SIG_DFL);
-	signal(SIGPIPE, SIG_DFL);
+	// signal(SIGPIPE, SIG_DFL);
 }
 
 void	setup_main_prompt_signals_handling(void)
@@ -35,7 +35,7 @@ void	setup_main_prompt_signals_handling(void)
 	signal(SIGCONT, SIG_IGN);
 	signal(SIGTTIN, SIG_IGN);
 	signal(SIGTTOU, SIG_IGN);
-	signal(SIGPIPE, SIG_IGN);
+	// signal(SIGPIPE, SIG_IGN);
 }
 
 void	setup_default_signals_handling(void)
@@ -47,7 +47,7 @@ void	setup_default_signals_handling(void)
 	signal(SIGCONT, SIG_IGN);
 	signal(SIGTTIN, SIG_IGN);
 	signal(SIGTTOU, SIG_IGN);
-	signal(SIGPIPE, SIG_IGN);
+	// signal(SIGPIPE, SIG_IGN);
 }
 
 // static int	ft_check_signal(void)

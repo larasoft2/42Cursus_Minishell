@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:07:44 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/04 17:47:39 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/20 23:40:45 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,21 +42,19 @@ char	*get_path(t_env *env, char *cmd)
 {
 	char	**full_paths;
 	char	*path;
-	int		i;
 
 	full_paths = NULL;
 	path = NULL;
-	i = 0;
 	if (cmd && (cmd[0] == '/' || cmd[0] == '.'))
 		return (cmd);
 	while (env)
 	{
-    	if (ft_strncmp(env->key, "PATH", 4) == 0 && env->key[4] == '\0')
-   		{
-        	full_paths = ft_split(env->value, ':');
-        	break;
-    	}
-    	env = env->next;
+		if (ft_strncmp(env->key, "PATH", 4) == 0 && env->key[4] == '\0')
+		{
+			full_paths = ft_split(env->value, ':');
+			break ;
+		}
+		env = env->next;
 	}
 	if (!full_paths)
 		return (NULL);

@@ -59,11 +59,9 @@ static char	*ft_writestr(char *str, long nb)
 
 char	*ft_itoa(int n)
 {
-	int		i;
 	char	*str;
 	long	nb;
 
-	i = 0;
 	nb = n;
 	str = (char *)malloc(sizeof(char) * (ft_size(nb) + 1));
 	if (!str)

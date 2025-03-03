@@ -12,13 +12,33 @@
 
 #include "minishell.h"
 
-void	print_delimiter_error_message(char *delimiter)
+void	ft_open_heredocs(t_exec *ex, int pipefd)
 {
-	ft_putstr_fd("minishell: warning: here-document delimited by ", 2);
-	ft_putstr_fd("end-of-file (wanted '", 2);
-	if (delimiter != NULL)
-		ft_putstr_fd(delimiter, 2);
-	ft_putstr_fd("')\n", 2);
+	int		fd_in;
+	t_exec	*current;
+
+	fd_in = pipefd;
+	current = ex;
+	while (current)
+	{
+		if (current->type == TOKEN_REDIR_HEREDOC && g_signal != SIGINT) //added && from raph
+		{
+			if (fd_in > 2)
+				ft_close_fds(fd_in);
+			fd_in = handle_heredoc(current);
+			if (fd_in < 0)
+			{
+				perror("Error handling heredoc");
+				return ;
+			}
+		}
+		current = current->next;
+	}
+	if (fd_in > 2)
+	{
+		dup2(fd_in, STDIN_FILENO);
+		ft_close_fds(fd_in);
+	}
 }
 
 char	*generate_heredoc_name(char	*heredoc)
@@ -84,7 +104,7 @@ void	heredoc_loop(t_exec *ex, char *delimiter, int *tmp)
 			break ;
 		if (!rline)
 		{
-			print_delimiter_error_message(delimiter);
+			print_delimiter_error_message(delimiter); //added by raph???
 			close(*tmp);
 			*tmp = open(ex->hd_name, O_RDONLY);
 			return ;

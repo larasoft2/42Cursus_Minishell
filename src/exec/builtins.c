@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:57:10 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/20 10:18:13 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/02/21 14:38:48 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 // environment variable name,
 // and returns a pointer to the corresponding value string.
 
-int is_builtin(t_exec *ex)
+int	is_builtin(t_exec *ex)
 {
 	t_exec	*temp;
 
@@ -28,22 +28,16 @@ int is_builtin(t_exec *ex)
 		return (-1);
 	while (temp)
 	{
-		if (ft_strcmp(temp->arg[0], "echo") == 0)
-			return (1);
-		else if (ft_strcmp(temp->arg[0], "cd") == 0)
-			return (1);
-		else if (ft_strcmp(temp->arg[0], "pwd") == 0)
-			return (1);
-		else if (ft_strcmp(temp->arg[0], "export") == 0)
-			return (1);
-		else if (ft_strcmp(temp->arg[0], "unset") == 0)
-			return (1);
-		else if (ft_strcmp(temp->arg[0], "env") == 0)
-			return (1);
-		else if (ft_strcmp(temp->arg[0], "exit") == 0)
+		if (ft_strcmp(temp->arg[0], "echo") == 0
+			|| ft_strcmp(temp->arg[0], "cd") == 0
+			|| ft_strcmp(temp->arg[0], "pwd") == 0
+			|| ft_strcmp(temp->arg[0], "export") == 0
+			|| ft_strcmp(temp->arg[0], "unset") == 0
+			|| ft_strcmp(temp->arg[0], "env") == 0
+			|| ft_strcmp(temp->arg[0], "exit") == 0)
 			return (1);
 		if (temp->next == NULL)
-			break;
+			break ;
 		temp = temp->next;
 	}
 	return (-1);

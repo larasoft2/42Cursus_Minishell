@@ -5,41 +5,24 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Created: 2025/01/03 17:54:54 by racoutte          #+#    #+#             */
 /*   Updated: 2025/02/18 17:54:54 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "minishell.h"
 
-int		env_list_size(t_env *env)
+char	*create_env_entry(char *key, char *value)
 {
-    int size;
+	char	*tmp;
+	char	*str;
 
-	size = 0;
-    while (env)
-	{
-        size++;
-        env = env->next;
-    }
-    return (size);
-}
-
-void	*ft_free_array(char **ar)
-{
-	int	i;
-
-	i = 0;
-	if (!ar)
+	tmp = ft_strjoin(key, "=");
+	if (!tmp)
 		return (NULL);
-	while (ar[i])
-		i++;
-	while (i > 0)
-		free(ar[--i]);
-	free(ar);
-	ar = NULL;
-	return (NULL);
+	str = ft_strjoin(tmp, value);
+	free(tmp);
+	return (str);
 }
 
 char	**put_env_in_ar(t_env *envp)
@@ -47,7 +30,6 @@ char	**put_env_in_ar(t_env *envp)
 	char	**array_env;
 	int		i;
 	char	*str;
-	char	*tmp;
 
 	i = 0;
 	if (!envp)
@@ -55,14 +37,7 @@ char	**put_env_in_ar(t_env *envp)
 	array_env = malloc(sizeof(char *) * (env_list_size(envp) + 1));
 	while (envp)
 	{
-		tmp = ft_strjoin(envp->key, "=");
-		if (!tmp)
-		{
-			ft_free_array(array_env);
-			return (NULL);
-		}
-		str = ft_strjoin(tmp, envp->value);
-		free(tmp);
+		str = create_env_entry(envp->key, envp->value);
 		if (!str)
 		{
 			ft_free_array(array_env);
@@ -70,7 +45,6 @@ char	**put_env_in_ar(t_env *envp)
 		}
 		array_env[i++] = str;
 		envp = envp->next;
-		str = NULL;
 	}
 	array_env[i] = NULL;
 	return (array_env);
@@ -141,11 +115,7 @@ t_env	*get_env_list(char **realenv)
 			key = ft_strndup(realenv[i], pos - realenv[i]);
 			value = ft_strdup(pos + 1);
 			if (!key || !value)
-			{
-				free(key);
-				free(value);
-				return (NULL);
-			}
+				return (free(key), free(value), NULL);
 			append_list(&envp, key, value);
 		}
 		i++;

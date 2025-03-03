@@ -6,30 +6,17 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:55:46 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/11 19:52:27 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/02/21 17:41:27 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_close_fd(int *pipefd)
+/* protection si string vide??*/
+char	*ft_strndup(const char *s, size_t n)
 {
-	if (pipefd[0] != -1)
-	{
-		close(pipefd[0]);
-		pipefd[0] = -1;
-	}
-	if (pipefd[1] != -1)
-	{
-		close(pipefd[1]);
-		pipefd[1] = -1;
-	}
-}
-
-char	*ft_strndup(const char *s, size_t n) // protection si string vide??
-{
-	size_t i;
-	char *dest;
+	size_t	i;
+	char	*dest;
 
 	i = 0;
 	dest = (char *)malloc(sizeof(char) * (n + 1));
@@ -64,6 +51,20 @@ int	ft_strcmp(char *s1, char *s2)
 			return (s1[i] - s2[i]);
 	}
 	return (0);
+}
+
+bool	check_command_in_list(t_exec *ex)
+{
+	t_exec	*current;
+
+	current = ex;
+	while (current)
+	{
+		if (current->type == TOKEN_WORD)
+			return (true);
+		current = current->next;
+	}
+	return (false);
 }
 
 int	count_command(t_exec *ex)
