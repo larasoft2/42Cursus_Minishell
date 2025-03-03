@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/03 17:10:32 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/03 18:41:03 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,14 @@ void	child_process(t_pipes *p, t_env **env)
 	}
 	if (handle_redir_in_pipe(p->block_begin, p->fd_in) == EXIT_FAILURE)
 	{
+		free_env_list(env);
+		free_exec_list(&p->block_begin);
 		exit(EXIT_FAILURE);
 	}
 	ft_exec(p->current, env);
-	exit(EXIT_FAILURE);
 }
 
-void	create_process(t_pipes *p, t_env **env)
+void	create_process(t_pipes *p, t_env **env, pid_t *pid)
 {
 	p->pid = fork();
 	if (p->pid == -1)
@@ -40,6 +41,7 @@ void	create_process(t_pipes *p, t_env **env)
 		setup_command_mode_signals_handling(); //added from raph
 	if (p->pid == 0)
 	{
+		free(pid);
 		setup_command_mode_signals_handling(); //added from raph
 		child_process(p, env);
 	}
@@ -66,10 +68,10 @@ void	clean_up_after_command(t_pipes *p)
 	p->block_begin = p->current;
 }
 
-void	handle_command_block(t_pipes *p, t_env **env)
+void	handle_command_block(t_pipes *p, t_env **env, pid_t *pid)
 {
 	setup_io_for_command(p);
-	create_process(p, env);
+	create_process(p, env, pid);
 	clean_up_after_command(p);
 }
 
@@ -98,11 +100,12 @@ void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
 		}
 		if (!p.current || p.current->type != TOKEN_WORD)
 			break ;
-		handle_command_block(&p, env);
+		handle_command_block(&p, env, pid);
 		pid[i++] = p.pid;
 	}
 	i = 0;
-	while (waitpid(pid[i++], &status, 0) > 0)
+	while (i < count_command(ex) && waitpid(pid[i++], &status, 0))
 		continue ;
 	modify_value_exit_code(status / 256);
+	free(pid);
 }

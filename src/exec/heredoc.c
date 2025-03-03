@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 15:37:43 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/03 14:51:58 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/03 18:00:17 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,13 +95,14 @@ void	heredoc_loop(t_exec *ex, char *delimiter, int *tmp)
 {
 	char	*rline;
 
+	rline = NULL;
 	while (1)
 	{
 		if (g_signal == SIGINT)
-			break ;
+			return (free(rline));
 		rline = readline("> ");
 		if (g_signal == SIGINT)
-			break ;
+			return (free(rline));
 		if (!rline)
 		{
 			print_delimiter_error_message(delimiter);

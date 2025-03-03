@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/03 17:45:29 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/03 17:53:57 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,12 @@ int	process_commands(t_exec *ex, t_env **env,
 {
 	if (has_heredoc(ex) == 1 && g_signal != SIGINT) //added && from raph
 		ft_open_heredocs(ex, ex->fd_in);
+	if (g_signal == SIGINT)
+	{
+		modify_value_exit_code(130);
+		dup2(std_dup[0], STDIN_FILENO);
+		return (EXIT_SUCCESS);
+	}
 	if (!has_command && has_heredoc(ex) == 1 && g_signal != SIGINT) //added && from raph //has heredoc useless?
 	{
 		handle_redir(ex);

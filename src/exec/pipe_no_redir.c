@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/03 16:59:42 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/03 18:58:25 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,17 +45,17 @@ void	handle_child_io(int fd_in, int *pipefd)
 		ft_close_fds(pipefd[0]);
 }
 
-void	execute_child_process(t_struct *data, t_env **env, pid_t *pid)
+void	execute_child_process(t_struct *data, t_env **env, pid_t *pid, int *i)
 {
-	*pid = fork();
-	if (*pid == -1)
+	pid[*i] = fork();
+	if (pid[*i] == -1)
 	{
 		perror("fork failed");
 		exit(EXIT_FAILURE);
 	}
-	if (*pid > 0) //added from raph
+	if (pid[*i] > 0) //added from raph
 		setup_command_mode_signals_handling();
-	else if (*pid == 0)
+	else if (pid[*i] == 0)
 	{
 		setup_command_mode_signals_handling(); //added from raph
 		handle_child_io(data->fd_in, data->pipefd);
@@ -63,6 +63,7 @@ void	execute_child_process(t_struct *data, t_env **env, pid_t *pid)
 		ft_exec(data->current, env);
 		exit(EXIT_FAILURE);
 	}
+	*i += 1;
 }
 
 void	handle_parent_io(int *fd_in, int *pipefd)
@@ -102,12 +103,12 @@ void	handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup)
 		prepare_pipe(pipefd, ex);
 		name.pipefd[0] = pipefd[0];
 		name.pipefd[1] = pipefd[1];
-		execute_child_process(&name, env, &pid[i++]);
+		execute_child_process(&name, env, pid, &i);
 		handle_parent_io(&name.fd_in, pipefd);
 		ex = get_next_exec_token(ex);
 	}
 	i = 0;
-	while (waitpid(pid[i++], &status, 0) > 0)
+	while (i < count_command(ex) && waitpid(pid[i++], &status, 0))
 		continue ;
 	ft_close_fd(pipefd);
 	modify_value_exit_code(status / 256);
