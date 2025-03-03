@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_no_redir.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/03 18:58:25 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/03 19:15:43 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	handle_parent_io(int *fd_in, int *pipefd)
 	*fd_in = pipefd[0];
 }
 
-void	handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup)
+void	handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup, int count)
 {
 	int			i;
 	int			status;
@@ -90,7 +90,7 @@ void	handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup)
 	t_struct	name;
 
 	i = 0;
-	pid = malloc(count_command(ex) * sizeof(pid_t));
+	pid = malloc(count * sizeof(pid_t));
 	name.ex = ex;
 	name.fd_in = STDIN_FILENO;
 	ft_close_fd(std_dup);
@@ -108,8 +108,8 @@ void	handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup)
 		ex = get_next_exec_token(ex);
 	}
 	i = 0;
-	while (i < count_command(ex) && waitpid(pid[i++], &status, 0))
-		continue ;
+	while (i < count)
+		waitpid(pid[i++], &status, 0);
 	ft_close_fd(pipefd);
 	modify_value_exit_code(status / 256);
 }

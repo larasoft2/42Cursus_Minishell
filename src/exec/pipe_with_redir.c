@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_with_redir.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/03 18:41:03 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/03 19:23:13 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	child_process(t_pipes *p, t_env **env)
 	if (handle_redir_in_pipe(p->block_begin, p->fd_in) == EXIT_FAILURE)
 	{
 		free_env_list(env);
-		free_exec_list(&p->block_begin);
+		free_exec_list(&p->begin);
 		exit(EXIT_FAILURE);
 	}
 	ft_exec(p->current, env);
@@ -86,6 +86,7 @@ void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
 	p.fd_in = -1;
 	p.current = ex;
 	p.block_begin = ex;
+	p.begin = ex;
 	p.std_dup[0] = std_dup[0];
 	p.std_dup[1] = std_dup[1];
 	pid = malloc(count_command(ex) * sizeof(pid_t));

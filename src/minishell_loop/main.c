@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:58:59 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/03 18:54:09 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/03 19:33:08 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	check_ctrl_d(t_env **env, t_exec *exec_list)
 	free_env_list(env);
 	if (exec_list)
 		free_exec_list(&exec_list);
-	exit(EXIT_FAILURE);
+	exit(EXIT_SUCCESS);
 }
 
 int	main(int ac, char **av, char **env) //add condition if ac > 1, code shouldn't run

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/03 17:53:57 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/03 19:14:50 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int	process_commands(t_exec *ex, t_env **env,
 	else if (has_pipe(ex) == 1)
 	{
 		if (has_redir(ex) != 1)
-			handle_pipes_no_redir(ex, env, std_dup);
+			handle_pipes_no_redir(ex, env, std_dup, count_command(ex));
 		else
 			handle_pipes_if_redir(ex, env, std_dup);
 	}
