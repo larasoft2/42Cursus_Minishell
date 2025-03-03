@@ -21,10 +21,7 @@ int	redir_out(t_exec *ex)
 		else if (ex->type == TOKEN_REDIR_APPEND)
 			ex->fd_out = open(ex->arg[0], O_CREAT | O_WRONLY | O_APPEND, 0644);
 		if (ex->fd_out < 0)
-		{
-			perror(strerror(errno));
-			return (EXIT_FAILURE);
-		}
+			return (print_error(ex->arg[0]));
 		dup2(ex->fd_out, STDOUT_FILENO);
 		if (ex->fd_out != -1)
 		{
@@ -43,21 +40,15 @@ int	redir_in(t_exec *ex, int *fd_in)
 			ft_close_fds(*fd_in);
 		*fd_in = open(ex->arg[0], O_RDONLY);
 		if (*fd_in < 0)
-		{
-			perror(strerror(errno)); //changer msg erreur
-			return (EXIT_FAILURE);
-		}
+			return (print_error(ex->arg[0]));
 	}
-	else if (ex->type == TOKEN_REDIR_HEREDOC)
+	else if (ex->type == TOKEN_REDIR_HEREDOC && g_signal != SIGINT) //added && from raph
 	{
 		if (*fd_in > 2)
 			ft_close_fds(*fd_in);
 		*fd_in = open(ex->hd_name, O_RDONLY);
 		if (*fd_in < 0)
-		{
-			perror(strerror(errno));
-			return (EXIT_FAILURE);
-		}
+			return (print_error(ex->hd_name)); //check this
 	}
 	return (EXIT_SUCCESS);
 }

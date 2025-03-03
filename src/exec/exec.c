@@ -41,7 +41,7 @@ void	ft_exec(t_exec *ex, t_env **env)
 	free(path_cmd);
 	free_exec_list(&ex);
 	free_env_list(env);
-    exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 }
 
 void	ft_fork(t_exec *cmd, t_env **env, int *std_dup)
@@ -99,9 +99,9 @@ void	exec_commands(t_exec *ex, t_env **env, int *std_dup)
 int	process_commands(t_exec *ex, t_env **env,
 	int *std_dup, bool has_command)
 {
-	if (has_heredoc(ex) == 1)
+	if (has_heredoc(ex) == 1 && g_signal != SIGINT) //added && from raph
 		ft_open_heredocs(ex, ex->fd_in);
-	if (!has_command && has_heredoc(ex) == 1)
+	if (!has_command && has_heredoc(ex) == 1 && g_signal != SIGINT) //added && from raph //has heredoc useless?
 	{
 		handle_redir(ex);
 		dup2(std_dup[0], STDIN_FILENO);

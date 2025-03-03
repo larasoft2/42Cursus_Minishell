@@ -6,21 +6,11 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 15:37:43 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/21 18:21:18 by lusavign         ###   ########.fr       */
 /*   Updated: 2025/02/21 16:27:10 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	print_delimiter_error_message(char *delimiter)
-{
-	ft_putstr_fd("minishell: warning: here-document delimited by ", 2);
-	ft_putstr_fd("end-of-file (wanted '", 2);
-	if (delimiter != NULL)
-		ft_putstr_fd(delimiter, 2);
-	ft_putstr_fd("')\n", 2);
-}
 
 void	ft_open_heredocs(t_exec *ex, int pipefd)
 {
@@ -31,7 +21,7 @@ void	ft_open_heredocs(t_exec *ex, int pipefd)
 	current = ex;
 	while (current)
 	{
-		if (current->type == TOKEN_REDIR_HEREDOC)
+		if (current->type == TOKEN_REDIR_HEREDOC && g_signal != SIGINT) //added && from raph
 		{
 			if (fd_in > 2)
 				ft_close_fds(fd_in);
@@ -114,7 +104,7 @@ void	heredoc_loop(t_exec *ex, char *delimiter, int *tmp)
 			break ;
 		if (!rline)
 		{
-			print_delimiter_error_message(delimiter);
+			print_delimiter_error_message(delimiter); //added by raph???
 			close(*tmp);
 			*tmp = open(ex->hd_name, O_RDONLY);
 			return ;

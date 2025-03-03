@@ -60,3 +60,12 @@ int	has_redir(t_exec *ex)
 	}
 	return (-1);
 }
+
+void	print_delimiter_error_message(char *delimiter)
+{
+	ft_putstr_fd("minishell: warning: here-document delimited by ", 2);
+	ft_putstr_fd("end-of-file (wanted '", 2);
+	if (delimiter != NULL)
+		ft_putstr_fd(delimiter, 2);
+	ft_putstr_fd("')\n", 2);
+}

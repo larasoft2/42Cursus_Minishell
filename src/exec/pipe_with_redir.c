@@ -36,8 +36,13 @@ void	create_process(t_pipes *p, t_env **env)
 		perror("fork failed");
 		exit(EXIT_FAILURE);
 	}
+	if (p->pid > 0)
+		setup_command_mode_signals_handling(); //added from raph
 	if (p->pid == 0)
+	{
+		setup_command_mode_signals_handling(); //added from raph
 		child_process(p, env);
+	}
 }
 
 void	clean_up_after_command(t_pipes *p)

@@ -42,7 +42,7 @@ void	check_ctrl_d(t_env **env, t_exec *exec_list)
 	exit(EXIT_FAILURE);
 }
 
-int	main(int ac, char **av, char **env)
+int	main(int ac, char **av, char **env) //add condition if ac > 1, code shouldn't run
 {
 	char			*input;
 	t_token_node	*token_list;

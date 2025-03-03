@@ -92,19 +92,22 @@ void				modify_value(char *new_value, t_env *env_var);
 bool				check_command_in_list(t_exec *ex);
 bool				check_command_in_block(t_exec *begin, t_exec *end);
 
+int					env_list_size(t_env *env);
 int					ft_strcmp(char *s1, char *s2);
 int					nbr_of_args(t_exec *ex);
 int					count_command(t_exec *ex);
 int					has_pipe(t_exec *ex);
 int					has_redir(t_exec *ex);
 int					has_heredoc(t_exec *ex);
+int					print_error(char *filename);
 
 char				*ft_strndup(const char *s, size_t n);
 
 void				ft_init(t_exec *ex, int *std_dup);
-void    			restore_fds(int *std_dup);
 void				ft_close_fds(int fd);
 void				ft_close_fd(int *pipefd);
+void				print_delimiter_error_message(char *delimiter);
+void    			restore_fds(int *std_dup);
 void				skip_redirections(t_exec **current);
 
 

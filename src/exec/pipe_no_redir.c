@@ -55,8 +55,11 @@ void	execute_child_process(t_struct *data, t_env **env)
 		perror("fork failed");
 		exit(EXIT_FAILURE);
 	}
+	if (pid > 0) //added from raph
+		setup_command_mode_signals_handling();
 	else if (pid == 0)
 	{
+		setup_command_mode_signals_handling(); //added from raph
 		handle_child_io(data->fd_in, data->pipefd);
 		handle_redir(data->current);
 		ft_exec(data->current, env);
