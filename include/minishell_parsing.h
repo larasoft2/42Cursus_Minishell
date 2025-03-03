@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/18 18:12:26 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/03 15:04:25 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef struct s_exec t_exec;
 
 // SYNTAX_ERROR
 int				syntax_error_checker(char *input);
+int				syntax_error_checker_spaces_empty(char *input);
 int				check_empty_input(char *input);
 int				check_only_whitespace_intput(char *input);
 int				check_first_character_is_special_without_error(char *input);

@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/21 23:13:31 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/03 17:48:17 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	ft_exec(t_exec *ex, t_env **env)
 		ft_free_and_null(env_array);
 		free_exec_list(&ex);
 		free_env_list(env);
-		exit(EXIT_FAILURE);
+		exit(127);
 	}
 	execve(path_cmd, ex->arg, env_array);
 	perror("execve");

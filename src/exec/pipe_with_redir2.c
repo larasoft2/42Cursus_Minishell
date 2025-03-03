@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipe_no_redir.c                                    :+:      :+:    :+:   */
+/*   pipe_with_redir2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/21 23:52:26 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/03 15:57:14 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	setup_pipe(int pipefd[2])
 {
 	if (pipe(pipefd) == -1)
 	{
-		perror("pipe failed");
+		perror("pipe failed"); //check free
 		exit(EXIT_FAILURE);
 	}
 	return (pipefd[0]);
