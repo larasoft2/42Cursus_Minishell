@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:58:59 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/21 19:30:02 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/03 14:57:32 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,13 @@ int	main(int ac, char **av, char **env) //add condition if ac > 1, code shouldn'
 	setup_default_signals_handling();
 	while (1)
 	{
-		// setup_main_prompt_signals_handling();
+		setup_main_prompt_signals_handling();
 		input = readline("minishell> ");
 		if (!input)
 			check_ctrl_d(&env_final, exec_list);
 		minishell_loop(input, &token_list, &env_final, &exec_list);
 		//print_tokens_exec_list(exec_list);
-		// setup_default_signals_handling();
+		setup_default_signals_handling();
 	}
 	return (EXIT_SUCCESS);
 }

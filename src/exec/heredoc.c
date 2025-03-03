@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 15:37:43 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/21 16:27:10 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/03 14:51:58 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void	heredoc_loop(t_exec *ex, char *delimiter, int *tmp)
 			break ;
 		if (!rline)
 		{
-			print_delimiter_error_message(delimiter); //added by raph???
+			print_delimiter_error_message(delimiter);
 			close(*tmp);
 			*tmp = open(ex->hd_name, O_RDONLY);
 			return ;

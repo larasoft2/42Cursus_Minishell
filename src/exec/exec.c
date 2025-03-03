@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/21 23:13:31 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/03 15:09:13 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	ft_exec(t_exec *ex, t_env **env)
 	char	*path_cmd;
 	char	**env_array;
 
-	path_cmd = get_path(*env, ex->arg[0]);
+	path_cmd = get_path(*env, ex->arg[0], ex);
 	env_array = put_env_in_ar(*env);
 	if (!path_cmd)
 	{
