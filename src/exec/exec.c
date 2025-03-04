@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/04 11:38:34 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/04 13:45:17 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	ft_exec(t_exec *ex, t_env **env)
 	char	*path_cmd;
 	char	**env_array;
 
-	path_cmd = get_path(*env, ex->arg[0]);
+	path_cmd = get_path(*env, ex->arg[0], ex);
 	env_array = put_env_in_ar(*env);
 	if (!path_cmd)
 	{
@@ -119,7 +119,7 @@ int	process_commands(t_exec *ex, t_env **env,
 	else if (has_pipe(ex) == 1)
 	{
 		if (has_redir(ex) != 1)
-			handle_pipes_no_redir(ex, env, std_dup);
+			handle_pipes_no_redir(ex, env, std_dup, count_command(ex));
 		else
 			handle_pipes_if_redir(ex, env, std_dup);
 	}

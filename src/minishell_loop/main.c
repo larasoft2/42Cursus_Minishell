@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:58:59 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/04 11:44:46 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/04 13:48:13 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,12 @@ int	main(int ac, char **av, char **env) //add condition if ac > 1, code shouldn'
 	token_list = NULL;
 	exec_list = NULL;
 	env_final = NULL;
-	env_final = set_env(env_final, env); //if ac != 1 ?
+	if (ac > 1)
+    {
+        ft_putstr_fd("Wrong number of arguments\n", 2);
+        return (EXIT_FAILURE);
+    }
+	env_final = set_env(env_final, env);
 	setup_default_signals_handling();
 	while (1)
 	{
