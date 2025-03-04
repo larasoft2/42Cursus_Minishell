@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/04 20:47:19 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/04 20:50:21 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup, int count)
 	t_struct	name;
 
 	i = 0;
-	pid = malloc(count_command(ex) * sizeof(pid_t)); //changed 04.03
+	pid = malloc(count * sizeof(pid_t));
 	name.ex = ex;
 	name.fd_in = STDIN_FILENO;
 	ft_close_fd(std_dup);
