@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/21 23:13:31 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/03 19:14:50 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	ft_exec(t_exec *ex, t_env **env)
 	char	*path_cmd;
 	char	**env_array;
 
-	path_cmd = get_path(*env, ex->arg[0]);
+	path_cmd = get_path(*env, ex->arg[0], ex);
 	env_array = put_env_in_ar(*env);
 	if (!path_cmd)
 	{
@@ -33,7 +33,7 @@ void	ft_exec(t_exec *ex, t_env **env)
 		ft_free_and_null(env_array);
 		free_exec_list(&ex);
 		free_env_list(env);
-		exit(EXIT_FAILURE);
+		exit(127);
 	}
 	execve(path_cmd, ex->arg, env_array);
 	perror("execve");
@@ -70,6 +70,9 @@ void	ft_fork(t_exec *cmd, t_env **env, int *std_dup)
 	}
 	while (wait(&status) > 0)
 		continue ;
+	modify_value_exit_code(status / 256);
+	if (g_signal != 0)
+		modify_value_exit_code(g_signal);
 }
 
 void	exec_commands(t_exec *ex, t_env **env, int *std_dup)
@@ -101,6 +104,12 @@ int	process_commands(t_exec *ex, t_env **env,
 {
 	if (has_heredoc(ex) == 1 && g_signal != SIGINT) //added && from raph
 		ft_open_heredocs(ex, ex->fd_in);
+	if (g_signal == SIGINT)
+	{
+		modify_value_exit_code(130);
+		dup2(std_dup[0], STDIN_FILENO);
+		return (EXIT_SUCCESS);
+	}
 	if (!has_command && has_heredoc(ex) == 1 && g_signal != SIGINT) //added && from raph //has heredoc useless?
 	{
 		handle_redir(ex);
@@ -110,7 +119,7 @@ int	process_commands(t_exec *ex, t_env **env,
 	else if (has_pipe(ex) == 1)
 	{
 		if (has_redir(ex) != 1)
-			handle_pipes_no_redir(ex, env, std_dup);
+			handle_pipes_no_redir(ex, env, std_dup, count_command(ex));
 		else
 			handle_pipes_if_redir(ex, env, std_dup);
 	}

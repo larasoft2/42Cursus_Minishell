@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 14:25:00 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/18 17:54:05 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/03 18:26:23 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,17 @@ void	free_exec_list(t_exec **list)
 		{
 			next = temp->next;
 			if (temp->arg)
-			{
 				ft_free_and_null(temp->arg);
-			}
 			free(temp);
 			temp = next;
 		}
 	}
 	*list = NULL;
+}
+
+void	free_exec_node(t_exec *node)
+{
+	if (node->arg)
+		ft_free_and_null(node->arg);
+	free(node);
 }

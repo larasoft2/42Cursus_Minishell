@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:08:01 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/21 23:51:57 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/03 19:22:41 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 
 typedef struct s_exec
 {
+	// pid_t			*pid;
 	char			*hd_name;
 	char			**arg;
 	int				fd_in;
@@ -56,7 +57,7 @@ typedef struct s_struct
     t_exec		*current;
 }					t_struct;
 
-typedef struct	s_pipes 
+typedef struct	s_pipes
 {
 	int			fd_in;
 	int			pipefd[2];
@@ -65,7 +66,7 @@ typedef struct	s_pipes
 	pid_t		pid;
 	t_exec		*current;
 	t_exec		*block_begin;
-	
+	t_exec		*begin;
 }					t_pipes;
 
 // BUILTINS//
@@ -125,7 +126,7 @@ int					redir_in(t_exec *ex, int *fd_in);
 int					redir_out(t_exec *ex);
 int					setup_pipe(int pipefd[2]);
 
-char				*get_path(t_env *env, char *cmd);
+char				*get_path(t_env *env, char *cmd, t_exec *ex);
 char				*is_path_exec(char *cmd, char **full_paths);
 char				**put_env_in_ar(t_env *envp);
 
@@ -135,7 +136,7 @@ void				ft_open_heredocs(t_exec *ex, int pipefd);
 void    			ft_process(t_env **env, t_exec *ex);
 void				handle_empty_pipe(t_pipes *p);
 void				handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup);
-void				handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup);
+void				handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup, int count);
 void				setup_io_for_command(t_pipes *p);
 
 // FREE//
