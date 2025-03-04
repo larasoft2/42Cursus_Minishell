@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:04:55 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/18 18:05:13 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/04 13:35:23 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,13 @@
 
 int	check_syntax_input(char *input, int *syntax_status)
 {
-	if (syntax_error_checker(input) == EXIT_FAILURE)
+	if (syntax_error_checker_spaces_empty(input) == EXIT_FAILURE)
+	{
+		modify_value_exit_code(0);
+		*syntax_status = EXIT_FAILURE;
+		return (EXIT_FAILURE);
+	}
+	else if (syntax_error_checker(input) == EXIT_FAILURE)
 	{
 		modify_value_exit_code(2);
 		*syntax_status = EXIT_FAILURE;
