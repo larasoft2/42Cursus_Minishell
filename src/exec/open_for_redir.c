@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 18:33:46 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/04 13:33:19 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/04 18:10:02 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	redir_out(t_exec *ex)
 		else if (ex->type == TOKEN_REDIR_APPEND)
 			ex->fd_out = open(ex->arg[0], O_CREAT | O_WRONLY | O_APPEND, 0644);
 		if (ex->fd_out < 0)
-			return (modify_value_exit_code(1), print_error(ex->arg[0])); 
+			return (modify_value_exit_code(1), print_error(ex->arg[0])); //
 		dup2(ex->fd_out, STDOUT_FILENO);
 		if (ex->fd_out != -1)
 		{

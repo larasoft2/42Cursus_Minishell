@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipe_no_redir.c                                    :+:      :+:    :+:   */
+/*   pipe_with_redir2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/21 23:52:26 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/04 15:35:16 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	setup_pipe(int pipefd[2])
 	if (pipe(pipefd) == -1)
 	{
 		perror("pipe failed");
+		ft_close_fd(pipefd); //added 04.03
 		exit(EXIT_FAILURE);
 	}
 	return (pipefd[0]);
@@ -76,5 +77,11 @@ void	setup_io_for_command(t_pipes *p)
 		dup2(p->pipefd[1], STDOUT_FILENO);
 		close(p->pipefd[1]);
 		p->pipefd[1] = -1;
+	}
+	if (p->pipefd[0] != -1) //added 04.03
+	{
+		dup2(p->pipefd[0], STDIN_FILENO); //not sure about this dup2
+		close(p->pipefd[0]);
+		p->pipefd[0] = -1;
 	}
 }

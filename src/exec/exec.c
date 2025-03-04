@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/03 19:14:50 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/04 20:18:51 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,12 @@
 // access F OK check infiles chez Jean pour que ca ne cree pas outfile si infile invalide
 //error check useless
 
-void	ft_exec(t_exec *ex, t_env **env)
+#include <unistd.h>
+
+
+
+
+void	ft_exec(t_exec *ex, t_env **env, pid_t *pid)
 {
 	char	*path_cmd;
 	char	**env_array;
@@ -29,10 +34,15 @@ void	ft_exec(t_exec *ex, t_env **env)
 	env_array = put_env_in_ar(*env);
 	if (!path_cmd)
 	{
-		print_error_exec_message(COMMAND_NOT_FOUND, ex->arg[0]);
+		print_command_not_found(ex->arg[0]);
 		ft_free_and_null(env_array);
 		free_exec_list(&ex);
 		free_env_list(env);
+		if (pid)
+		{
+			free(pid);
+			pid = NULL;
+		}
 		exit(127);
 	}
 	execve(path_cmd, ex->arg, env_array);
@@ -41,6 +51,11 @@ void	ft_exec(t_exec *ex, t_env **env)
 	free(path_cmd);
 	free_exec_list(&ex);
 	free_env_list(env);
+	if (pid)
+	{
+		free(pid);
+		pid = NULL;
+	}
 	exit(EXIT_FAILURE);
 }
 
@@ -64,7 +79,7 @@ void	ft_fork(t_exec *cmd, t_env **env, int *std_dup)
 		{
 			setup_command_mode_signals_handling();
 			ft_close_fd(std_dup);
-			ft_exec(cmd, env);
+			ft_exec(cmd, env, NULL);
 		}
 		cmd = cmd->next;
 	}

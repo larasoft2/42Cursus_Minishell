@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_exec.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:08:01 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/03 19:22:41 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/04 20:19:13 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct s_struct
     int			pipefd[2];
 	t_exec		*ex;
     t_exec		*current;
+	t_exec		*begin;
 }					t_struct;
 
 typedef struct	s_pipes
@@ -107,6 +108,7 @@ char				*ft_strndup(const char *s, size_t n);
 void				ft_init(t_exec *ex, int *std_dup);
 void				ft_close_fds(int fd);
 void				ft_close_fd(int *pipefd);
+void				print_command_not_found(char *command);
 void				print_delimiter_error_message(char *delimiter);
 void    			restore_fds(int *std_dup);
 void				skip_redirections(t_exec **current);
@@ -116,6 +118,7 @@ t_exec				*get_next_exec_token(t_exec *ex);
 t_exec				*find_next_valid_token(t_exec *ex);
 
 // EXEC//
+int					ft_fprintf(int fd, const char *format, ...);
 int					exec_builtin(t_exec *ex, t_env **env, int *std_dup);
 int					ft_open(t_exec *ex, int *fd_in);
 int					handle_heredoc(t_exec *ex);
@@ -130,7 +133,7 @@ char				*get_path(t_env *env, char *cmd, t_exec *ex);
 char				*is_path_exec(char *cmd, char **full_paths);
 char				**put_env_in_ar(t_env *envp);
 
-void				ft_exec(t_exec *ex, t_env **env);
+void				ft_exec(t_exec *ex, t_env **env, pid_t *pid);
 void				ft_fork(t_exec *cmd, t_env **env, int *std_dup);
 void				ft_open_heredocs(t_exec *ex, int pipefd);
 void    			ft_process(t_env **env, t_exec *ex);
