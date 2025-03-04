@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/04 20:17:41 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/04 20:47:19 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,6 @@ void	execute_child_process(t_struct *data, t_env **env, pid_t *pid, int *i)
 		setup_command_mode_signals_handling(); //added from raph
 		handle_child_io(data->fd_in, data->pipefd);
 		handle_redir(data->current);
-		// if (handle_redir(data->current) == EXIT_FAILURE)
-		// {
-		// 	fprintf(stderr, "freeing\n");
-		// 	free_env_list(env);
-		// 	free_exec_list(&data->begin);
-		// 	exit(EXIT_FAILURE);
-		// }
-		// fprintf(stderr, "here\n");
 		ft_exec(data->current, env, pid);
 		exit(EXIT_FAILURE); //useless
 	}
@@ -95,25 +87,24 @@ void	handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup, int count)
 	int			status;
 	int			pipefd[2];
 	pid_t		*pid;
-	t_struct	cpy;
+	t_struct	name;
 
 	i = 0;
-	pid = malloc(count * sizeof(pid_t));
-	cpy.ex = ex;
-	cpy.begin = ex;
-	cpy.fd_in = STDIN_FILENO;
+	pid = malloc(count_command(ex) * sizeof(pid_t)); //changed 04.03
+	name.ex = ex;
+	name.fd_in = STDIN_FILENO;
 	ft_close_fd(std_dup);
 	while (ex)
 	{
 		ex = find_next_valid_token(ex);
 		if (!ex || ex->type != TOKEN_WORD)
 			break ;
-		cpy.current = ex;
+		name.current = ex;
 		prepare_pipe(pipefd, ex);
-		cpy.pipefd[0] = pipefd[0];
-		cpy.pipefd[1] = pipefd[1];
-		execute_child_process(&cpy, env, pid, &i);
-		handle_parent_io(&cpy.fd_in, pipefd);
+		name.pipefd[0] = pipefd[0];
+		name.pipefd[1] = pipefd[1];
+		execute_child_process(&name, env, pid, &i);
+		handle_parent_io(&name.fd_in, pipefd);
 		ex = get_next_exec_token(ex);
 	}
 	i = 0;

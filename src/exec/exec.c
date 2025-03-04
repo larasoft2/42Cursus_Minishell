@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/04 20:18:51 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/04 20:26:07 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@
 //error check useless
 
 #include <unistd.h>
-
-
-
 
 void	ft_exec(t_exec *ex, t_env **env, pid_t *pid)
 {
