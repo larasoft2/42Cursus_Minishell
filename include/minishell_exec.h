@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:08:01 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/04 20:19:13 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/04 20:21:10 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,6 @@ t_exec				*get_next_exec_token(t_exec *ex);
 t_exec				*find_next_valid_token(t_exec *ex);
 
 // EXEC//
-int					ft_fprintf(int fd, const char *format, ...);
 int					exec_builtin(t_exec *ex, t_env **env, int *std_dup);
 int					ft_open(t_exec *ex, int *fd_in);
 int					handle_heredoc(t_exec *ex);
