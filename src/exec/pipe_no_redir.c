@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/04 21:18:05 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/04 22:34:11 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	execute_child_process(t_struct *data, t_env **env, pid_t *pid, int *i)
 		setup_command_mode_signals_handling(); //added from raph
 		handle_child_io(data->fd_in, data->pipefd);
 		handle_redir(data->current);
-		ft_exec(data->current, env, pid, data);
+		ft_exec(data->current, env, pid, data, NULL);
 		exit(EXIT_FAILURE); //useless
 	}
 	*i += 1;
