@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/15 18:07:44 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/20 23:40:45 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/04 11:46:29 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,26 +38,56 @@ char	*is_path_exec(char *cmd, char **full_paths)
 	return (NULL);
 }
 
-char	*get_path(t_env *env, char *cmd)
+char *check_direct_path(char *cmd, t_exec *ex, t_env **env)
 {
-	char	**full_paths;
-	char	*path;
+    if (cmd && (cmd[0] == '/' || cmd[0] == '.'))
+    {
+        if (access(cmd, F_OK) == 0)
+        {
+            if (access(cmd, X_OK) == 0)
+                return (ft_strdup(cmd));
+            else
+            {
+                print_error(cmd);
+                free_exec_list(&ex);
+                free_env_list(env);
+                exit(126);
+            }
+        }
+        else
+        {
+            print_error(cmd);
+            free_exec_list(&ex);
+            free_env_list(env);
+            exit(127);
+        }
+    }
+    return (NULL);
+}
+
+char	*get_path(t_env *env, char *cmd, t_exec *ex)
+{
+	char **full_paths;
+	char *path;
+	char *direct_path;
+
+	direct_path = check_direct_path(cmd, ex, &env);
+	if (direct_path)
+		return (direct_path);
 
 	full_paths = NULL;
-	path = NULL;
-	if (cmd && (cmd[0] == '/' || cmd[0] == '.'))
-		return (cmd);
 	while (env)
 	{
 		if (ft_strncmp(env->key, "PATH", 4) == 0 && env->key[4] == '\0')
 		{
 			full_paths = ft_split(env->value, ':');
-			break ;
+			break;
 		}
 		env = env->next;
 	}
 	if (!full_paths)
 		return (NULL);
+
 	path = is_path_exec(cmd, full_paths);
 	return (path);
 }

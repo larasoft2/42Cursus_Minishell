@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/03 17:48:17 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/04 11:38:34 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,9 @@ void	ft_fork(t_exec *cmd, t_env **env, int *std_dup)
 	}
 	while (wait(&status) > 0)
 		continue ;
+	modify_value_exit_code(status / 256);
+	if (g_signal != 0)
+		modify_value_exit_code(g_signal);
 }
 
 void	exec_commands(t_exec *ex, t_env **env, int *std_dup)
@@ -101,6 +104,12 @@ int	process_commands(t_exec *ex, t_env **env,
 {
 	if (has_heredoc(ex) == 1 && g_signal != SIGINT) //added && from raph
 		ft_open_heredocs(ex, ex->fd_in);
+	if (g_signal == SIGINT)
+	{
+		modify_value_exit_code(130);
+		dup2(std_dup[0], STDIN_FILENO);
+		return (EXIT_SUCCESS);
+	}
 	if (!has_command && has_heredoc(ex) == 1 && g_signal != SIGINT) //added && from raph //has heredoc useless?
 	{
 		handle_redir(ex);

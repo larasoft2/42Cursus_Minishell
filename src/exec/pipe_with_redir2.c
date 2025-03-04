@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/03 15:57:14 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/04 11:42:05 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	setup_pipe(int pipefd[2])
 {
 	if (pipe(pipefd) == -1)
 	{
-		perror("pipe failed"); //check free
+		perror("pipe failed");
 		exit(EXIT_FAILURE);
 	}
 	return (pipefd[0]);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipe_no_redir.c                                    :+:      :+:    :+:   */
+/*   pipe_with_redir.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/21 23:52:26 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/04 11:41:47 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,14 @@ void	child_process(t_pipes *p, t_env **env)
 	}
 	if (handle_redir_in_pipe(p->block_begin, p->fd_in) == EXIT_FAILURE)
 	{
+		free_env_list(env);
+		free_exec_list(&p->begin);
 		exit(EXIT_FAILURE);
 	}
 	ft_exec(p->current, env);
-	exit(EXIT_FAILURE);
 }
 
-void	create_process(t_pipes *p, t_env **env)
+void	create_process(t_pipes *p, t_env **env, pid_t *pid)
 {
 	p->pid = fork();
 	if (p->pid == -1)
@@ -40,6 +41,7 @@ void	create_process(t_pipes *p, t_env **env)
 		setup_command_mode_signals_handling(); //added from raph
 	if (p->pid == 0)
 	{
+		free(pid);
 		setup_command_mode_signals_handling(); //added from raph
 		child_process(p, env);
 	}
@@ -66,23 +68,28 @@ void	clean_up_after_command(t_pipes *p)
 	p->block_begin = p->current;
 }
 
-void	handle_command_block(t_pipes *p, t_env **env)
+void	handle_command_block(t_pipes *p, t_env **env, pid_t *pid)
 {
 	setup_io_for_command(p);
-	create_process(p, env);
+	create_process(p, env, pid);
 	clean_up_after_command(p);
 }
 
 void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
 {
+	int			i;
 	int			status;
+	pid_t		*pid;
 	t_pipes		p;
 
+	i = 0; //ft_init
 	p.fd_in = -1;
 	p.current = ex;
 	p.block_begin = ex;
+	p.begin = ex;
 	p.std_dup[0] = std_dup[0];
 	p.std_dup[1] = std_dup[1];
+	pid = malloc(count_command(ex) * sizeof(pid_t));
 	while (p.current)
 	{
 		skip_redirections(&p.current);
@@ -94,8 +101,12 @@ void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
 		}
 		if (!p.current || p.current->type != TOKEN_WORD)
 			break ;
-		handle_command_block(&p, env);
+		handle_command_block(&p, env, pid);
+		pid[i++] = p.pid;
 	}
-	while (wait(&status) > 0)
+	i = 0;
+	while (i < count_command(ex) && waitpid(pid[i++], &status, 0))
 		continue ;
+	modify_value_exit_code(status / 256);
+	free(pid);
 }
