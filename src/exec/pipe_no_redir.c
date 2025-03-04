@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/04 20:50:21 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/04 21:18:05 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	execute_child_process(t_struct *data, t_env **env, pid_t *pid, int *i)
 		setup_command_mode_signals_handling(); //added from raph
 		handle_child_io(data->fd_in, data->pipefd);
 		handle_redir(data->current);
-		ft_exec(data->current, env, pid);
+		ft_exec(data->current, env, pid, data);
 		exit(EXIT_FAILURE); //useless
 	}
 	*i += 1;
@@ -93,6 +93,7 @@ void	handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup, int count)
 	pid = malloc(count * sizeof(pid_t));
 	name.ex = ex;
 	name.fd_in = STDIN_FILENO;
+	name.begin = ex;
 	ft_close_fd(std_dup);
 	while (ex)
 	{

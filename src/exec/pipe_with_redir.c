@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/04 18:27:50 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/04 21:21:06 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	child_process(t_pipes *p, t_env **env)
 		free_exec_list(&p->begin);
 		exit(EXIT_FAILURE);
 	}
-	ft_exec(p->current, env, NULL);
+	ft_exec(p->current, env, NULL, NULL);
 }
 
 void	create_process(t_pipes *p, t_env **env, pid_t *pid)
