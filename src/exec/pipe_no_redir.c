@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/04 22:34:11 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:15:03 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	handle_child_io(int fd_in, int *pipefd)
 		ft_close_fds(pipefd[0]);
 }
 
-void	execute_child_process(t_struct *data, t_env **env, pid_t *pid, int *i)
+void	execute_child_process(t_ex_ctx *ex_ctx, t_env **env, pid_t *pid, int *i)
 {
 	pid[*i] = fork();
 	if (pid[*i] == -1)
@@ -58,9 +58,9 @@ void	execute_child_process(t_struct *data, t_env **env, pid_t *pid, int *i)
 	else if (pid[*i] == 0)
 	{
 		setup_command_mode_signals_handling(); //added from raph
-		handle_child_io(data->fd_in, data->pipefd);
-		handle_redir(data->current);
-		ft_exec(data->current, env, pid, data, NULL);
+		handle_child_io(ex_ctx->fd_in, ex_ctx->pipefd);
+		handle_redir(ex_ctx->current);
+		ft_exec(ex_ctx->current, env, pid, ex_ctx);
 		exit(EXIT_FAILURE); //useless
 	}
 	*i += 1;
@@ -87,25 +87,25 @@ void	handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup, int count)
 	int			status;
 	int			pipefd[2];
 	pid_t		*pid;
-	t_struct	name;
+	t_ex_ctx		ex_ctx;
 
 	i = 0;
 	pid = malloc(count * sizeof(pid_t));
-	name.ex = ex;
-	name.fd_in = STDIN_FILENO;
-	name.begin = ex;
+	ex_ctx.ex = ex;
+	ex_ctx.fd_in = STDIN_FILENO;
+	ex_ctx.begin = ex;
 	ft_close_fd(std_dup);
 	while (ex)
 	{
 		ex = find_next_valid_token(ex);
 		if (!ex || ex->type != TOKEN_WORD)
 			break ;
-		name.current = ex;
+		ex_ctx.current = ex;
 		prepare_pipe(pipefd, ex);
-		name.pipefd[0] = pipefd[0];
-		name.pipefd[1] = pipefd[1];
-		execute_child_process(&name, env, pid, &i);
-		handle_parent_io(&name.fd_in, pipefd);
+		ex_ctx.pipefd[0] = pipefd[0];
+		ex_ctx.pipefd[1] = pipefd[1];
+		execute_child_process(&ex_ctx, env, pid, &i);
+		handle_parent_io(&ex_ctx.fd_in, pipefd);
 		ex = get_next_exec_token(ex);
 	}
 	i = 0;

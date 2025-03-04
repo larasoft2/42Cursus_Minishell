@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/04 15:35:16 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:15:03 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,42 +46,42 @@ int	setup_pipe(int pipefd[2])
 	return (pipefd[0]);
 }
 
-void	handle_empty_pipe(t_pipes *p)
+void	handle_empty_pipe(t_ex_ctx *ex_ctx)
 {
 	int	prev_fd;
 
-	prev_fd = setup_pipe(p->pipefd);
-	close(p->pipefd[1]);
-	p->current = p->current->next;
-	p->block_begin = p->current;
-	p->fd_in = prev_fd;
+	prev_fd = setup_pipe(ex_ctx->pipefd);
+	close(ex_ctx->pipefd[1]);
+	ex_ctx->current = ex_ctx->current->next;
+	ex_ctx->block_begin = ex_ctx->current;
+	ex_ctx->fd_in = prev_fd;
 }
 
-void	setup_io_for_command(t_pipes *p)
+void	setup_io_for_command(t_ex_ctx *ex_ctx)
 {
-	if (p->fd_in != -1)
+	if (ex_ctx->fd_in != -1)
 	{
-		dup2(p->fd_in, STDIN_FILENO);
-		close(p->fd_in);
-		p->fd_in = -1;
+		dup2(ex_ctx->fd_in, STDIN_FILENO);
+		close(ex_ctx->fd_in);
+		ex_ctx->fd_in = -1;
 	}
-	if (has_pipe(p->current) != -1)
-		p->fd_in = setup_pipe(p->pipefd);
+	if (has_pipe(ex_ctx->current) != -1)
+		ex_ctx->fd_in = setup_pipe(ex_ctx->pipefd);
 	else
 	{
-		p->pipefd[0] = -1;
-		p->pipefd[1] = -1;
+		ex_ctx->pipefd[0] = -1;
+		ex_ctx->pipefd[1] = -1;
 	}
-	if (p->pipefd[1] != -1)
+	if (ex_ctx->pipefd[1] != -1)
 	{
-		dup2(p->pipefd[1], STDOUT_FILENO);
-		close(p->pipefd[1]);
-		p->pipefd[1] = -1;
+		dup2(ex_ctx->pipefd[1], STDOUT_FILENO);
+		close(ex_ctx->pipefd[1]);
+		ex_ctx->pipefd[1] = -1;
 	}
-	if (p->pipefd[0] != -1) //added 04.03
+	if (ex_ctx->pipefd[0] != -1) //added 04.03
 	{
-		dup2(p->pipefd[0], STDIN_FILENO); //not sure about this dup2
-		close(p->pipefd[0]);
-		p->pipefd[0] = -1;
+		dup2(ex_ctx->pipefd[0], STDIN_FILENO); //not sure about this dup2
+		close(ex_ctx->pipefd[0]);
+		ex_ctx->pipefd[0] = -1;
 	}
 }

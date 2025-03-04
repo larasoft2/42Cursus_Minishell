@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:08:01 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/04 22:47:34 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:15:03 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_env
 	struct s_env	*next;
 }					t_env;
 
-typedef struct s_luna
+typedef struct s_ex_ctx
 {
 	int 		fd_in;
     int			pipefd[2];
@@ -57,30 +57,10 @@ typedef struct s_luna
 	bool		has_command;
 	pid_t		pid;
 	t_exec		*ex;
-    t_exec		*current;
-	t_exec		*begin;
-}					t_luna;
-
-typedef struct s_struct
-{
-    int 		fd_in;
-    int			pipefd[2];
-	t_exec		*ex;
-    t_exec		*current;
-	t_exec		*begin;
-}					t_struct;
-
-typedef struct	s_pipes
-{
-	int			fd_in;
-	int			pipefd[2];
-	int			std_dup[2];
-	bool		has_command;
-	pid_t		pid;
-	t_exec		*current;
 	t_exec		*block_begin;
+    t_exec		*current;
 	t_exec		*begin;
-}					t_pipes;
+}					t_ex_ctx;
 
 // BUILTINS//
 int					ft_echo(t_exec *ex);
@@ -144,14 +124,14 @@ char				*get_path(t_env *env, char *cmd, t_exec *ex);
 char				*is_path_exec(char *cmd, char **full_paths);
 char				**put_env_in_ar(t_env *envp);
 
-void				ft_exec(t_exec *ex, t_env **env, pid_t *pid, t_struct *data, t_pipes *p);
+void				ft_exec(t_exec *ex, t_env **env, pid_t *pid, t_ex_ctx *ex_ctx);
 void				ft_fork(t_exec *cmd, t_env **env, int *std_dup);
 void				ft_open_heredocs(t_exec *ex, int pipefd);
 void    			ft_process(t_env **env, t_exec *ex);
-void				handle_empty_pipe(t_pipes *p);
+void				handle_empty_pipe(t_ex_ctx *ex_ctx);
 void				handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup);
 void				handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup, int count);
-void				setup_io_for_command(t_pipes *p);
+void				setup_io_for_command(t_ex_ctx *ex_ctx);
 
 // FREE//
 void				*ft_free_array(char **ar);

@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/04 22:34:04 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:15:03 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 
 #include <unistd.h>
 
-void	ft_exec(t_exec *ex, t_env **env, pid_t *pid, t_struct *data, t_pipes *p)
+void	ft_exec(t_exec *ex, t_env **env, pid_t *pid, t_ex_ctx *ex_ctx)
 {
 	char	*path_cmd;
 	char	**env_array;
@@ -33,10 +33,8 @@ void	ft_exec(t_exec *ex, t_env **env, pid_t *pid, t_struct *data, t_pipes *p)
 	{
 		print_command_not_found(ex->arg[0]);
 		ft_free_and_null(env_array);
-		if (data)
-			free_exec_list(&data->begin);
-		else if (p)
-			free_exec_list(&p->begin);
+		if (ex_ctx)
+			free_exec_list(&ex_ctx->begin);
 		else
 			free_exec_list(&ex);
 		free_env_list(env);
@@ -81,7 +79,7 @@ void	ft_fork(t_exec *cmd, t_env **env, int *std_dup)
 		{
 			setup_command_mode_signals_handling();
 			ft_close_fd(std_dup);
-			ft_exec(cmd, env, NULL, NULL, NULL);
+			ft_exec(cmd, env, NULL, NULL);
 		}
 		cmd = cmd->next;
 	}
