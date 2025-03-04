@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_no_redir.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/03 19:15:43 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/04 13:12:57 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,5 +111,6 @@ void	handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup, int count)
 	while (i < count)
 		waitpid(pid[i++], &status, 0);
 	ft_close_fd(pipefd);
+	free(pid);
 	modify_value_exit_code(status / 256);
 }
