@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 16:24:43 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/04 13:34:03 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:26:36 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ int	syntax_error_checker(char *input)
 	return (EXIT_SUCCESS);
 }
 
-int    syntax_error_checker_spaces_empty(char *input)
+int	syntax_error_checker_spaces_empty(char *input)
 {
-    if (check_empty_input(input) == EMPTY_STRING)
-        return (EXIT_FAILURE);
-    if (check_only_whitespace_intput(input) == INPUT_ONLY_WHITESPACE)
-        return (EXIT_FAILURE);
-    return (EXIT_SUCCESS);
+	if (check_empty_input(input) == EMPTY_STRING)
+		return (EXIT_FAILURE);
+	if (check_only_whitespace_intput(input) == INPUT_ONLY_WHITESPACE)
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 18:33:46 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/04 20:46:31 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:43:02 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,15 @@ int	redir_in(t_exec *ex, int *fd_in)
 			ft_close_fds(*fd_in);
 		*fd_in = open(ex->arg[0], O_RDONLY);
 		if (*fd_in < 0)
-			return (modify_value_exit_code(1), print_error(ex->arg[0])); 
+			return (modify_value_exit_code(1), print_error(ex->arg[0]));
 	}
-	else if (ex->type == TOKEN_REDIR_HEREDOC && g_signal != SIGINT) //added && from raph
+	else if (ex->type == TOKEN_REDIR_HEREDOC && g_signal != SIGINT)
 	{
 		if (*fd_in > 2)
 			ft_close_fds(*fd_in);
 		*fd_in = open(ex->hd_name, O_RDONLY);
 		if (*fd_in < 0)
-			return (modify_value_exit_code(1), print_error(ex->hd_name)); //check this
+			return (modify_value_exit_code(1), print_error(ex->hd_name));
 	}
 	return (EXIT_SUCCESS);
 }

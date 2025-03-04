@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/04 23:15:03 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 00:27:30 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ void	create_process(t_ex_ctx *ex_ctx, t_env **env, pid_t *pid)
 		exit(EXIT_FAILURE);
 	}
 	if (ex_ctx->pid > 0)
-		setup_command_mode_signals_handling(); //added from raph
+		setup_command_mode_signals_handling();
 	if (ex_ctx->pid == 0)
 	{
 		free(pid);
-		setup_command_mode_signals_handling(); //added from raph
+		setup_command_mode_signals_handling();
 		child_process(ex_ctx, env);
 	}
 }
@@ -75,25 +75,30 @@ void	handle_command_block(t_ex_ctx *ex_ctx, t_env **env, pid_t *pid)
 	clean_up_after_command(ex_ctx);
 }
 
+void	init_ex_ctx_for_redir(t_ex_ctx *ex_ctx, t_exec *ex, int *std_dup)
+{
+	ex_ctx->fd_in = -1;
+	ex_ctx->current = ex;
+	ex_ctx->block_begin = ex;
+	ex_ctx->begin = ex;
+	ex_ctx->std_dup[0] = std_dup[0];
+	ex_ctx->std_dup[1] = std_dup[1];
+}
+
 void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
 {
 	int			i;
 	int			status;
 	pid_t		*pid;
-	t_ex_ctx		ex_ctx;
+	t_ex_ctx	ex_ctx;
 
-	i = 0; //ft_init
-	ex_ctx.fd_in = -1;
-	ex_ctx.current = ex;
-	ex_ctx.block_begin = ex;
-	ex_ctx.begin = ex;
-	ex_ctx.std_dup[0] = std_dup[0];
-	ex_ctx.std_dup[1] = std_dup[1];
+	i = 0;
+	init_ex_ctx_for_redir(&ex_ctx, ex, std_dup);
 	pid = malloc(count_command(ex) * sizeof(pid_t));
 	while (ex_ctx.current)
 	{
 		skip_redirections(&ex_ctx.current);
-		ex_ctx.has_command = check_command_in_block(ex_ctx.block_begin, ex_ctx.current);
+		ex_ctx.has_command = check_cmd_in_block(ex_ctx.block_begin, ex_ctx.current);
 		if (!ex_ctx.has_command && ex_ctx.current && ex_ctx.current->type == TOKEN_PIPE)
 		{
 			handle_empty_pipe(&ex_ctx);

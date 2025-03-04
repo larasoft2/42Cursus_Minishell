@@ -6,13 +6,13 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/04 23:15:03 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 00:27:27 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	check_command_in_block(t_exec *begin, t_exec *end)
+bool	check_cmd_in_block(t_exec *begin, t_exec *end)
 {
 	t_exec	*temp;
 
@@ -40,7 +40,6 @@ int	setup_pipe(int pipefd[2])
 	if (pipe(pipefd) == -1)
 	{
 		perror("pipe failed");
-		ft_close_fd(pipefd); //added 04.03
 		exit(EXIT_FAILURE);
 	}
 	return (pipefd[0]);

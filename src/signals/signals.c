@@ -6,13 +6,13 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 16:33:15 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/20 19:55:56 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:20:46 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int g_signal = 0;
+int	g_signal = 0;
 
 void	setup_command_mode_signals_handling(void)
 {

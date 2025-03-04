@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/04 23:15:03 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 00:21:08 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ void	ft_process(t_env **env, t_exec *ex)
 	t_exec	*current;
 
 	has_command = check_command_in_list(ex);
-	ft_init(ex, std_dup);
+	init_fd_dup(ex, std_dup);
 	process_commands(ex, env, std_dup, has_command);
 	ft_close_fds(std_dup[0]);
 	ft_close_fds(std_dup[1]);

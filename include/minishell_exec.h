@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/18 18:08:01 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/04 23:15:03 by lusavign         ###   ########.fr       */
+/*   Created: 2025/03/04 23:30:45 by lusavign          #+#    #+#             */
+/*   Updated: 2025/03/05 00:27:27 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void				modify_value(char *new_value, t_env *env_var);
 
 // EXEC UTILS//
 bool				check_command_in_list(t_exec *ex);
-bool				check_command_in_block(t_exec *begin, t_exec *end);
+bool				check_cmd_in_block(t_exec *begin, t_exec *end);
 
 int					env_list_size(t_env *env);
 int					ft_strcmp(char *s1, char *s2);
@@ -97,7 +97,7 @@ int					print_error(char *filename);
 
 char				*ft_strndup(const char *s, size_t n);
 
-void				ft_init(t_exec *ex, int *std_dup);
+void				init_fd_dup(t_exec *ex, int *std_dup);
 void				ft_close_fds(int fd);
 void				ft_close_fd(int *pipefd);
 void				print_command_not_found(char *command);
@@ -124,6 +124,7 @@ char				*get_path(t_env *env, char *cmd, t_exec *ex);
 char				*is_path_exec(char *cmd, char **full_paths);
 char				**put_env_in_ar(t_env *envp);
 
+void				init_ex_ctx(t_ex_ctx *ex_ctx, t_exec *ex);
 void				ft_exec(t_exec *ex, t_env **env, pid_t *pid, t_ex_ctx *ex_ctx);
 void				ft_fork(t_exec *cmd, t_env **env, int *std_dup);
 void				ft_open_heredocs(t_exec *ex, int pipefd);
@@ -131,10 +132,12 @@ void    			ft_process(t_env **env, t_exec *ex);
 void				handle_empty_pipe(t_ex_ctx *ex_ctx);
 void				handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup);
 void				handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup, int count);
+void				handle_parent_io(int *fd_in, int *pipefd);
+void				handle_child_io(int fd_in, int *pipefd);
+void				prepare_pipe(int *pipefd, t_exec *ex);
 void				setup_io_for_command(t_ex_ctx *ex_ctx);
 
 // FREE//
 void				*ft_free_array(char **ar);
 
 #endif
-
