@@ -6,36 +6,13 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/05 13:21:27 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 14:54:22 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	check_cmd_in_block(t_exec *begin, t_exec *end)
-{
-	t_exec	*temp;
-
-	temp = begin;
-	while (temp && temp != end)
-	{
-		if (temp->type == TOKEN_WORD)
-			return (true);
-		temp = temp->next;
-	}
-	return (false);
-}
-
-void	skip_redirections(t_exec **current)
-{
-	while ((*current && (*current)->type == TOKEN_REDIR_IN)
-		|| (*current && (*current)->type == TOKEN_REDIR_OUT)
-		|| (*current && (*current)->type == TOKEN_REDIR_APPEND)
-		|| (*current && (*current)->type == TOKEN_REDIR_HEREDOC))
-		*current = (*current)->next;
-}
-
-int	setup_pipe(int pipefd[2])
+int	setup_pipe_redir(int pipefd[2])
 {
 	if (pipe(pipefd) == -1)
 	{
@@ -49,7 +26,7 @@ void	handle_empty_pipe(t_ex_ctx *ex_ctx)
 {
 	int	prev_fd;
 
-	prev_fd = setup_pipe(ex_ctx->pipefd);
+	prev_fd = setup_pipe_redir(ex_ctx->pipefd);
 	close(ex_ctx->pipefd[1]);
 	ex_ctx->current = ex_ctx->current->next;
 	ex_ctx->block_begin = ex_ctx->current;
@@ -65,7 +42,7 @@ void	setup_io_for_command(t_ex_ctx *ex_ctx)
 		ex_ctx->fd_in = -1;
 	}
 	if (has_pipe(ex_ctx->current) != -1)
-		ex_ctx->fd_in = setup_pipe(ex_ctx->pipefd);
+		ex_ctx->fd_in = setup_pipe_redir(ex_ctx->pipefd);
 	else
 	{
 		ex_ctx->pipefd[0] = -1;

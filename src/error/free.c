@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 14:25:00 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/03 18:26:23 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 14:33:10 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,12 @@ void	free_exec_node(t_exec *node)
 	if (node->arg)
 		ft_free_and_null(node->arg);
 	free(node);
+}
+
+void	free_for_ft_exec(t_exec *ex, t_env **env, char **env_array, char *path_cmd)
+{
+	ft_free_and_null(env_array);
+	free(path_cmd);
+	free_exec_list(&ex);
+	free_env_list(env);
 }

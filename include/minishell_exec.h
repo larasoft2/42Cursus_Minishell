@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 23:30:45 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/05 13:18:00 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 14:55:02 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,8 @@ int					print_error(char *filename);
 
 char				*ft_strndup(const char *s, size_t n);
 
+void				get_exit_code(int status);
+void				init_ex_ctx(t_ex_ctx *ex_ctx, t_exec *ex);
 void				init_fd_dup(t_exec *ex, int *std_dup);
 void				ft_close_fds(int fd);
 void				ft_close_fd(int *pipefd);
@@ -118,7 +120,8 @@ int					handle_redir_in_pipe(t_exec *ex, int pipefd);
 int					is_builtin(t_exec *ex);
 int					redir_in(t_exec *ex, int *fd_in);
 int					redir_out(t_exec *ex);
-int					setup_pipe(int pipefd[2]);
+int					setup_pipe_redir(int pipefd[2]);
+int					starting_hd(t_exec *ex, int *std_dup);
 
 char				*get_path(t_env *env, char *cmd, t_exec *ex);
 char				*is_path_exec(char *cmd, char **full_paths);
@@ -135,10 +138,11 @@ void				handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup);
 void				handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup, int count);
 void				handle_parent_io(int *fd_in, int *pipefd);
 void				handle_child_io(int fd_in, int *pipefd);
-void				prepare_pipe(int *pipefd, t_exec *ex);
+void				setup_pipe_no_redir(int *pipefd, t_exec *ex);
 void				setup_io_for_command(t_ex_ctx *ex_ctx);
 
 // FREE//
 void				*ft_free_array(char **ar);
+void				free_for_ft_exec(t_exec *ex, t_env **env, char **env_array, char *path_cmd);
 
 #endif

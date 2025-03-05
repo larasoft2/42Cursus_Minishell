@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/05 00:17:17 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 14:54:01 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	execute_pipeline(t_exec *ex, t_env **env, int *pipefd, pid_t *pid)
 		if (!ex || ex->type != TOKEN_WORD)
 			break ;
 		ex_ctx.current = ex;
-		prepare_pipe(pipefd, ex);
+		setup_pipe_no_redir(pipefd, ex);
 		ex_ctx.pipefd[0] = pipefd[0];
 		ex_ctx.pipefd[1] = pipefd[1];
 		execute_child_process(&ex_ctx, env, pid, &i);

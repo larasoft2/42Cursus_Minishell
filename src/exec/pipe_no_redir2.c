@@ -6,20 +6,13 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/05 00:13:35 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/05 00:17:46 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 14:54:05 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	init_ex_ctx(t_ex_ctx *ex_ctx, t_exec *ex)
-{
-	ex_ctx->ex = ex;
-	ex_ctx->fd_in = STDIN_FILENO;
-	ex_ctx->begin = ex;
-}
-
-void	prepare_pipe(int *pipefd, t_exec *ex)
+void	setup_pipe_no_redir(int *pipefd, t_exec *ex)
 {
 	if (ex->next && ex->next->type == TOKEN_PIPE)
 	{
