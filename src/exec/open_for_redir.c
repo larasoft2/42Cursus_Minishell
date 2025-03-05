@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 18:33:46 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/05 17:48:46 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 20:39:12 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	redir_out(t_exec *ex, int *fd_in)
 		{
 			if (*fd_in > 0)
 				close(*fd_in);
-			return (modify_value_exit_code(1), print_error(ex->arg[0]));
+			return (modify_value_exit_code(1), print_perm(ex->arg[0]));
 		}
 		dup2(ex->fd_out, STDOUT_FILENO);
 		if (ex->fd_out != -1)
@@ -42,10 +42,9 @@ int	redir_in(t_exec *ex, int *fd_in)
 	{
 		if (*fd_in > 2)
 			ft_close_fds(*fd_in);
-		fprintf(stderr, "opening in\n");
 		*fd_in = open(ex->arg[0], O_RDONLY);
 		if (*fd_in < 0)
-			return (modify_value_exit_code(1), print_error(ex->arg[0]));
+			return (modify_value_exit_code(1), print_perm(ex->arg[0]));
 	}
 	else if (ex->type == TOKEN_REDIR_HEREDOC && g_signal != SIGINT)
 	{
