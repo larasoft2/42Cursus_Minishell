@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/05 15:18:54 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/05 16:14:21 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,28 +36,27 @@
 
 typedef enum e_token_type
 {
-	TOKEN_WORD,          	// For single word
-	TOKEN_PIPE,          	// For '|'
-	TOKEN_REDIR_IN,      	// For '<'
-	TOKEN_REDIR_OUT,     	// For '>'
-	TOKEN_REDIR_APPEND,  	// For '>>'
-	TOKEN_REDIR_HEREDOC, 	// For '<<'
-	TOKEN_CMD_WITH_OPTIONS, // For commands and arguments
+	TOKEN_WORD,
+	TOKEN_PIPE,
+	TOKEN_REDIR_IN,
+	TOKEN_REDIR_OUT,
+	TOKEN_REDIR_APPEND,
+	TOKEN_REDIR_HEREDOC,
+	TOKEN_CMD_WITH_OPTIONS,
 }						t_token_type;
 
 typedef struct s_token_node
 {
 	t_token_type		type;
 	char				*value;
-	//int					to_delete;
 	struct s_token_node	*next;
 }						t_token_node;
 
-struct s_env;
-typedef struct s_env t_env;
+struct					s_env;
+typedef struct s_env	t_env;
 
-struct s_exec;
-typedef struct s_exec t_exec;
+struct					s_exec;
+typedef struct s_exec	t_exec;
 
 // FUNCTIONS ////////////////////////////////////////////////////////////////
 
@@ -134,8 +133,10 @@ t_token_node	*clean_tokens(t_token_node **token_list, t_env **env_final);
 int				is_metacharacter(char c);
 int				is_var_stop_char(char c);
 void			update_index(int *i, char *word);
-char			*process_expand(char *input, int *i, char *final_string, t_env **env); //HEY
-char			*handle_dollar_case(char *input, int *i, char *final_string, t_env **env);//HEY
+char			*process_expand(char *input, int *i, char *final_string,
+					t_env **env);
+char			*handle_dollar_case(char *input, int *i, char *final_string,
+					t_env **env);
 
 // FINAL_EXEC_LIST
 void			init_exec_node(t_exec *new_node,
@@ -145,9 +146,11 @@ t_exec			*add_exec_node_with_type(t_exec **exec_list,
 void			add_word(char **arg, char *value, int i);
 t_exec			*add_word_to_exec_word_node(t_exec **exec_list, char *value,
 					int *word_count, t_exec **last_exec_node);
-void			handle_token_word(t_exec **exec_list, t_token_node *current_token,
-					int *word_count, t_exec **last_exec_node);
-void			handle_token_special(t_exec **exec_list, t_token_node *current_token,
+void			handle_token_word(t_exec **exec_list,
+					t_token_node *current_token, int *word_count,
+					t_exec **last_exec_node);
+void			handle_token_special(t_exec **exec_list,
+					t_token_node *current_token,
 					int *word_count, t_exec **last_exec_node);
 t_exec			*add_all_tokens(t_token_node **token_list, t_exec **exec_list);
 

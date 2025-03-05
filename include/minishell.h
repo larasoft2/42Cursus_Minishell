@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2025/03/05 15:09:57 by racoutte         ###   ########.fr       */
+/*   Created: 2025/03/05 15:46:12 by racoutte          #+#    #+#             */
+/*   Updated: 2025/03/05 15:46:50 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # include <unistd.h>
 # include <limits.h>
 
-extern int g_signal;
+extern int	g_signal;
 
 // STRUCTURES ///////////////////////////////////////////////////////////////
 typedef enum e_error
@@ -42,7 +42,6 @@ typedef enum e_error
 	SYNTAX_ERROR_UNCLOSED_QUOTES,
 	SYNTAX_ERROR_NOT_HANDLED,
 	SYNTAX_ERROR_NOT_HANDLED_WORD,
-
 	COMMAND_NOT_FOUND,
 	NOT_A_VALID_IDENTIFIER,
 	NO_SUCH_FILE_OR_DIRECTORY,

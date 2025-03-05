@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:58:59 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/05 15:14:54 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/05 16:16:38 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void	minishell_loop(char *input, t_token_node **token_list,
 	syntax_status = 0;
 	g_signal = 0;
 	add_history(input);
-	check_syntax_input(input, &syntax_status);
+	if (check_syntax_input(input, &syntax_status) == EXIT_FAILURE)
+		free(input);
 	if (syntax_status == EXIT_SUCCESS)
 		syntax_status = tokenize_parsing(input, token_list, env_final,
 				exec_list);
@@ -28,8 +29,8 @@ void	minishell_loop(char *input, t_token_node **token_list,
 	{
 		ft_process(env_final, *exec_list);
 		free_exec_list(exec_list);
+		free(input);
 	}
-	free(input);
 }
 
 void	check_ctrl_d(t_env **env, t_exec *exec_list)
