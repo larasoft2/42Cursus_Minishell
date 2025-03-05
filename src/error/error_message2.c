@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 15:24:09 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/05 17:44:42 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 20:07:01 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,17 @@ void	print_command_not_found(char *command)
 	append_to_message(msg, command, &len);
 	append_to_message(msg, ": command not found\n", &len);
 	write(STDERR_FILENO, msg, len);
+}
+
+int	print_perm(char *command)
+{
+	int		len;
+	char	msg[512];
+
+	len = 0;
+	append_to_message(msg, "minishell: ", &len);
+	append_to_message(msg, command, &len);
+	append_to_message(msg, ": Permission denied\n", &len);
+	write(STDERR_FILENO, msg, len);
+	return (EXIT_FAILURE);
 }
