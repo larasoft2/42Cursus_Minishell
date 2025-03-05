@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/04 13:45:03 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/05 15:18:54 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ typedef struct s_exec t_exec;
 // SYNTAX_ERROR
 int				syntax_error_checker_spaces_empty(char *input);
 int				syntax_error_checker(char *input);
-int				syntax_error_checker_spaces_empty(char *input);
 int				check_empty_input(char *input);
 int				check_only_whitespace_intput(char *input);
 int				check_first_character_is_special_without_error(char *input);
@@ -135,6 +134,8 @@ t_token_node	*clean_tokens(t_token_node **token_list, t_env **env_final);
 int				is_metacharacter(char c);
 int				is_var_stop_char(char c);
 void			update_index(int *i, char *word);
+char			*process_expand(char *input, int *i, char *final_string, t_env **env); //HEY
+char			*handle_dollar_case(char *input, int *i, char *final_string, t_env **env);//HEY
 
 // FINAL_EXEC_LIST
 void			init_exec_node(t_exec *new_node,

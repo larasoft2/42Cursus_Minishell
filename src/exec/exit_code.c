@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 17:49:40 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/04 11:46:55 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/05 15:11:20 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,4 @@ void	modify_value_exit_code(long code)
 
 	exit_status = get_exit_status();
 	*exit_status = code;
-	//printf("Dans fonction MODIFY VALUE, VALUE exit_code = %ld\n", *exit_status);
 }
