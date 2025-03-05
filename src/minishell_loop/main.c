@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 11:58:59 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/05 16:16:38 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/05 20:08:56 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	check_ctrl_d(t_env **env, t_exec *exec_list)
 	free_env_list(env);
 	if (exec_list)
 		free_exec_list(&exec_list);
-	exit(EXIT_SUCCESS);
+	exit(*get_exit_status());
 }
 
 int	check_nb_of_args(int ac)
