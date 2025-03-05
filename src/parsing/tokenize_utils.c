@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 14:59:07 by racoutte          #+#    #+#             */
-/*   Updated: 2025/01/27 13:51:26 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/05 15:15:54 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,24 @@ void	print_tokens_exec_list(t_exec *exec_list)
 		}
 		current = current->next;
 	}
+}
+
+char	*handle_quote(char *input, int *i, char *open_quote, char *final_string)
+{
+	if (*open_quote == '\0')
+	{
+		*open_quote = input[*i];
+		(*i)++;
+	}
+	else if (input[*i] == *open_quote)
+	{
+		*open_quote = '\0';
+		(*i)++;
+	}
+	else
+	{
+		final_string = str_append(final_string, input[*i]);
+		(*i)++;
+	}
+	return (final_string);
 }

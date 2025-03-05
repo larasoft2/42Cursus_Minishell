@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 23:30:45 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/05 17:33:56 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 17:44:05 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,9 +104,8 @@ void				ft_close_fds(int fd);
 void				ft_close_fd(int *pipefd);
 void				print_command_not_found(char *command);
 void				print_delimiter_error_message(char *delimiter);
-void    			restore_fds(int *std_dup);
+void				restore_fds(int *std_dup);
 void				skip_redirections(t_exec **current);
-
 
 t_exec				*get_next_exec_token(t_exec *ex);
 t_exec				*find_next_valid_token(t_exec *ex);

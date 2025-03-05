@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:26:46 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/21 16:30:55 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/05 15:16:03 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,4 @@ void	setup_heredoc_signals_handling(void)
 	signal(SIGCONT, SIG_IGN);
 	signal(SIGTTIN, SIG_IGN);
 	signal(SIGTTOU, SIG_IGN);
-	// signal(SIGPIPE, SIG_IGN); //this here
 }

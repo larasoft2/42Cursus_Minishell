@@ -6,31 +6,11 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 14:26:55 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/20 19:22:15 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/05 15:15:25 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*handle_quote(char *input, int *i, char *open_quote, char *final_string)
-{
-	if (*open_quote == '\0')
-	{
-		*open_quote = input[*i];
-		(*i)++;
-	}
-	else if (input[*i] == *open_quote)
-	{
-		*open_quote = '\0';
-		(*i)++;
-	}
-	else
-	{
-		final_string = str_append(final_string, input[*i]);
-		(*i)++;
-	}
-	return (final_string);
-}
 
 char	*handle_special_case(char *input, int *i, char open_quote,
 	char *final_string)
@@ -70,7 +50,8 @@ char	*dollar_special_cases(char *input, int *i, char open_quote,
 	return (final_string);
 }
 
-char	*handle_dollar_case(char *input, int *i, char *final_string, t_env **env)
+char	*handle_dollar_case(char *input, int *i, char *final_string,
+			t_env **env)
 {
 	char	*result;
 
@@ -78,11 +59,6 @@ char	*handle_dollar_case(char *input, int *i, char *final_string, t_env **env)
 	if (!result)
 		return (expand(final_string, input, i, env));
 	return (result);
-}
-
-char	*process_expand(char *input, int *i, char *final_string, t_env **env)
-{
-	return (handle_dollar_case(input, i, final_string, env));
 }
 
 char	*search_and_replace(char *input, t_env **env)

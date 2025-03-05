@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 12:26:09 by racoutte          #+#    #+#             */
-/*   Updated: 2025/02/18 15:52:19 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/05 15:15:37 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,9 @@ t_token_node	*clean_tokens(t_token_node **token_list, t_env **env_final)
 		temp = temp->next;
 	}
 	return (*token_list);
+}
+
+char	*process_expand(char *input, int *i, char *final_string, t_env **env)
+{
+	return (handle_dollar_case(input, i, final_string, env));
 }
