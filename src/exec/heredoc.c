@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 15:37:43 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/03 18:00:17 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 15:11:35 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	ft_open_heredocs(t_exec *ex, int pipefd)
 	current = ex;
 	while (current)
 	{
-		if (current->type == TOKEN_REDIR_HEREDOC && g_signal != SIGINT) //added && from raph
+		if (current->type == TOKEN_REDIR_HEREDOC && g_signal != SIGINT)
 		{
 			if (fd_in > 2)
 				ft_close_fds(fd_in);
@@ -96,6 +96,7 @@ void	heredoc_loop(t_exec *ex, char *delimiter, int *tmp)
 	char	*rline;
 
 	rline = NULL;
+	(void)ex;
 	while (1)
 	{
 		if (g_signal == SIGINT)
@@ -106,9 +107,8 @@ void	heredoc_loop(t_exec *ex, char *delimiter, int *tmp)
 		if (!rline)
 		{
 			print_delimiter_error_message(delimiter);
-			close(*tmp);
-			*tmp = open(ex->hd_name, O_RDONLY);
-			return ;
+			//*tmp = open(ex->hd_name, O_RDONLY);
+			return ((void)close(*tmp));
 		}
 		if (!ft_strcmp(rline, delimiter))
 		{

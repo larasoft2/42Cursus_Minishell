@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   final_string_for_exe_init.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 11:50:01 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/03 16:51:43 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 15:15:05 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void	init_exec_node(t_exec *new_node, t_token_type type, char *value)
 	}
 	new_node->fd_in = 0;
 	new_node->fd_out = 0;
-	// new_node->pid = NULL;
 	new_node->hd_name = NULL;
 	new_node->next = NULL;
 }

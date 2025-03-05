@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:48:29 by lusavign          #+#    #+#             */
-/*   Updated: 2025/02/21 17:41:20 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 15:22:39 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_init(t_exec *ex, int *std_dup)
+void	init_fd_dup(t_exec *ex, int *std_dup)
 {
 	ex->fd_in = STDIN_FILENO;
 	ex->fd_out = STDOUT_FILENO;
