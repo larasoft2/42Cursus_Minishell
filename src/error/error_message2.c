@@ -6,11 +6,20 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 15:24:09 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/04 20:18:50 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 13:09:56 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	print_delimiter_error_message(char *delimiter)
+{
+	ft_putstr_fd("minishell: warning: here-document delimited by ", 2);
+	ft_putstr_fd("end-of-file (wanted '", 2);
+	if (delimiter != NULL)
+		ft_putstr_fd(delimiter, 2);
+	ft_putstr_fd("')\n", 2);
+}
 
 int	print_error(char *filename)
 {

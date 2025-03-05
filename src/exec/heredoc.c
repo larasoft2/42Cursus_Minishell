@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 15:37:43 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/04 23:41:57 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 13:08:19 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,9 @@ int	prepare_heredoc_file(t_exec *ex)
 	return (tmp);
 }
 
-void	heredoc_loop(t_exec *ex, char *delimiter, int *tmp)
+void	heredoc_loop(char *delimiter, int *tmp)
 {
 	char	*rline;
-
 	rline = NULL;
 	while (1)
 	{
@@ -106,8 +105,7 @@ void	heredoc_loop(t_exec *ex, char *delimiter, int *tmp)
 		if (!rline)
 		{
 			print_delimiter_error_message(delimiter);
-			*tmp = open(ex->hd_name, O_RDONLY);
-			return ((void)close(*tmp));
+			return ;
 		}
 		if (!ft_strcmp(rline, delimiter))
 		{
@@ -135,7 +133,7 @@ int	handle_heredoc(t_exec *ex)
 		return (-1);
 	delimiter = ex->arg[0];
 	setup_heredoc_signals_handling();
-	heredoc_loop(ex, delimiter, &tmp);
+	heredoc_loop(delimiter, &tmp);
 	close(tmp);
 	tmp = open(ex->hd_name, O_RDONLY);
 	setup_default_signals_handling();

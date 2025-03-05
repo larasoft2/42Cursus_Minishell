@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 23:30:45 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/05 00:27:27 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 13:18:00 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ char				*is_path_exec(char *cmd, char **full_paths);
 char				**put_env_in_ar(t_env *envp);
 
 void				init_ex_ctx(t_ex_ctx *ex_ctx, t_exec *ex);
+void				init_ex_ctx_for_redir(t_ex_ctx *ex_ctx, t_exec *ex, int *std_dup);
 void				ft_exec(t_exec *ex, t_env **env, pid_t *pid, t_ex_ctx *ex_ctx);
 void				ft_fork(t_exec *cmd, t_env **env, int *std_dup);
 void				ft_open_heredocs(t_exec *ex, int pipefd);

@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/03 18:48:29 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/05 00:21:08 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 13:17:39 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,12 @@ int	has_redir(t_exec *ex)
 	return (-1);
 }
 
-void	print_delimiter_error_message(char *delimiter)
+void	init_ex_ctx_for_redir(t_ex_ctx *ex_ctx, t_exec *ex, int *std_dup)
 {
-	ft_putstr_fd("minishell: warning: here-document delimited by ", 2);
-	ft_putstr_fd("end-of-file (wanted '", 2);
-	if (delimiter != NULL)
-		ft_putstr_fd(delimiter, 2);
-	ft_putstr_fd("')\n", 2);
+	ex_ctx->fd_in = -1;
+	ex_ctx->current = ex;
+	ex_ctx->block_begin = ex;
+	ex_ctx->begin = ex;
+	ex_ctx->std_dup[0] = std_dup[0];
+	ex_ctx->std_dup[1] = std_dup[1];
 }

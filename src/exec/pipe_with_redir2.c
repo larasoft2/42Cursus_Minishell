@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/05 00:27:27 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 13:21:27 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,9 @@ void	setup_io_for_command(t_ex_ctx *ex_ctx)
 		close(ex_ctx->pipefd[1]);
 		ex_ctx->pipefd[1] = -1;
 	}
-	if (ex_ctx->pipefd[0] != -1) //added 04.03
+	if (ex_ctx->pipefd[0] != -1)
 	{
-		dup2(ex_ctx->pipefd[0], STDIN_FILENO); //not sure about this dup2
+		dup2(ex_ctx->pipefd[0], STDIN_FILENO);
 		close(ex_ctx->pipefd[0]);
 		ex_ctx->pipefd[0] = -1;
 	}
