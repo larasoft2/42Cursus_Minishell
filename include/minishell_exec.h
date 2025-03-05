@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:08:01 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/05 15:21:45 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/05 17:23:42 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int					handle_redir(t_exec *ex);
 int					handle_redir_in_pipe(t_exec *ex, int pipefd);
 int					is_builtin(t_exec *ex);
 int					redir_in(t_exec *ex, int *fd_in);
-int					redir_out(t_exec *ex);
+int					redir_out(t_exec *ex, int *fd_in);
 int					setup_pipe(int pipefd[2]);
 
 char				*get_path(t_env *env, char *cmd, t_exec *ex);
