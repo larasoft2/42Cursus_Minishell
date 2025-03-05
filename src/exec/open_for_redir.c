@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   open_for_redir.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 18:33:46 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/05 17:48:46 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 19:32:11 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	redir_in(t_exec *ex, int *fd_in)
 	{
 		if (*fd_in > 2)
 			ft_close_fds(*fd_in);
-		fprintf(stderr, "opening in\n");
 		*fd_in = open(ex->arg[0], O_RDONLY);
 		if (*fd_in < 0)
 			return (modify_value_exit_code(1), print_error(ex->arg[0]));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_with_redir2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/05 17:51:18 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 20:01:27 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,5 @@ void	setup_io_for_command(t_ex_ctx *ex_ctx)
 		dup2(ex_ctx->pipefd[1], STDOUT_FILENO);
 		close(ex_ctx->pipefd[1]);
 		ex_ctx->pipefd[1] = -1;
-	}
-	if (ex_ctx->pipefd[0] != -1)
-	{
-		dup2(ex_ctx->pipefd[0], STDIN_FILENO);
-		close(ex_ctx->pipefd[0]);
-		ex_ctx->pipefd[0] = -1;
 	}
 }

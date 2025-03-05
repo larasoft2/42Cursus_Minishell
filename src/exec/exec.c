@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
+/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/05 17:46:13 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 21:00:03 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,14 @@ void	ft_exec(t_exec *ex, t_env **env, pid_t *pid, t_ex_ctx *ex_ctx)
 	}
 	execve(path_cmd, ex->arg, env_array);
 	perror("execve");
-	free_for_ft_exec(ex, env, env_array, path_cmd);
+	ft_free_and_null(env_array);
+	if (path_cmd)
+		free(path_cmd);
+	if (ex_ctx)
+		free_exec_list(&ex_ctx->begin);
+	else
+		free_exec_list(&ex);
+	free_env_list(env);
 	if (pid)
 		free(pid);
 	exit(EXIT_FAILURE);
