@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 18:33:46 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/05 20:05:50 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 20:39:12 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	redir_in(t_exec *ex, int *fd_in)
 			ft_close_fds(*fd_in);
 		*fd_in = open(ex->hd_name, O_RDONLY);
 		if (*fd_in < 0)
-			return (modify_value_exit_code(1), print_perm(ex->hd_name));
+			return (modify_value_exit_code(1), print_error(ex->hd_name));
 	}
 	return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/05 17:46:13 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 21:18:18 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,8 @@ void	ft_exec(t_exec *ex, t_env **env, pid_t *pid, t_ex_ctx *ex_ctx)
 	}
 	execve(path_cmd, ex->arg, env_array);
 	perror("execve");
-	free_for_ft_exec(ex, env, env_array, path_cmd);
-	if (pid)
-		free(pid);
+	free_for_ft_exec(env, env_array, path_cmd, pid);
+	free_ex_or_struct(ex, ex_ctx);
 	exit(EXIT_FAILURE);
 }
 

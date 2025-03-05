@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 23:30:45 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/05 20:06:53 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 21:14:36 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,8 @@ void				setup_io_for_command(t_ex_ctx *ex_ctx);
 
 // FREE//
 void				*ft_free_array(char **ar);
-void				free_for_ft_exec(t_exec *ex, t_env **env,
-						char **env_ar, char *path);
+void				free_ex_or_struct(t_exec *ex, t_ex_ctx *ex_ctx);
+void				free_for_ft_exec(t_env **env, char **env_ar, 
+						char *path, pid_t *pid);
 
 #endif
