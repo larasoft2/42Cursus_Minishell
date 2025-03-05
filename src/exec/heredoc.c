@@ -6,10 +6,9 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 15:37:43 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/05 17:46:47 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 18:11:17 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "minishell.h"
 
@@ -22,7 +21,6 @@ void	ft_open_heredocs(t_exec *ex, int pipefd)
 	current = ex;
 	while (current)
 	{
-		if (current->type == TOKEN_REDIR_HEREDOC && g_signal != SIGINT)
 		if (current->type == TOKEN_REDIR_HEREDOC && g_signal != SIGINT)
 		{
 			if (fd_in > 2)
@@ -96,8 +94,8 @@ int	prepare_heredoc_file(t_exec *ex)
 void	heredoc_loop(char *delimiter, int *tmp)
 {
 	char	*rline;
+
 	rline = NULL;
-	(void)ex;
 	while (1)
 	{
 		if (g_signal == SIGINT)

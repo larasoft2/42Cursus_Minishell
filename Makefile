@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+         #
+#    By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/22 14:20:31 by racoutte          #+#    #+#              #
-#    Updated: 2025/03/05 15:17:28 by racoutte         ###   ########.fr        #
+#    Updated: 2025/03/05 18:17:30 by lusavign         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,7 +73,7 @@ SRCS += src/exec/pipe_with_redir2.c
 SRCS += src/exec/utils.c
 SRCS += src/exec/utils2.c
 SRCS += src/exec/utils3.c
-# SRCS += src/exec/utils4.c
+SRCS += src/exec/utils4.c
 
 SRCS += src/parsing/final_string_for_exe_add_nodes.c
 SRCS += src/parsing/final_string_for_exe_init.c

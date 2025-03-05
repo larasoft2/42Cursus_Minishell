@@ -6,10 +6,9 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 14:25:00 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/05 17:45:04 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 18:11:56 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "minishell.h"
 
@@ -77,10 +76,10 @@ void	free_exec_node(t_exec *node)
 	free(node);
 }
 
-void	free_for_ft_exec(t_exec *ex, t_env **env, char **env_array, char *path_cmd)
+void	free_for_ft_exec(t_exec *ex, t_env **env, char **env_ar, char *path)
 {
-	ft_free_and_null(env_array);
-	free(path_cmd);
+	ft_free_and_null(env_ar);
+	free(path);
 	free_exec_list(&ex);
 	free_env_list(env);
 }
