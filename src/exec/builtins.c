@@ -3,21 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:57:10 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/05 15:10:49 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/05 17:45:17 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// Les arguments seront places dans un tableau **,
-// donc je verifie si un arg du tab fait ref a un builtin
-
-// // The  getenv()  function searches the environment list to find the
-// environment variable name,
-// and returns a pointer to the corresponding value string.
 
 int	is_builtin(t_exec *ex)
 {

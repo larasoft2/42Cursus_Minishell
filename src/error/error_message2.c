@@ -3,14 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   error_message2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 15:24:09 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/05 15:10:35 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/05 17:44:42 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	print_delimiter_error_message(char *delimiter)
+{
+	ft_putstr_fd("minishell: warning: here-document delimited by ", 2);
+	ft_putstr_fd("end-of-file (wanted '", 2);
+	if (delimiter != NULL)
+		ft_putstr_fd(delimiter, 2);
+	ft_putstr_fd("')\n", 2);
+}
 
 int	print_error(char *filename)
 {
@@ -20,36 +29,27 @@ int	print_error(char *filename)
 	return (EXIT_FAILURE);
 }
 
+void	append_to_message(char *msg, char *str, int *len)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		msg[*len] = str[i];
+		(*len)++;
+		i++;
+	}
+}
+
 void	print_command_not_found(char *command)
 {
-	int		i;
 	int		len;
 	char	msg[512];
-	char	*msg_tail;
-
 
 	len = 0;
-	i = 0;
-	while ("minishell: "[i] != '\0')
-	{
-		msg[len] = "minishell: "[i];
-		len++;
-		i++;
-	}
-	i = 0;
-	while (command[i] != '\0')
-	{
-		msg[len] = command[i];
-		len++;
-		i++;
-	}
-	msg_tail = ": command not found\n";
-	i = 0;
-	while (msg_tail[i] != '\0')
-	{
-		msg[len] = msg_tail[i];
-		len++;
-		i++;
-	}
+	append_to_message(msg, "minishell: ", &len);
+	append_to_message(msg, command, &len);
+	append_to_message(msg, ": command not found\n", &len);
 	write(STDERR_FILENO, msg, len);
 }

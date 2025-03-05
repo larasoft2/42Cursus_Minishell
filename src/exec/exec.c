@@ -3,24 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 15:54:11 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/05 15:11:09 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/05 17:46:13 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// execve will receive cmd path as first arg
-// then options and args as second
-// env as last
-// ft_close_fd at the end
-// 	// check errors, parsing???
-// access F OK check infiles chez Jean pour que ca ne cree pas outfile si infile invalide
-//error check useless
-
-#include <unistd.h>
 
 void	ft_exec(t_exec *ex, t_env **env, pid_t *pid, t_ex_ctx *ex_ctx)
 {
@@ -39,23 +29,14 @@ void	ft_exec(t_exec *ex, t_env **env, pid_t *pid, t_ex_ctx *ex_ctx)
 			free_exec_list(&ex);
 		free_env_list(env);
 		if (pid)
-		{
 			free(pid);
-			pid = NULL;
-		}
 		exit(127);
 	}
 	execve(path_cmd, ex->arg, env_array);
 	perror("execve");
-	ft_free_and_null(env_array);
-	free(path_cmd);
-	free_exec_list(&ex);
-	free_env_list(env);
+	free_for_ft_exec(ex, env, env_array, path_cmd);
 	if (pid)
-	{
 		free(pid);
-		pid = NULL;
-	}
 	exit(EXIT_FAILURE);
 }
 
@@ -66,8 +47,7 @@ void	ft_fork(t_exec *cmd, t_env **env, int *std_dup)
 
 	while (cmd)
 	{
-		while (cmd && (cmd->type > 1))
-			cmd = cmd->next;
+		skip_redirections(&cmd);
 		if (!cmd || cmd->type != TOKEN_WORD)
 			break ;
 		pid = fork();
@@ -85,9 +65,7 @@ void	ft_fork(t_exec *cmd, t_env **env, int *std_dup)
 	}
 	while (wait(&status) > 0)
 		continue ;
-	modify_value_exit_code(status / 256);
-	if (g_signal != 0)
-		modify_value_exit_code(g_signal);
+	get_exit_code(status);
 }
 
 void	exec_commands(t_exec *ex, t_env **env, int *std_dup)
@@ -114,36 +92,28 @@ void	exec_commands(t_exec *ex, t_env **env, int *std_dup)
 	}
 }
 
-int	process_commands(t_exec *ex, t_env **env,
-	int *std_dup, bool has_command)
+int	process_commands(t_exec *ex, t_env **env, int *std_dup, bool has_command)
 {
-	if (has_heredoc(ex) == 1 && g_signal != SIGINT) //added && from raph
-		ft_open_heredocs(ex, ex->fd_in);
-	if (g_signal == SIGINT)
-	{
-		modify_value_exit_code(130);
-		dup2(std_dup[0], STDIN_FILENO);
+	if (starting_hd(ex, std_dup) == EXIT_SUCCESS)
 		return (EXIT_SUCCESS);
-	}
-	if (!has_command && has_heredoc(ex) == 1 && g_signal != SIGINT) //added && from raph //has heredoc useless?
+	if (!has_command && has_heredoc(ex) == 1)
 	{
 		handle_redir(ex);
 		dup2(std_dup[0], STDIN_FILENO);
 		dup2(std_dup[1], STDOUT_FILENO);
+		return (EXIT_SUCCESS);
 	}
-	else if (has_pipe(ex) == 1)
+	if (has_pipe(ex) == 1)
 	{
-		if (has_redir(ex) != 1)
-			handle_pipes_no_redir(ex, env, std_dup, count_command(ex));
-		else
+		if (has_redir(ex) == 1)
 			handle_pipes_if_redir(ex, env, std_dup);
+		else
+			handle_pipes_no_redir(ex, env, std_dup, count_command(ex));
+		return (EXIT_SUCCESS);
 	}
-	else if (has_pipe(ex) != 1)
-	{
-		if (handle_redir(ex) == EXIT_FAILURE)
-			return (EXIT_FAILURE);
-		exec_commands(ex, env, std_dup);
-	}
+	if (handle_redir(ex) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	exec_commands(ex, env, std_dup);
 	return (EXIT_SUCCESS);
 }
 

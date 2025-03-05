@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:14:13 by licohen           #+#    #+#             */
-/*   Updated: 2025/01/09 15:01:02 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/04 23:28:56 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int ft_isspace(char c)
+int	ft_isspace(char c)
 {
 	if ((c == ' ' || c == '\t' || c == '\n'
-		|| c == '\v' || c == '\f' || c == '\r'))
+			|| c == '\v' || c == '\f' || c == '\r'))
 		return (EXIT_FAILURE);
 	else
 		return (EXIT_SUCCESS);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_exec.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/18 18:08:01 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/05 17:23:42 by racoutte         ###   ########.fr       */
+/*   Created: 2025/03/04 23:30:45 by lusavign          #+#    #+#             */
+/*   Updated: 2025/03/05 18:18:16 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,13 @@
 
 typedef struct s_exec
 {
-	// pid_t			*pid;
 	char			*hd_name;
 	char			**arg;
 	int				fd_in;
 	int				fd_out;
 	long			exit_status;
 	t_token_type	type;
-	struct s_exec *next;
+	struct s_exec	*next;
 }					t_exec;
 
 typedef struct s_env
@@ -51,14 +50,14 @@ typedef struct s_env
 
 typedef struct s_ex_ctx
 {
-	int 		fd_in;
-    int			pipefd[2];
+	int			fd_in;
+	int			pipefd[2];
 	int			std_dup[2];
 	bool		has_command;
 	pid_t		pid;
 	t_exec		*ex;
 	t_exec		*block_begin;
-    t_exec		*current;
+	t_exec		*current;
 	t_exec		*begin;
 }					t_ex_ctx;
 
@@ -97,6 +96,7 @@ int					print_error(char *filename);
 
 char				*ft_strndup(const char *s, size_t n);
 
+void				get_exit_code(int status);
 void				init_fd_dup(t_exec *ex, int *std_dup);
 void				ft_close_fds(int fd);
 void				ft_close_fd(int *pipefd);
@@ -117,27 +117,34 @@ int					handle_redir_in_pipe(t_exec *ex, int pipefd);
 int					is_builtin(t_exec *ex);
 int					redir_in(t_exec *ex, int *fd_in);
 int					redir_out(t_exec *ex, int *fd_in);
-int					setup_pipe(int pipefd[2]);
+int					setup_pipe_redir(int pipefd[2]);
+int					starting_hd(t_exec *ex, int *std_dup);
 
 char				*get_path(t_env *env, char *cmd, t_exec *ex);
 char				*is_path_exec(char *cmd, char **full_paths);
 char				**put_env_in_ar(t_env *envp);
 
 void				init_ex_ctx(t_ex_ctx *ex_ctx, t_exec *ex);
-void				ft_exec(t_exec *ex, t_env **env, pid_t *pid, t_ex_ctx *ex_ctx);
+void				init_ex_ctx_for_redir(t_ex_ctx *ex_ctx,
+						t_exec *ex, int *std_dup);
+void				ft_exec(t_exec *ex, t_env **env,
+						pid_t *pid, t_ex_ctx *ex_ctx);
 void				ft_fork(t_exec *cmd, t_env **env, int *std_dup);
 void				ft_open_heredocs(t_exec *ex, int pipefd);
 void				ft_process(t_env **env, t_exec *ex);
 void				handle_empty_pipe(t_ex_ctx *ex_ctx);
-void				handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup);
-void				handle_pipes_no_redir(t_exec *ex, t_env **env, int *std_dup, int count);
+void				handle_pipes_if_redir(t_exec *ex, t_env **env,
+						int *std_dup);
+void				handle_pipes_no_redir(t_exec *ex, t_env **env,
+						int *std_dup, int count);
 void				handle_parent_io(int *fd_in, int *pipefd);
 void				handle_child_io(int fd_in, int *pipefd);
-void				prepare_pipe(int *pipefd, t_exec *ex);
+void				setup_pipe_no_redir(int *pipefd, t_exec *ex);
 void				setup_io_for_command(t_ex_ctx *ex_ctx);
 
 // FREE//
 void				*ft_free_array(char **ar);
+void				free_for_ft_exec(t_exec *ex, t_env **env,
+						char **env_ar, char *path);
 
 #endif
-

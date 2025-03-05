@@ -3,30 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_with_redir.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 21:44:07 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/05 15:13:45 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/05 17:50:50 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	child_process(t_ex_ctx *ex_ctx, t_env **env)
+void	child_process(t_ex_ctx *ctx, t_env **env)
 {
-	ft_close_fd(ex_ctx->std_dup);
-	if (ex_ctx->fd_in != -1)
+	ft_close_fd(ctx->std_dup);
+	if (ctx->fd_in != -1)
 	{
-		close(ex_ctx->fd_in);
-		ex_ctx->fd_in = -1;
+		close(ctx->fd_in);
+		ctx->fd_in = -1;
 	}
-	if (handle_redir_in_pipe(ex_ctx->block_begin, ex_ctx->fd_in) == EXIT_FAILURE)
+	if (handle_redir_in_pipe(ctx->block_begin, ctx->fd_in) == EXIT_FAILURE)
 	{
 		free_env_list(env);
-		free_exec_list(&ex_ctx->begin);
+		free_exec_list(&ctx->begin);
 		exit(EXIT_FAILURE);
 	}
-	ft_exec(ex_ctx->current, env, NULL, ex_ctx);
+	ft_exec(ctx->current, env, NULL, ctx);
 }
 
 void	create_process(t_ex_ctx *ex_ctx, t_env **env, pid_t *pid)
@@ -75,39 +75,26 @@ void	handle_command_block(t_ex_ctx *ex_ctx, t_env **env, pid_t *pid)
 	clean_up_after_command(ex_ctx);
 }
 
-void	init_ex_ctx_for_redir(t_ex_ctx *ex_ctx, t_exec *ex, int *std_dup)
-{
-	ex_ctx->fd_in = -1;
-	ex_ctx->current = ex;
-	ex_ctx->block_begin = ex;
-	ex_ctx->begin = ex;
-	ex_ctx->std_dup[0] = std_dup[0];
-	ex_ctx->std_dup[1] = std_dup[1];
-}
-
 void	handle_pipes_if_redir(t_exec *ex, t_env **env, int *std_dup)
 {
 	int			i;
 	int			status;
 	pid_t		*pid;
-	t_ex_ctx	ex_ctx;
+	t_ex_ctx	ctx;
 
 	i = 0;
-	init_ex_ctx_for_redir(&ex_ctx, ex, std_dup);
+	init_ex_ctx_for_redir(&ctx, ex, std_dup);
 	pid = malloc(count_command(ex) * sizeof(pid_t));
-	while (ex_ctx.current)
+	while (ctx.current)
 	{
-		skip_redirections(&ex_ctx.current);
-		ex_ctx.has_command = check_cmd_in_block(ex_ctx.block_begin, ex_ctx.current);
-		if (!ex_ctx.has_command && ex_ctx.current && ex_ctx.current->type == TOKEN_PIPE)
-		{
-			handle_empty_pipe(&ex_ctx);
-			continue ;
-		}
-		if (!ex_ctx.current || ex_ctx.current->type != TOKEN_WORD)
+		skip_redirections(&ctx.current);
+		ctx.has_command = check_cmd_in_block(ctx.block_begin, ctx.current);
+		if (!ctx.has_command && ctx.current && ctx.current->type == TOKEN_PIPE)
+			handle_empty_pipe(&ctx);
+		if (!ctx.current || ctx.current->type != TOKEN_WORD)
 			break ;
-		handle_command_block(&ex_ctx, env, pid);
-		pid[i++] = ex_ctx.pid;
+		handle_command_block(&ctx, env, pid);
+		pid[i++] = ctx.pid;
 	}
 	i = 0;
 	while (i < count_command(ex) && waitpid(pid[i++], &status, 0))
