@@ -6,13 +6,13 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 18:33:46 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/04 23:43:02 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 17:40:36 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	redir_out(t_exec *ex)
+int	redir_out(t_exec *ex, int *fd_in)
 {
 	if (ex->type == TOKEN_REDIR_OUT || ex->type == TOKEN_REDIR_APPEND)
 	{
@@ -21,7 +21,11 @@ int	redir_out(t_exec *ex)
 		else if (ex->type == TOKEN_REDIR_APPEND)
 			ex->fd_out = open(ex->arg[0], O_CREAT | O_WRONLY | O_APPEND, 0644);
 		if (ex->fd_out < 0)
+		{
+			if (*fd_in > 0)
+				close(*fd_in);
 			return (modify_value_exit_code(1), print_error(ex->arg[0]));
+		}
 		dup2(ex->fd_out, STDOUT_FILENO);
 		if (ex->fd_out != -1)
 		{
@@ -38,6 +42,7 @@ int	redir_in(t_exec *ex, int *fd_in)
 	{
 		if (*fd_in > 2)
 			ft_close_fds(*fd_in);
+		fprintf(stderr, "opening in\n");
 		*fd_in = open(ex->arg[0], O_RDONLY);
 		if (*fd_in < 0)
 			return (modify_value_exit_code(1), print_error(ex->arg[0]));
@@ -62,7 +67,7 @@ int	ft_open(t_exec *ex, int *fd_in)
 	}
 	if (ex->type == TOKEN_REDIR_OUT || ex->type == TOKEN_REDIR_APPEND)
 	{
-		if (redir_out(ex) != EXIT_SUCCESS)
+		if (redir_out(ex, fd_in) != EXIT_SUCCESS)
 			return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);

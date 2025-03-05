@@ -6,7 +6,7 @@
 /*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/04 23:30:45 by lusavign          #+#    #+#             */
-/*   Updated: 2025/03/05 14:55:02 by lusavign         ###   ########.fr       */
+/*   Updated: 2025/03/05 17:33:56 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int					handle_redir(t_exec *ex);
 int					handle_redir_in_pipe(t_exec *ex, int pipefd);
 int					is_builtin(t_exec *ex);
 int					redir_in(t_exec *ex, int *fd_in);
-int					redir_out(t_exec *ex);
+int					redir_out(t_exec *ex, int *fd_in);
 int					setup_pipe_redir(int pipefd[2]);
 int					starting_hd(t_exec *ex, int *std_dup);
 
