@@ -6,7 +6,7 @@
 /*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 14:25:00 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/05 20:55:04 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/05 21:27:26 by racoutte         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,11 @@ void	free_exec_node(t_exec *node)
 	free(node);
 }
 
-void	free_for_ft_exec(t_exec *ex, t_env **env, char **env_ar, char *path)
+void	free_for_ft_exec(t_env **env, char **env_ar, char *path, pid_t *pid)
 {
 	ft_free_and_null(env_ar);
 	free(path);
-	free_exec_list(&ex);
 	free_env_list(env);
+	if (pid)
+		free(pid);
 }

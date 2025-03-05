@@ -6,7 +6,7 @@
 #    By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/22 14:20:31 by racoutte          #+#    #+#              #
-#    Updated: 2025/03/05 18:17:30 by lusavign         ###   ########.fr        #
+#    Updated: 2025/03/05 21:18:04 by lusavign         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,6 +59,7 @@ SRCS += src/error/close_and_free_exit.c
 SRCS += src/error/error_message.c
 SRCS += src/error/error_message2.c
 SRCS += src/error/free.c
+SRCS += src/error/free2.c
 
 SRCS += src/exec/builtins.c
 SRCS += src/exec/exec.c

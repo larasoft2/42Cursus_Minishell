@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_parsing.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: racoutte <racoutte@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lusavign <lusavign@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 14:25:28 by racoutte          #+#    #+#             */
-/*   Updated: 2025/03/05 16:14:21 by racoutte         ###   ########.fr       */
+/*   Updated: 2025/03/05 21:24:17 by lusavign         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,9 +153,5 @@ void			handle_token_special(t_exec **exec_list,
 					t_token_node *current_token,
 					int *word_count, t_exec **last_exec_node);
 t_exec			*add_all_tokens(t_token_node **token_list, t_exec **exec_list);
-
-// PRINT
-void			print_tokens(t_token_node *list); // A ENLEVER A LA FIN
-void			print_tokens_exec_list(t_exec *exec_list); // A ENLEVER A LA FIN
 
 #endif
